@@ -5,7 +5,7 @@ import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.data.UserData;
 
 /**
- * Interfész a
+ * Interfész a backend egységes kezelésére, ha esetleg a Parse-ot kicserélnénk.
  * Created by Varsi on 2014.12.04..
  */
 public interface CloudHandler {
