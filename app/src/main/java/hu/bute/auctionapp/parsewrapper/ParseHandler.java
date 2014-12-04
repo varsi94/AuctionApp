@@ -1,5 +1,7 @@
 package hu.bute.auctionapp.parsewrapper;
 
+import android.util.Log;
+
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -75,7 +77,7 @@ public class ParseHandler implements CloudHandler {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
         final String passwordMD5 = MD5(password);
         query.whereEqualTo(USER_USERNAME, username);
-        query.whereEqualTo(USER_PASSWORD, passwordMD5);
+        //query.whereEqualTo(USER_PASSWORD, passwordMD5);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
@@ -96,7 +98,13 @@ public class ParseHandler implements CloudHandler {
                         }
                     });
                 } else {
-                    callback.onResult(parseObjectToUser(parseObject));
+                    if (parseObject.getString(USER_PASSWORD).equals(passwordMD5)) {
+                        callback.onResult(parseObjectToUser(parseObject));
+                    } else {
+                        Log.d("passwordDB", parseObject.getString(USER_PASSWORD));
+                        Log.d("passwordGiven", passwordMD5);
+                        callback.onResult(null);
+                    }
                 }
             }
         });
