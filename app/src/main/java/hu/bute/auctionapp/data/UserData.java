@@ -6,6 +6,7 @@ package hu.bute.auctionapp.data;
 public class UserData {
     private String name;
     private String passwordMD5;
+    private String objectId;
 
     public UserData(String name) {
         this.name = name;
@@ -25,5 +26,13 @@ public class UserData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }
