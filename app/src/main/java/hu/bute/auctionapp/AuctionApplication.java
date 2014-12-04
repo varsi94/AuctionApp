@@ -16,6 +16,6 @@ public class AuctionApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
-        Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
+        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
     }
 }
