@@ -1,7 +1,5 @@
 package hu.bute.auctionapp.parsewrapper;
 
-import android.util.Log;
-
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -77,34 +75,48 @@ public class ParseHandler implements CloudHandler {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
         final String passwordMD5 = MD5(password);
         query.whereEqualTo(USER_USERNAME, username);
-        //query.whereEqualTo(USER_PASSWORD, passwordMD5);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 System.out.println(e);
                 if (e != null || parseObject == null) {
-                    ParseObject obj = ParseObject.create(USER_CLASSNAME);
+                    callback.onResult(null);
+                } else {
+                    if (parseObject.getString(USER_PASSWORD).equals(passwordMD5)) {
+                        callback.onResult(parseObjectToUser(parseObject));
+                    } else {
+                        callback.onResult(null);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void saveUser(final String username, final String password, final ResultCallback callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
+        query.whereEqualTo(USER_USERNAME, username);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                System.out.println(e);
+                if (parseObject == null) {
+                    final ParseObject obj = ParseObject.create(USER_CLASSNAME);
+                    final String passwordMD5 = MD5(password);
                     obj.put(USER_USERNAME, username);
                     obj.put(USER_PASSWORD, passwordMD5);
                     obj.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            System.out.println(e);
                             if (e == null) {
-                                callback.onResult(new UserData(username));
+                                callback.onResult(parseObjectToUser(obj));
                             } else {
                                 callback.onResult(null);
                             }
                         }
                     });
                 } else {
-                    if (parseObject.getString(USER_PASSWORD).equals(passwordMD5)) {
-                        callback.onResult(parseObjectToUser(parseObject));
-                    } else {
-                        Log.d("passwordDB", parseObject.getString(USER_PASSWORD));
-                        Log.d("passwordGiven", passwordMD5);
-                        callback.onResult(null);
-                    }
+                    callback.onResult(null);
                 }
             }
         });

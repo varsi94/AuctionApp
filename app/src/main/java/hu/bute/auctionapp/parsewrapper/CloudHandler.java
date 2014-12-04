@@ -16,6 +16,8 @@ public interface CloudHandler {
 
     public void getUser(String username, String password, ResultCallback callback);
 
+    public void saveUser(String username, String password, ResultCallback callback);
+
     public void getStore(String objectid, ResultCallback callback);
 
     public void saveStore(StoreData data);
