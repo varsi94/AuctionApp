@@ -1,10 +1,8 @@
 package hu.bute.auctionapp;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 
 import hu.bute.auctionapp.activities.LoginActivity;
 
