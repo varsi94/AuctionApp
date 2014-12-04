@@ -6,6 +6,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.data.UserData;
@@ -26,7 +29,8 @@ public class ParseHandler implements CloudHandler {
 
     private UserData parseObjectToUser(ParseObject obj) {
         String userName = obj.getString(USER_USERNAME);
-        UserData result = new UserData(userName);
+        String passwordMD5 = obj.getString(USER_PASSWORD);
+        UserData result = new UserData(userName, passwordMD5);
         result.setObjectId(obj.getObjectId());
         return result;
     }
@@ -58,14 +62,14 @@ public class ParseHandler implements CloudHandler {
 
     public static String MD5(String md5) {
         try {
-            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] array = md.digest(md5.getBytes());
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < array.length; ++i) {
                 sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
             }
             return sb.toString();
-        } catch (java.security.NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
         }
         return null;
     }
@@ -93,33 +97,55 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public void saveUser(final String username, final String password, final ResultCallback callback) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
-        query.whereEqualTo(USER_USERNAME, username);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                System.out.println(e);
-                if (parseObject == null) {
-                    final ParseObject obj = ParseObject.create(USER_CLASSNAME);
-                    final String passwordMD5 = MD5(password);
-                    obj.put(USER_USERNAME, username);
-                    obj.put(USER_PASSWORD, passwordMD5);
-                    obj.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                callback.onResult(parseObjectToUser(obj));
-                            } else {
-                                callback.onResult(null);
+    public void saveUser(final UserData userData, final ResultCallback callback) {
+        if (userData.getObjectId() == null) {
+            //regisztráció
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
+            query.whereEqualTo(USER_USERNAME, userData.getName());
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (parseObject == null) {
+                        final ParseObject obj = ParseObject.create(USER_CLASSNAME);
+                        final String passwordMD5 = MD5(userData.getPasswordMD5());
+                        obj.put(USER_USERNAME, userData.getName());
+                        obj.put(USER_PASSWORD, passwordMD5);
+                        obj.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    callback.onResult(parseObjectToUser(obj));
+                                } else {
+                                    callback.onResult(null);
+                                }
                             }
-                        }
-                    });
-                } else {
-                    callback.onResult(null);
+                        });
+                    } else {
+                        callback.onResult(null);
+                    }
+                    }
+            });
+        } else {
+            //módosítás
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
+            query.getInBackground(userData.getObjectId(), new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (parseObject == null) {
+                        callback.onResult(null);
+                    } else {
+                        parseObject.put(USER_USERNAME, userData.getName());
+                        parseObject.put(USER_PASSWORD, userData.getPasswordMD5());
+                        parseObject.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                callback.onResult(userData);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

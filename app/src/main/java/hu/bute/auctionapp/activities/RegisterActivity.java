@@ -103,10 +103,10 @@ public class RegisterActivity extends Activity {
                 password1Text.getText().toString(),
                 password2Text.getText().toString());
         if (!b) return;
+        UserData userData = new UserData(emailText.getText().toString(), password1Text.getText().toString());
         showProgress(true);
         ((AuctionApplication) getApplication()).cloud.saveUser(
-                emailText.getText().toString(),
-                password1Text.getText().toString(),
+                userData,
                 new CloudHandler.ResultCallback() {
                     @Override
                     public void onResult(Object result) {

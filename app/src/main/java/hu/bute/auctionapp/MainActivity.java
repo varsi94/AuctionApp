@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_LOGIN: {
-                if(resultCode == RESULT_CANCELED){
+                if(resultCode == RESULT_CANCELED) {
                     finish();
                 }
                 break;

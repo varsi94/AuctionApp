@@ -12,6 +12,11 @@ public class UserData {
         this.name = name;
     }
 
+    public UserData(String name, String passwordMD5) {
+        this.name = name;
+        this.passwordMD5 = passwordMD5;
+    }
+
     public String getPasswordMD5() {
         return passwordMD5;
     }
