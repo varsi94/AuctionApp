@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -27,7 +26,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,8 +109,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         View focusView = null;
 
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        // Check for a valid password
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -124,7 +122,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+            mEmailView.setError(getString(R.string.error_invalid_accname));
             focusView = mEmailView;
             cancel = true;
         }
@@ -143,12 +141,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.length() > 7;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -263,7 +259,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             ((AuctionApplication) getApplication()).cloud.getUser(mEmail, mPassword, this);
             try {
                 synchronized (this) {
-                    if(this.result == null) {
+                    if (this.result == null) {
                         ((Object) this).wait();
                     }
                 }
@@ -281,6 +277,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
+                setResult(RESULT_OK);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -303,11 +300,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 this.result = (UserData) result;
                 ((AuctionApplication) getApplication()).user = this.result;
                 ((Object) this).notify();
-                if(this.result!=null) {
+                if (this.result != null) {
                     Toast.makeText(LoginActivity.this, this.result.getName(), Toast.LENGTH_LONG);
                 }
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResult(RESULT_CANCELED);
     }
 }
 
