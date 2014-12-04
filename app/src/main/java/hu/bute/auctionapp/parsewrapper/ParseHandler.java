@@ -4,6 +4,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,7 +20,7 @@ import hu.bute.auctionapp.data.UserData;
 public class ParseHandler implements CloudHandler {
     private static final String USER_USERNAME = "username";
     private static final String USER_PASSWORD = "password";
-    private static final String USER_CLASSNAME = "user";
+    private static final String USER_CLASSNAME = "_User";
 
     @Override
     public void getUser(String objectid, final ResultCallback callback) {
@@ -54,13 +55,26 @@ public class ParseHandler implements CloudHandler {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e != null) {
-                    ParseObject obj = new ParseObject(USER_CLASSNAME);
-                    obj.put(USER_USERNAME, username);
-                    obj.put(USER_PASSWORD, passwordMD5);
-                    obj.saveInBackground();
+                    //itt történjen valami?
                 } else {
-                    String userName = parseObject.getString(USER_USERNAME);
-                    callback.onResult(new UserData(userName));
+                    if (parseObject == null) {
+                        ParseObject obj = ParseObject.create(USER_CLASSNAME);
+                        obj.put(USER_USERNAME, username);
+                        obj.put(USER_PASSWORD, passwordMD5);
+                        obj.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    callback.onResult(new UserData(username));
+                                } else {
+                                    callback.onResult(null);
+                                }
+                            }
+                        });
+                    } else {
+                        String userName = parseObject.getString(USER_USERNAME);
+                        callback.onResult(new UserData(userName));
+                    }
                 }
             }
         });
@@ -68,7 +82,7 @@ public class ParseHandler implements CloudHandler {
 
     @Override
     public void saveUser(UserData data) {
-        ParseObject userObject = new ParseObject(USER_CLASSNAME);
+        ParseObject userObject = ParseObject.create(USER_CLASSNAME);
         userObject.put(USER_USERNAME, data.getName());
         userObject.put(USER_PASSWORD, data.getPasswordMD5());
         userObject.saveInBackground();
