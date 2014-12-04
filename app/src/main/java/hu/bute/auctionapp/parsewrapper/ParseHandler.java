@@ -1,13 +1,25 @@
 package hu.bute.auctionapp.parsewrapper;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
@@ -26,6 +38,12 @@ public class ParseHandler implements CloudHandler {
     private static final String STORE_ADDRESS = "address";
     private static final String STORE_GPS_LATITUDE = "gps_lat";
     private static final String STORE_GPS_LONGITUDE = "gps_lon";
+    private static final String STORE_LOGO_PICTRUE = "logo_pic";
+    private Context context;
+
+    public ParseHandler(Context context) {
+        this.context = context;
+    }
 
     private UserData parseObjectToUser(ParseObject obj) {
         String userName = obj.getString(USER_USERNAME);
@@ -153,12 +171,25 @@ public class ParseHandler implements CloudHandler {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.getInBackground(objectid, new GetCallback<ParseObject>() {
             @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e == null) {
-                    if (parseObject == null) {
-                        callback.onResult(null);
+            public void done(final ParseObject parseObject, ParseException e) {
+                if (e == null && parseObject != null) {
+                    final ParseFile picture = parseObject.getParseFile(STORE_LOGO_PICTRUE);
+                    File f = context.getFileStreamPath(picture.getName());
+                    Date lastModified = parseObject.getUpdatedAt();
+                    Date fileLastModified = new Date(f.lastModified());
+                    final StoreData storeData = parseObjectToStore(parseObject);
+                    if (f.exists() && fileLastModified.compareTo(lastModified) > 0) {
+                        callback.onResult(storeData);
                     } else {
-                        callback.onResult(parseObjectToStore(parseObject));
+                        picture.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] bytes, ParseException e) {
+                                String fileName = picture.getName();
+                                saveToFile(fileName, bytes);
+                                storeData.setPictureFileName(fileName);
+                                callback.onResult(storeData);
+                            }
+                        });
                     }
                 } else {
                     callback.onResult(null);
@@ -167,9 +198,82 @@ public class ParseHandler implements CloudHandler {
         });
     }
 
-    @Override
-    public void saveStore(StoreData data) {
+    private void saveToFile(String fileName, byte[] bytes) {
+        FileOutputStream fos = null;
+        try {
+            fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            fos.write(bytes, 0, bytes.length);
+        } catch (FileNotFoundException e1) {
+        } catch (IOException e1) {
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+    }
 
+    @Override
+    public void saveStore(final StoreData data, final ResultCallback callback) {
+        if (data.getObjectId() == null) {
+            //feltöltés
+            ParseObject storeObj = ParseObject.create(STORE_CLASSNAME);
+            saveStore(data, storeObj, callback);
+        } else {
+            //módosítás
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
+            query.getInBackground(data.getObjectId(), new GetCallback<ParseObject>() {
+                @Override
+                public void done(final ParseObject parseObject, ParseException e) {
+                    if (e == null && parseObject != null) {
+                        saveStore(data, parseObject, callback);
+                    } else {
+                        callback.onResult(false);
+                    }
+                }
+            });
+        }
+    }
+
+    private void saveStore(StoreData data, final ParseObject storeObj, final ResultCallback callback) {
+        storeObj.put(STORE_NAME, data.getName());
+        storeObj.put(STORE_ADDRESS, data.getAddress());
+        storeObj.put(STORE_GPS_LATITUDE, data.getGpsLatitude());
+        storeObj.put(STORE_GPS_LONGITUDE, data.getGpsLongitude());
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(data.getName(), opt);
+        int imgWidth = opt.outWidth;
+
+        int realWidth = 100;
+        int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
+        opt.inSampleSize = scaleFactor;
+        opt.inJustDecodeBounds = false;
+
+        Bitmap img = BitmapFactory.decodeFile(data.getName(),opt);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        final ParseFile picture = new ParseFile(baos.toByteArray());
+        picture.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    storeObj.put(STORE_LOGO_PICTRUE, picture);
+                    storeObj.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                callback.onResult(true);
+                            } else {
+                                callback.onResult(false);
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override

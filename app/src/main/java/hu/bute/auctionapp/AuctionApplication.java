@@ -24,6 +24,6 @@ public class AuctionApplication extends Application {
         super.onCreate();
         Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
         Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
-        cloud = new ParseHandler();
+        cloud = new ParseHandler(this);
     }
 }

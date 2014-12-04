@@ -21,7 +21,7 @@ public interface CloudHandler {
 
     public void getStore(String objectid, ResultCallback callback);
 
-    public void saveStore(StoreData data);
+    public void saveStore(StoreData data, ResultCallback callback);
 
     public void getProduct(String objectid, ResultCallback callback);
 
