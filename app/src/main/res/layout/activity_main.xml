@@ -21,9 +21,11 @@
             <TableRow>
                 <Button
                     android:text="Upload ad"
-                    android:id="@+id/up"
+                    android:id="@+id/upl"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+
+
                     />
             </TableRow>
             <TableRow>
