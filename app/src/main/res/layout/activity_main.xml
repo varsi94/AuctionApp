@@ -18,37 +18,37 @@
             android:stretchColumns="1" >
 
 
-                <TableRow>
-                    <Button
-                        android:text="Upload ad"
-                        android:id="@+id/up"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        />
-                </TableRow>
-                <TableRow>
+            <TableRow>
+                <Button
+                    android:text="Upload ad"
+                    android:id="@+id/up"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    />
+            </TableRow>
+            <TableRow>
                 <Button
                     android:text="Search"
                     android:id="@+id/search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                </TableRow>
+            </TableRow>
 
-                <TableRow>
-                    <Button
-                        android:text="Adverts"
-                        android:id="@+id/adverts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </TableRow>
+            <TableRow>
+                <Button
+                    android:text="Adverts"
+                    android:id="@+id/adverts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </TableRow>
 
-                <TableRow>
-                    <Button
-                        android:text="Favourites"
-                        android:id="@+id/favourites"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </TableRow>
+            <TableRow>
+                <Button
+                    android:text="Favourites"
+                    android:id="@+id/favourites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </TableRow>
 
         </TableLayout>
 
