@@ -13,14 +13,11 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
         android:name="hu.bute.auctionapp.AuctionApplication"
@@ -38,9 +35,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="hu.bute.auctionapp.LoginActivity"
+            android:name="hu.bute.auctionapp.activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible" />
+        <activity
+            android:name="hu.bute.auctionapp.activities.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:parentActivityName="hu.bute.auctionapp.activities.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hu.bute.auctionapp.activities.LoginActivity" />
         </activity>
     </application>
 
