@@ -5,10 +5,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import hu.bute.auctionapp.R;
 
 public class UploadActivity extends Activity {
+
+    static final String[] storeNames = new String[] { "Tesco", "Lidl","Aldi", "Auchan Csömör",
+    "Árkád", "Aréna Pláza", "Mammut", "WestEnd" , "Campona", "Auchan Dunakeszi", "Auchan Budaörs",
+    "Auchan Maglód", "Auchan Óbuda", "Auchan Fót"};
+
+    static final String[] cityNames = new String[] { "Győr", "Szombathely","Sopron", "Csömör",
+            "Szeged", "Kecskemét", "Debrecen", "Karcag" , "Budapest", "Dunakeszi", "Budaörs",
+            "Maglód", "Óbuda", "Fót"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +33,24 @@ public class UploadActivity extends Activity {
 
             }
         });
+
+        AutoCompleteTextView tv = (AutoCompleteTextView)
+                findViewById(R.id.store);
+        ArrayAdapter<String> storeAdapter =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.
+                                simple_dropdown_item_1line, storeNames);
+        tv.setAdapter(storeAdapter);
+
+        AutoCompleteTextView tv2 = (AutoCompleteTextView)
+                findViewById(R.id.location);
+        ArrayAdapter<String> cityAdapter =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.
+                                simple_dropdown_item_1line, cityNames);
+        tv2.setAdapter(cityAdapter);
+
+
 
 
     }

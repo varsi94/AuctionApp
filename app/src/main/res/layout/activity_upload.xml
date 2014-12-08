@@ -48,17 +48,22 @@
                 android:inputType="numberDecimal"
                 android:hint="@string/product_price"/>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/store"
-                android:hint="@string/store_name"/>
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/store"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/store_name" >
+                <requestFocus />
+            </AutoCompleteTextView>
+
+            <AutoCompleteTextView
                 android:id="@+id/location"
-                android:hint="@string/location"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/location" >
+                <requestFocus />
+            </AutoCompleteTextView>
 
             <EditText
                 android:layout_width="match_parent"
@@ -85,6 +90,14 @@
                 android:id="@+id/uploadbtn"
                 android:text="Upload"
                 android:background="#8c96ff"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/camera"
+                android:text="Take a picture"/>
+
+
 
 
 
