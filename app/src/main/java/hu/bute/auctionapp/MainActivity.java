@@ -7,7 +7,9 @@ import android.view.View;
 
 import hu.bute.auctionapp.activities.LoginActivity;
 import hu.bute.auctionapp.activities.ProductsActivity;
+import hu.bute.auctionapp.activities.SearchActivity;
 import hu.bute.auctionapp.activities.StoresActivity;
+import hu.bute.auctionapp.activities.UploadActivity;
 
 
 public class MainActivity extends Activity {
@@ -57,7 +59,7 @@ public class MainActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(MainActivity.this, StoresActivity.class));
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
             }
         });
         productsButton.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +77,7 @@ public class MainActivity extends Activity {
         uploadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // startActivity(new Intent(MainActivity.this, StoresActivity.class));
+                 startActivity(new Intent(MainActivity.this, UploadActivity.class));
             }
         });
 

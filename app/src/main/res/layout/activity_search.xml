@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:gravity="center_horizontal"
+    android:paddingBottom="16dp"
+    >
+
+    <ProgressBar
+        android:id="@+id/searchProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/serachForm">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchproduct"
+                android:hint="@string/search_product"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/okbtn"
+                android:text="OK"
+                android:background="#0033ff"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Results:"
+                android:textSize="24dp"/>
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                </ListView>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+</LinearLayout>

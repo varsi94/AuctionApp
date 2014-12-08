@@ -20,5 +20,11 @@
     <string name="products">Products</string>
     <string name="upload_ad">Upload ad</string>
     <string name="search">Search</string>
+    <string name="search_product">Enter a keyword</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_upload">UploadActivity</string>
+    <string name="upload">Fill in the fields</string>
+    <string name="product_name">Product name</string>
+    <string name="product_price">Price</string>
 
 </resources>
