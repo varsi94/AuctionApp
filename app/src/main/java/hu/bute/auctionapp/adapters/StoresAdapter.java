@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -87,6 +88,9 @@ public class StoresAdapter extends BaseAdapter{
 
     private static class ViewHolder {
         public TextView storeNameTV;
+        public ImageView pictureIV;
+        public TextView clicksTV;
+        public TextView locationTV;
     }
 
     @Override
@@ -97,12 +101,18 @@ public class StoresAdapter extends BaseAdapter{
             LayoutInflater inflater = LayoutInflater.from(app);
             view = inflater.inflate(R.layout.store_line, null);
             holder = new ViewHolder();
-            holder.storeNameTV = (TextView) view.findViewById(R.id.storeName);
+            holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameTv);
+            holder.pictureIV = (ImageView) view.findViewById(R.id.iconPicImageView);
+            holder.clicksTV = (TextView) view.findViewById(R.id.clicksTV);
+            holder.locationTV = (TextView) view.findViewById(R.id.locationTV);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         holder.storeNameTV.setText(data.getName());
+        holder.clicksTV.setText(app.getString(R.string.viewsLabel) + data.getClicks());
+        holder.locationTV.setText(app.getString(R.string.addressLabel) + data.getAddress());
+        holder.pictureIV.setImageResource(R.drawable.nophoto);
         return view;
     }
 }

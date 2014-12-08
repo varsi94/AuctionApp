@@ -3,6 +3,7 @@ package hu.bute.auctionapp.parsewrapper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -59,15 +60,40 @@ public class ParseHandler implements CloudHandler {
         return result;
     }
 
-    private StoreData parseObjectToStore(ParseObject obj) {
+    private void parseObjectToStore(ParseObject obj, final ResultCallback callback) {
         String name = obj.getString(STORE_NAME);
         String address = obj.getString(STORE_ADDRESS);
         double gpsLat = obj.getNumber(STORE_GPS_LATITUDE).doubleValue();
         double gpsLon = obj.getNumber(STORE_GPS_LONGITUDE).doubleValue();
         int clicks = obj.getNumber(STORE_CLICKS).intValue();
-        StoreData result = new StoreData(name, address, gpsLon, gpsLat, clicks);
+        final StoreData result = new StoreData(name, address, gpsLon, gpsLat, clicks);
         result.setObjectId(obj.getObjectId());
-        return result;
+
+        final ParseFile picture = obj.getParseFile(STORE_LOGO_PICTRUE);
+        if (picture == null) {
+            callback.onResult(result);
+            return;
+        }
+        File f = context.getFileStreamPath(picture.getName());
+        Date lastModified = obj.getUpdatedAt();
+        Date fileLastModified = new Date(f.lastModified());
+        if (f.exists() && fileLastModified.compareTo(lastModified) > 0) {
+            callback.onResult(result);
+        } else {
+            picture.getDataInBackground(new GetDataCallback() {
+                @Override
+                public void done(byte[] bytes, ParseException e) {
+                    if (e == null) {
+                        String fileName = picture.getName();
+                        saveToFile(fileName, bytes);
+                        result.setPictureFileName(fileName);
+                        callback.onResult(result);
+                    } else {
+                        Log.e("downloadPicture", e.getMessage());
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -77,7 +103,7 @@ public class ParseHandler implements CloudHandler {
             @Override
             public void done(ParseObject result, ParseException e) {
                 if (e == null) {
-                    callback.onResult(parseObjectToStore(result));
+                    parseObjectToStore(result, callback);
                 } else {
                     callback.onResult(null);
                 }
@@ -194,24 +220,7 @@ public class ParseHandler implements CloudHandler {
             @Override
             public void done(final ParseObject parseObject, ParseException e) {
                 if (e == null && parseObject != null) {
-                    final ParseFile picture = parseObject.getParseFile(STORE_LOGO_PICTRUE);
-                    File f = context.getFileStreamPath(picture.getName());
-                    Date lastModified = parseObject.getUpdatedAt();
-                    Date fileLastModified = new Date(f.lastModified());
-                    final StoreData storeData = parseObjectToStore(parseObject);
-                    if (f.exists() && fileLastModified.compareTo(lastModified) > 0) {
-                        callback.onResult(storeData);
-                    } else {
-                        picture.getDataInBackground(new GetDataCallback() {
-                            @Override
-                            public void done(byte[] bytes, ParseException e) {
-                                String fileName = picture.getName();
-                                saveToFile(fileName, bytes);
-                                storeData.setPictureFileName(fileName);
-                                callback.onResult(storeData);
-                            }
-                        });
-                    }
+                    parseObjectToStore(parseObject, callback);
                 } else {
                     callback.onResult(null);
                 }
@@ -230,11 +239,28 @@ public class ParseHandler implements CloudHandler {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                List<StoreData> result = new ArrayList<StoreData>();
-                for (ParseObject obj : parseObjects) {
-                    result.add(parseObjectToStore(obj));
+                if (e == null) {
+                    final List<StoreData> result = new ArrayList<StoreData>();
+                    final int max = parseObjects.size();
+                    final int[] counter = {0};
+                    for (ParseObject obj : parseObjects) {
+                        Log.d("counter", counter[0] + "");
+                        Log.d("max", max + "");
+                        parseObjectToStore(obj, new ResultCallback() {
+                            @Override
+                            public void onResult(Object data) {
+                                result.add((StoreData) data);
+                                counter[0] = counter[0] + 1;
+                                if (counter[0] == max) {
+                                    callback.onResult(result);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    System.out.println(e.getMessage());
+                    callback.onResult(new ArrayList<StoreData>());
                 }
-                callback.onResult(result);
             }
         });
     }
@@ -287,7 +313,7 @@ public class ParseHandler implements CloudHandler {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 List<StoreData> result = new ArrayList<StoreData>();
                 for (ParseObject obj : parseObjects) {
-                    result.add(parseObjectToStore(obj));
+                    //result.add(parseObjectToStore(obj));
                 }
                 callback.onResult(result);
             }

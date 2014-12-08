@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AuctionApp</string>
+    <string name="app_name">Auctions</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="register">Sign up</string>
@@ -9,7 +9,7 @@
     <string name="title_activity_register">Sign up</string>
     <string name="successfulSignUp">Sign up successful!</string>
     <string name="title_activity_stores">Stores</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Auction application</string>
     <string name="title_most_recent">Most recent</string>
     <string name="title_most_viewed">Most viewed</string>
     <string name="title_favourites">Favourites</string>
@@ -22,9 +22,12 @@
     <string name="search">Search</string>
     <string name="search_product">Enter a keyword</string>
     <string name="title_activity_search">Search</string>
-    <string name="title_activity_upload">UploadActivity</string>
+    <string name="title_activity_upload">Upload ad</string>
     <string name="upload">Fill in the fields</string>
     <string name="product_name">Product name</string>
     <string name="product_price">Price</string>
+    <string name="empty">Empty!</string>
+    <string name="viewsLabel">"Views: "</string>
+    <string name="addressLabel">"Location: "</string>
 
 </resources>
