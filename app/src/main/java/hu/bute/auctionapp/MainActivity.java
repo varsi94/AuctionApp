@@ -3,8 +3,11 @@ package hu.bute.auctionapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import hu.bute.auctionapp.activities.LoginActivity;
+import hu.bute.auctionapp.activities.StoresActivity;
 
 
 public class MainActivity extends Activity {
@@ -38,6 +41,14 @@ public class MainActivity extends Activity {
             startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
         }
 
-        //komment
+        Button storesbtn= (Button) findViewById(R.id.stores);
+        storesbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, StoresActivity.class));
+            }
+        });
+
+
     }
 }
