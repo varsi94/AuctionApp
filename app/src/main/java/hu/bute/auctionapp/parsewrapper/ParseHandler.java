@@ -224,7 +224,7 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public void getStoresByMostViewed(final ResultCallback callback) {
+    public void getStoresByView(final ResultCallback callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.orderByDescending(STORE_CLICKS);
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -276,6 +276,22 @@ public class ParseHandler implements CloudHandler {
                 }
             });
         }
+    }
+
+    @Override
+    public void getStoresByLastChanged(final ResultCallback callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
+        query.orderByDescending("updatedAt");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                List<StoreData> result = new ArrayList<StoreData>();
+                for (ParseObject obj : parseObjects) {
+                    result.add(parseObjectToStore(obj));
+                }
+                callback.onResult(result);
+            }
+        });
     }
 
     private void saveStore(StoreData data, final ParseObject storeObj, final ResultCallback callback) {

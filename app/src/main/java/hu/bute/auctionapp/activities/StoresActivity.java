@@ -131,8 +131,7 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
+            System.out.println("New fragment created: " + position);
             ListFragment result = new StoresFragment();
             result.setListAdapter(new StoresAdapter(getApplicationContext(), position));
             return result;

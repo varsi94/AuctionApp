@@ -51,17 +51,23 @@ public class StoresAdapter extends BaseAdapter{
     }
 
     private void loadMostViewed() {
-        app.cloud.getStoresByMostViewed(new CloudHandler.ResultCallback() {
+        app.cloud.getStoresByView(new CloudHandler.ResultCallback() {
             @Override
             public void onResult(Object result) {
-                storeDatas = (List<StoreData>)result;
+                storeDatas = (List<StoreData>) result;
                 notifyDataSetChanged();
             }
         });
     }
 
     private void loadMostRecent() {
-
+        app.cloud.getStoresByLastChanged(new CloudHandler.ResultCallback() {
+            @Override
+            public void onResult(Object result) {
+                storeDatas = (List<StoreData>) result;
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
