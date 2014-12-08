@@ -37,5 +37,7 @@ public class MainActivity extends Activity {
         if (!app.hasUser()) {
             startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
         }
+
+        //komment
     }
 }
