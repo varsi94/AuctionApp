@@ -1,76 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#00ff99">
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00ff99"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context=".MainActivity"
-        android:orientation="vertical">
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:stretchColumns="1" >
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
 
+        <TableRow>
 
-            <TableRow>
-                <Button
-                    android:text="Upload ad"
-                    android:id="@+id/up"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:background="#8c96ff"
+            <Button
+                android:id="@+id/up"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_margin="@dimen/close_buttons_margin"
+                android:layout_weight="1"
+                android:background="#8c96ff"
+                android:text="@string/upload_ad" />
 
+            <Button
+                android:id="@+id/search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_margin="@dimen/close_buttons_margin"
+                android:layout_weight="1"
+                android:background="#ff968c"
+                android:text="@string/search" />
+        </TableRow>
 
-                    />
-            </TableRow>
-            <TableRow>
-                <Button
-                    android:text="Search"
-                    android:id="@+id/search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#ff968c"
-                    />
-            </TableRow>
+        <TableRow>
 
-            <TableRow>
-                <Button
-                    android:text="Adverts"
-                    android:id="@+id/adverts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#0000ff"/>
-            </TableRow>
+            <Button
+                android:id="@+id/adverts"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_margin="@dimen/close_buttons_margin"
+                android:layout_weight="1"
+                android:background="#0000ff"
+                android:text="@string/adverts" />
 
-            <TableRow>
-                <Button
-                    android:text="Stores"
-                    android:id="@+id/stores"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:background="#ffff00"/>
+            <Button
+                android:id="@+id/stores"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_margin="@dimen/close_buttons_margin"
+                android:layout_weight="1"
+                android:background="#ffff00"
+                android:text="@string/stores" />
+        </TableRow>
 
-            </TableRow>
+        <TableRow>
 
-            <TableRow>
-                <Button
-                    android:text="Favourites"
-                    android:id="@+id/favourites"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#96158c"/>
-            </TableRow>
+            <Button
+                android:id="@+id/favourites"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_margin="@dimen/close_buttons_margin"
+                android:layout_weight="1"
+                android:background="#96158c"
+                android:text="@string/favorites" />
+        </TableRow>
 
-        </TableLayout>
+    </TableLayout>
 
-
-
-    </RelativeLayout>
 </ScrollView>

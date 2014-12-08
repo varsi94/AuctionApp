@@ -13,5 +13,14 @@
     <string name="title_most_recent">Most recent</string>
     <string name="title_most_viewed">Most viewed</string>
     <string name="title_favourites">Favourites</string>
+    <string name="title_activity_products">Products</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="favorites">Favorites</string>
+    <string name="stores">Stores</string>
+    <string name="adverts">Adverts</string>
+    <string name="upload_ad">Upload ad</string>
+    <string name="search">Search</string>
 
 </resources>

@@ -7,4 +7,6 @@ public class ProductData {
     private String name;
     private StoreData store;
     private String pictureFileName;
+    private String objectId;
+    private String price;
 }
