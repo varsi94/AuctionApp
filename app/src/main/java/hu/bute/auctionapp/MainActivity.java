@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import hu.bute.auctionapp.activities.LoginActivity;
+import hu.bute.auctionapp.activities.ProductsActivity;
 import hu.bute.auctionapp.activities.StoresActivity;
 
 
@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_LOGIN: {
-                if(resultCode == RESULT_CANCELED) {
+                if (resultCode == RESULT_CANCELED) {
                     finish();
                 }
                 break;
@@ -41,14 +41,43 @@ public class MainActivity extends Activity {
             startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
         }
 
-        Button storesbtn= (Button) findViewById(R.id.stores);
-        storesbtn.setOnClickListener(new View.OnClickListener() {
+        View storesButton = findViewById(R.id.main_stores);
+        View searchButton = findViewById(R.id.main_search);
+        View productsButton = findViewById(R.id.main_products);
+        View favoritesButton = findViewById(R.id.main_favorites);
+        View uploadAdButton = findViewById(R.id.main_upload_ad);
+
+
+        storesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, StoresActivity.class));
             }
         });
-
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(MainActivity.this, StoresActivity.class));
+            }
+        });
+        productsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ProductsActivity.class));
+            }
+        });
+        favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(MainActivity.this, StoresActivity.class));
+            }
+        });
+        uploadAdButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // startActivity(new Intent(MainActivity.this, StoresActivity.class));
+            }
+        });
 
     }
 }
