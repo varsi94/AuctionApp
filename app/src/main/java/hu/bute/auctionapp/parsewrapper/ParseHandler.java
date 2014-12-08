@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -19,7 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
@@ -39,6 +42,7 @@ public class ParseHandler implements CloudHandler {
     private static final String STORE_GPS_LATITUDE = "gps_lat";
     private static final String STORE_GPS_LONGITUDE = "gps_lon";
     private static final String STORE_LOGO_PICTRUE = "logo_pic";
+    private static final String STORE_CLICKS = "clicks";
     private Context context;
 
     public ParseHandler(Context context) {
@@ -60,7 +64,8 @@ public class ParseHandler implements CloudHandler {
         String address = obj.getString(STORE_ADDRESS);
         double gpsLat = obj.getNumber(STORE_GPS_LATITUDE).doubleValue();
         double gpsLon = obj.getNumber(STORE_GPS_LONGITUDE).doubleValue();
-        StoreData result = new StoreData(name, address, gpsLon, gpsLat);
+        int clicks = obj.getNumber(STORE_CLICKS).intValue();
+        StoreData result = new StoreData(name, address, gpsLon, gpsLat, clicks);
         result.setObjectId(obj.getObjectId());
         return result;
     }
@@ -210,6 +215,26 @@ public class ParseHandler implements CloudHandler {
                 } else {
                     callback.onResult(null);
                 }
+            }
+        });
+    }
+
+    @Override
+    public void getStores(final ResultCallback callback) {
+    }
+
+    @Override
+    public void getStoresByMostViewed(final ResultCallback callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
+        query.orderByDescending(STORE_CLICKS);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                List<StoreData> result = new ArrayList<StoreData>();
+                for (ParseObject obj : parseObjects) {
+                    result.add(parseObjectToStore(obj));
+                }
+                callback.onResult(result);
             }
         });
     }

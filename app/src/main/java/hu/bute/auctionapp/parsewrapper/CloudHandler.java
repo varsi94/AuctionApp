@@ -9,6 +9,8 @@ import hu.bute.auctionapp.data.UserData;
  * Created by Varsi on 2014.12.04..
  */
 public interface CloudHandler {
+    public void getStoresByMostViewed(ResultCallback callback);
+
     public interface ResultCallback {
         public void onResult(Object result);
     }
@@ -22,6 +24,8 @@ public interface CloudHandler {
     public void saveUser(UserData userData, ResultCallback callback);
 
     public void getStore(String objectid, ResultCallback callback);
+
+    public void getStores(ResultCallback callback);
 
     public void saveStore(StoreData data, ResultCallback callback);
 

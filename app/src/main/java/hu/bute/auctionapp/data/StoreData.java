@@ -11,12 +11,14 @@ public class StoreData {
     private double gpsLatitude;
     private String pictureFileName;
     private String objectId;
+    private int clicks;
 
-    public StoreData(String name, String address, double gpsLongitude, double gpsLatitude) {
+    public StoreData(String name, String address, double gpsLongitude, double gpsLatitude, int clicks) {
         this.name = name;
         this.address = address;
         this.gpsLongitude = gpsLongitude;
         this.gpsLatitude = gpsLatitude;
+        this.clicks = clicks;
     }
 
     public String getName() {
@@ -65,5 +67,13 @@ public class StoreData {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public int getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(int clicks) {
+        this.clicks = clicks;
     }
 }
