@@ -8,5 +8,10 @@
     <string name="signIn">Sign in</string>
     <string name="title_activity_register">Sign up</string>
     <string name="successfulSignUp">Sign up successful!</string>
+    <string name="title_activity_stores">Stores</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_most_recent">Most recent</string>
+    <string name="title_most_viewed">Most viewed</string>
+    <string name="title_favourites">Favourites</string>
 
 </resources>

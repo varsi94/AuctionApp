@@ -46,6 +46,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.activities.LoginActivity" />
         </activity>
+        <activity
+            android:name="hu.bute.auctionapp.activities.StoresActivity"
+            android:label="@string/title_activity_stores"
+            android:parentActivityName="hu.bute.auctionapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hu.bute.auctionapp.MainActivity" />
+        </activity>
+        <activity
+            android:name="hu.bute.auctionapp.activities.MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
     </application>
 
 </manifest>
