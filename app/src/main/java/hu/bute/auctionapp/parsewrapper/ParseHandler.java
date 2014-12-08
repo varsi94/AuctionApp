@@ -46,6 +46,8 @@ public class ParseHandler implements CloudHandler {
     }
 
     private UserData parseObjectToUser(ParseObject obj) {
+        if (obj == null)
+            return null;
         String userName = obj.getString(USER_USERNAME);
         String passwordMD5 = obj.getString(USER_PASSWORD);
         UserData result = new UserData(userName, passwordMD5);
@@ -112,6 +114,20 @@ public class ParseHandler implements CloudHandler {
                 }
             }
         });
+    }
+
+    @Override
+    public UserData getUserDirectly(String username, String passmd5) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(USER_CLASSNAME);
+        query.whereEqualTo(USER_USERNAME, username);
+        query.whereEqualTo(USER_PASSWORD, passmd5);
+        try {
+            ParseObject first = query.getFirst();
+            return parseObjectToUser(first);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

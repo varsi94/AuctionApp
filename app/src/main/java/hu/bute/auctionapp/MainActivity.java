@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         app = (AuctionApplication) getApplication();
-        if (app.user == null) {
+        if (!app.hasUser()) {
             startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
         }
     }

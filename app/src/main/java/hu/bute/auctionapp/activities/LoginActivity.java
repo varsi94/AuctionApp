@@ -317,7 +317,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
             synchronized (this) {
                 this.result = (UserData) result;
-                ((AuctionApplication) getApplication()).user = this.result;
+                ((AuctionApplication) getApplication()).setUser(this.result);
                 ((Object) this).notify();
                 if (this.result != null) {
                     Toast.makeText(LoginActivity.this, this.result.getName(), Toast.LENGTH_LONG);

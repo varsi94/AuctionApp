@@ -115,7 +115,7 @@ public class RegisterActivity extends Activity {
                             Toast.makeText(RegisterActivity.this, R.string.usernameOccupied, Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(RegisterActivity.this, R.string.successfulSignUp, Toast.LENGTH_LONG).show();
-                            ((AuctionApplication) getApplication()).user = (UserData) result;
+                            ((AuctionApplication) getApplication()).setUser((UserData) result);
                             setResult(RESULT_OK);
                             finish();
                         }

@@ -5,4 +5,6 @@ package hu.bute.auctionapp.data;
  */
 public class ProductData {
     private String name;
+    private StoreData store;
+    private String pictureFileName;
 }
