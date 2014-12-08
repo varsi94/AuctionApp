@@ -5,9 +5,6 @@ import android.util.AttributeSet;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-/**
- * Created by Andras on 2014.12.08..
- */
 public class DynamicLoaderListView extends ListView {
     public interface OnLoadListener {
         public boolean startLoad();
@@ -28,8 +25,9 @@ public class DynamicLoaderListView extends ListView {
     }
 
     {
+        super.setFooterDividersEnabled(false);
         super.setOnScrollListener(new OnScrollListener() {
-            boolean isLoading = false;
+            boolean wouldLoad = true;
             public int currentFirstVisibleItem;
             public int currentVisibleItemCount;
             public int currentTotalItemCount;
@@ -38,8 +36,8 @@ public class DynamicLoaderListView extends ListView {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (this.currentTotalItemCount - currentFirstVisibleItem - currentVisibleItemCount <= 1
                         && scrollState == SCROLL_STATE_IDLE) {
-                    if (!isLoading && listener != null) {
-                        isLoading = listener.startLoad();
+                    if (wouldLoad && listener != null) {
+                        wouldLoad = listener.startLoad();
                     }
                 }
             }
@@ -57,7 +55,11 @@ public class DynamicLoaderListView extends ListView {
     public void setOnScrollListener(OnScrollListener l) {
     }
 
-    public void setListener(OnLoadListener listener) {
+    public void setOnLoadListener(OnLoadListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public void setFooterDividersEnabled(boolean footerDividersEnabled) {
     }
 }

@@ -78,6 +78,7 @@
     </TableLayout>
 
     <hu.bute.auctionapp.widgets.DynamicLoaderListView
+        android:id="@+id/main_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
