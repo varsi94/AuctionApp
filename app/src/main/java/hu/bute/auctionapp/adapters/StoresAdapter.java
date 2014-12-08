@@ -1,6 +1,8 @@
 package hu.bute.auctionapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +89,22 @@ public class StoresAdapter extends BaseAdapter{
         return i;
     }
 
+    public void refresh() {
+        switch (type) {
+            case MOST_RECENT:
+                loadMostRecent();
+                break;
+            case MOST_VIEWED:
+                loadMostViewed();
+                break;
+            case FAVOURITES:
+                loadFavourites();
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid storelist type!");
+        }
+    }
+
     private static class ViewHolder {
         public TextView storeNameTV;
         public ImageView pictureIV;
@@ -112,7 +131,16 @@ public class StoresAdapter extends BaseAdapter{
         holder.storeNameTV.setText(data.getName());
         holder.clicksTV.setText(app.getString(R.string.viewsLabel) + data.getClicks());
         holder.locationTV.setText(app.getString(R.string.addressLabel) + data.getAddress());
-        holder.pictureIV.setImageResource(R.drawable.nophoto);
+        if (data.getPictureFileName() == null) {
+            holder.pictureIV.setImageResource(R.drawable.nophoto);
+        } else {
+            try {
+                Bitmap image = BitmapFactory.decodeStream(app.openFileInput(data.getPictureFileName()));
+                holder.pictureIV.setImageBitmap(image);
+            } catch (FileNotFoundException e) {
+                holder.pictureIV.setImageResource(R.drawable.nophoto);
+            }
+        }
         return view;
     }
 }

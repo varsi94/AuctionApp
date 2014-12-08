@@ -3,7 +3,6 @@ package hu.bute.auctionapp.parsewrapper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -78,6 +77,7 @@ public class ParseHandler implements CloudHandler {
         Date lastModified = obj.getUpdatedAt();
         Date fileLastModified = new Date(f.lastModified());
         if (f.exists() && fileLastModified.compareTo(lastModified) > 0) {
+            result.setPictureFileName(picture.getName());
             callback.onResult(result);
         } else {
             picture.getDataInBackground(new GetDataCallback() {
@@ -88,8 +88,6 @@ public class ParseHandler implements CloudHandler {
                         saveToFile(fileName, bytes);
                         result.setPictureFileName(fileName);
                         callback.onResult(result);
-                    } else {
-                        Log.e("downloadPicture", e.getMessage());
                     }
                 }
             });
@@ -244,8 +242,6 @@ public class ParseHandler implements CloudHandler {
                     final int max = parseObjects.size();
                     final int[] counter = {0};
                     for (ParseObject obj : parseObjects) {
-                        Log.d("counter", counter[0] + "");
-                        Log.d("max", max + "");
                         parseObjectToStore(obj, new ResultCallback() {
                             @Override
                             public void onResult(Object data) {
@@ -258,7 +254,6 @@ public class ParseHandler implements CloudHandler {
                         });
                     }
                 } else {
-                    System.out.println(e.getMessage());
                     callback.onResult(new ArrayList<StoreData>());
                 }
             }
@@ -267,6 +262,7 @@ public class ParseHandler implements CloudHandler {
 
     private void saveToFile(String fileName, byte[] bytes) {
         FileOutputStream fos = null;
+        System.out.println("saveToFile: " + fileName);
         try {
             fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fos.write(bytes, 0, bytes.length);
@@ -311,11 +307,25 @@ public class ParseHandler implements CloudHandler {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                List<StoreData> result = new ArrayList<StoreData>();
-                for (ParseObject obj : parseObjects) {
-                    //result.add(parseObjectToStore(obj));
+                if (e == null) {
+                    final List<StoreData> result = new ArrayList<StoreData>();
+                    final int max = parseObjects.size();
+                    final int[] counter = {0};
+                    for (ParseObject obj : parseObjects) {
+                        parseObjectToStore(obj, new ResultCallback() {
+                            @Override
+                            public void onResult(Object data) {
+                                result.add((StoreData) data);
+                                counter[0] = counter[0] + 1;
+                                if (counter[0] == max) {
+                                    callback.onResult(result);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    callback.onResult(new ArrayList<StoreData>());
                 }
-                callback.onResult(result);
             }
         });
     }
@@ -330,7 +340,7 @@ public class ParseHandler implements CloudHandler {
         BitmapFactory.decodeFile(data.getName(), opt);
         int imgWidth = opt.outWidth;
 
-        int realWidth = 100;
+        int realWidth = 128;
         int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
         opt.inSampleSize = scaleFactor;
         opt.inJustDecodeBounds = false;
