@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hu.bute.auctionapp">
+    package="hu.bute.auctionapp" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -17,18 +17,22 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <permission android:name="hu.bute.auctionapp.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
 
     <application
         android:name="hu.bute.auctionapp.AuctionApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="hu.bute.auctionapp.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -40,7 +44,7 @@
         <activity
             android:name="hu.bute.auctionapp.activities.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName="hu.bute.auctionapp.activities.LoginActivity">
+            android:parentActivityName="hu.bute.auctionapp.activities.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.activities.LoginActivity" />
@@ -48,7 +52,7 @@
         <activity
             android:name="hu.bute.auctionapp.activities.ProductsActivity"
             android:label="@string/title_activity_products"
-            android:parentActivityName="hu.bute.auctionapp.MainActivity">
+            android:parentActivityName="hu.bute.auctionapp.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.MainActivity" />
@@ -56,7 +60,7 @@
         <activity
             android:name="hu.bute.auctionapp.activities.StoresActivity"
             android:label="@string/title_activity_stores"
-            android:parentActivityName="hu.bute.auctionapp.MainActivity">
+            android:parentActivityName="hu.bute.auctionapp.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.MainActivity" />
@@ -69,12 +73,35 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.MainActivity" />
         </activity>
-        <activity android:name=".activities.SearchActivity"
+        <activity
+            android:name="hu.bute.auctionapp.activities.SearchActivity"
             android:label="@string/search"
-            android:parentActivityName=".MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.MainActivity"/>
-            </activity>
+            android:parentActivityName="hu.bute.auctionapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hu.bute.auctionapp.MainActivity" />
+        </activity>
+        <activity
+            android:name="hu.bute.auctionapp.activities.UploadStoreActivity"
+            android:label="@string/title_activity_upload_store"
+            android:parentActivityName="hu.bute.auctionapp.activities.StoresActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hu.bute.auctionapp.activities.StoresActivity" />
+        </activity>
+        <activity
+            android:name="hu.bute.auctionapp.activities.PickLocationActivity"
+            android:label="@string/title_activity_pick_location" >
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     </application>
 
 </manifest>

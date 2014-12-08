@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -16,11 +16,10 @@ import android.view.MenuItem;
 import java.util.Locale;
 
 import hu.bute.auctionapp.R;
-import hu.bute.auctionapp.adapters.StoresAdapter;
 import hu.bute.auctionapp.fragments.stores.StoresFragment;
 
 public class StoresActivity extends Activity implements ActionBar.TabListener, StoresFragment.OnFragmentInteractionListener {
-
+    private static final int UPLOAD_STORE_REQUEST = 1520;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -76,27 +75,30 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_stores, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.upload_store) {
+            startActivityForResult(new Intent(this, UploadStoreActivity.class), UPLOAD_STORE_REQUEST);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UPLOAD_STORE_REQUEST && resultCode == RESULT_OK) {
+            System.out.println("RESULT_OK");
+        }
     }
 
     @Override
@@ -131,9 +133,7 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
 
         @Override
         public Fragment getItem(int position) {
-            ListFragment result = new StoresFragment();
-            result.setListAdapter(new StoresAdapter(getApplicationContext(), position));
-            return result;
+            return StoresFragment.newInstance(position);
         }
 
         @Override

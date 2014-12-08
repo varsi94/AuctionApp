@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.adapters.StoresAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,21 +21,14 @@ import hu.bute.auctionapp.R;
  * create an instance of this fragment.
  */
 public class StoresFragment extends ListFragment {
-
     private OnFragmentInteractionListener mListener;
+    private static final String TYPE_KEY = "type";
+    private int type;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StoresFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StoresFragment newInstance(String param1, String param2) {
+    public static StoresFragment newInstance(int type) {
         StoresFragment fragment = new StoresFragment();
         Bundle args = new Bundle();
+        args.putInt(TYPE_KEY, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +40,14 @@ public class StoresFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            type = savedInstanceState.getInt(TYPE_KEY);
+            setListAdapter(new StoresAdapter(getActivity().getApplication(), type));
+        } else if (getArguments() != null) {
+            Bundle args = getArguments();
+            type = args.getInt(TYPE_KEY);
+            setListAdapter(new StoresAdapter(getActivity().getApplication(), type));
+        }
     }
 
     @Override
@@ -72,21 +74,17 @@ public class StoresFragment extends ListFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(TYPE_KEY, type);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(Uri uri);
     }
