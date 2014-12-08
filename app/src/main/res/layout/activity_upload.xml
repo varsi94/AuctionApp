@@ -48,19 +48,44 @@
                 android:inputType="numberDecimal"
                 android:hint="@string/product_price"/>
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/store"
+                android:hint="@string/store_name"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/location"
+                android:hint="@string/location"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/duration"
+                android:hint="@string/duration"
+                android:inputType="date"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/properties"
+                android:hint="@string/properties"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment"
+                android:hint="@string/comment"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/okbtn"
+                android:id="@+id/uploadbtn"
                 android:text="Upload"
                 android:background="#8c96ff"/>
 
-
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            </ListView>
 
 
 
