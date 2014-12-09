@@ -52,6 +52,7 @@ public class ParseHandler implements CloudHandler {
     private static final String PRODUCT_GPS_LON = "gps_lon";
     private static final String PRODUCT_ADDRESS = "address";
     private static final String PRODUCT_PICTURE = "picture";
+    private static final String PRODUCT_CURRENCTY = "currency";
     private Context context;
 
     public ParseHandler(Context context) {
@@ -408,6 +409,7 @@ public class ParseHandler implements CloudHandler {
         obj.put(PRODUCT_COMMENTS, data.getComment());
         obj.put(PRODUCT_PROPERTIES, data.getProperties());
         obj.put(PRODUCT_DURATION_END, data.getDurationEnd());
+        obj.put(PRODUCT_CURRENCTY, data.getCurrency());
         ParseQuery<ParseObject> storeQuery = ParseQuery.getQuery(STORE_CLASSNAME);
         storeQuery.getInBackground(data.getStore().getObjectId(), new GetCallback<ParseObject>() {
             @Override
@@ -415,7 +417,6 @@ public class ParseHandler implements CloudHandler {
                 if (e == null) {
                     obj.put(PRODUCT_STOREID, result);
                     if (data.getPictureFileName() != null) {
-                        if (data.getPictureFileName() != null) {
                             BitmapFactory.Options opt = new BitmapFactory.Options();
                             opt.inJustDecodeBounds = true;
                             BitmapFactory.decodeFile(data.getPictureFileName(), opt);
@@ -457,7 +458,6 @@ public class ParseHandler implements CloudHandler {
                             });
                         }
                     }
-                }
             }
         });
     }
