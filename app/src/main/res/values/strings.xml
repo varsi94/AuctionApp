@@ -46,6 +46,8 @@
     <string name="store_uploading_failed">Store uploading failed!</string>
     <string name="store_uploading_successful">Store uploading was successful!</string>
     <string name="uploading">Uploading...</string>
+    <string name="typeLabel">"Type: "</string>
+    <string name="store_type">Store type:</string>
 
 
 </resources>

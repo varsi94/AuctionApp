@@ -40,6 +40,7 @@ public class ParseHandler implements CloudHandler {
     private static final String STORE_NAME = "name";
     private static final String STORE_LOGO_PICTRUE = "logo_pic";
     private static final String STORE_CLICKS = "clicks";
+    private static final String STORE_TYPE = "type";
     private static final String PRODUCT_CLASSNAME = "Products";
     private static final String PRODUCT_NAME = "name";
     private static final String PRODUCT_PRICE = "price";
@@ -70,7 +71,8 @@ public class ParseHandler implements CloudHandler {
     private void parseObjectToStore(ParseObject obj, boolean fileSave, final ResultCallback callback) {
         String name = obj.getString(STORE_NAME);
         int clicks = obj.getNumber(STORE_CLICKS).intValue();
-        final StoreData result = new StoreData(name, clicks);
+        String storeType = obj.getString(STORE_TYPE);
+        final StoreData result = new StoreData(name, clicks, storeType);
         result.setObjectId(obj.getObjectId());
 
         final ParseFile picture = obj.getParseFile(STORE_LOGO_PICTRUE);

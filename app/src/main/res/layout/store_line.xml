@@ -27,5 +27,11 @@
             android:id="@+id/clicksTV"
             android:layout_margin="@dimen/activity_vertical_margin"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/typeTV"
+            android:layout_margin="16dp"/>
+
     </LinearLayout>
 </LinearLayout>

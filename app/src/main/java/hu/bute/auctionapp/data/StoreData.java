@@ -8,11 +8,13 @@ public class StoreData {
     private String name;
     private String pictureFileName;
     private String objectId;
+    private String type;
     private int clicks;
 
-    public StoreData(String name, int clicks) {
+    public StoreData(String name, int clicks, String type) {
         this.name = name;
         this.clicks = clicks;
+        this.type = type;
     }
 
     public String getName() {
@@ -45,5 +47,13 @@ public class StoreData {
 
     public void setClicks(int clicks) {
         this.clicks = clicks;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

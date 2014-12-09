@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import hu.bute.auctionapp.R;
-import hu.bute.auctionapp.adapters.StoresAdapterForTV;
+import hu.bute.auctionapp.adapters.StoresAdapterForSpinner;
 
 public class UploadActivity extends Activity {
 
@@ -65,13 +65,9 @@ public class UploadActivity extends Activity {
         });
 
         ivDrawer = (ImageView) findViewById(R.id.ivDrawer);
+        Spinner tv = (Spinner) findViewById(R.id.store);
 
-
-
-        Spinner tv = (Spinner)
-                findViewById(R.id.store);
-
-        StoresAdapterForTV storeAdapter = new StoresAdapterForTV(getApplicationContext());
+        StoresAdapterForSpinner storeAdapter = new StoresAdapterForSpinner(getApplicationContext());
         tv.setAdapter(storeAdapter);
     }
 

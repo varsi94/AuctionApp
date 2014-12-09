@@ -9,14 +9,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.StoreData;
+import hu.bute.auctionapp.data.StoreTypes;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 public class UploadStoreActivity extends Activity {
@@ -25,6 +28,7 @@ public class UploadStoreActivity extends Activity {
     private ImageButton okBtn;
     private ImageButton cancelBtn;
     private ImageButton deleteImageBtn;
+    private Spinner storeTypeSpinner;
     private EditText storeNameET;
     private ImageView previewImage;
     private String pictureFileName;
@@ -89,7 +93,7 @@ public class UploadStoreActivity extends Activity {
 
         Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
         String storeName = storeNameET.getText().toString();
-        StoreData data = new StoreData(storeName, 0);
+        StoreData data = new StoreData(storeName, 0, "");
         data.setPictureFileName(pictureFileName);
         AuctionApplication app = (AuctionApplication) getApplication();
         app.cloud.saveStore(data, new CloudHandler.ResultCallback() {
@@ -121,6 +125,10 @@ public class UploadStoreActivity extends Activity {
 
         storeNameET = (EditText) findViewById(R.id.storeNameUploadET);
         previewImage = (ImageView) findViewById(R.id.imagePreview);
+        storeTypeSpinner = (Spinner) findViewById(R.id.storeTypeSpinner);
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, StoreTypes.getValues());
+        storeTypeSpinner.setAdapter(adapter);
     }
 
     private void pickImage() {

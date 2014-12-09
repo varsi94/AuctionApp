@@ -108,6 +108,7 @@ public class StoresAdapter extends BaseAdapter{
         public TextView storeNameTV;
         public ImageView pictureIV;
         public TextView clicksTV;
+        public TextView typeTV;
     }
 
     @Override
@@ -121,12 +122,14 @@ public class StoresAdapter extends BaseAdapter{
             holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);
             holder.pictureIV = (ImageView) view.findViewById(R.id.iconPicImageView);
             holder.clicksTV = (TextView) view.findViewById(R.id.clicksTV);
+            holder.typeTV = (TextView) view.findViewById(R.id.typeTV);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         holder.storeNameTV.setText(data.getName());
         holder.clicksTV.setText(app.getString(R.string.viewsLabel) + data.getClicks());
+        holder.typeTV.setText(app.getString(R.string.typeLabel) + data.getType());
         if (data.getPictureFileName() == null) {
             holder.pictureIV.setImageResource(R.drawable.nophoto);
         } else {

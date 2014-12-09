@@ -11,18 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.bute.auctionapp.AuctionApplication;
+import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 /**
- * Osztály a store-ok megjelenítéséhez egy autocompletetextview-ban.
+ * Osztály a store-ok megjelenítéséhez egy spinnerben.
  * Created by Varsi on 2014.12.09..
  */
-public class StoresAdapterForTV extends BaseAdapter {
+public class StoresAdapterForSpinner extends BaseAdapter {
     private Context context;
     private List<StoreData> data;
 
-    public StoresAdapterForTV(Context context) {
+    public StoresAdapterForSpinner(Context context) {
         this.context = context;
         data = new ArrayList<StoreData>();
         download();
@@ -58,11 +59,11 @@ public class StoresAdapterForTV extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
         if (convertView == null) {
-            convertView = inflater.inflate(android.R.layout.simple_dropdown_item_1line, null);
+            convertView = inflater.inflate(R.layout.store_line_spinner, null);
         }
 
         StoreData obj = data.get(position);
-        TextView text = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView text = (TextView) convertView.findViewById(R.id.storeLineTV);
         text.setText(obj.getName());
         return convertView;
     }
