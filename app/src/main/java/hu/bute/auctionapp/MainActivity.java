@@ -9,7 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ProgressBar;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,15 @@ import hu.bute.auctionapp.activities.ProductsActivity;
 import hu.bute.auctionapp.activities.SearchActivity;
 import hu.bute.auctionapp.activities.StoresActivity;
 import hu.bute.auctionapp.activities.UploadActivity;
-import hu.bute.auctionapp.widgets.DynamicLoaderListView;
+import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements DynamicListHandler.DynamicLoader {
     private static final int REQUEST_LOGIN = 9746;
     private AuctionApplication app;
     private MainListAdapter adapter;
+
+    private DynamicListHandler loadhandler;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -57,10 +60,10 @@ public class MainActivity extends Activity {
         View searchButton = findViewById(R.id.main_search);
         View productsButton = findViewById(R.id.main_products);
         View uploadAdButton = findViewById(R.id.main_upload_ad);
-        DynamicLoaderListView list = (DynamicLoaderListView) findViewById(R.id.main_list);
+        ListView list = (ListView) findViewById(R.id.main_list);
         adapter = new MainListAdapter(this);
-        list.setAdapter(adapter);
-        list.setOnLoadListener(adapter);
+        loadhandler = new DynamicListHandler(list, adapter, this);
+
 
         storesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,14 +111,29 @@ public class MainActivity extends Activity {
             default:
                 break;
         }
-        if (id == R.id.upload_store) {
-
-        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private static class MainListAdapter extends BaseAdapter implements DynamicLoaderListView.OnLoadListener {
+    @Override
+    public boolean wantsToLoad() {
+        return true;
+    }
+
+    @Override
+    public void doLoading() {
+        System.out.println("MainActivity.doLoading");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        adapter.items.add(adapter.items.size());
+        adapter.items.add(adapter.items.size());
+        adapter.items.add(adapter.items.size());
+    }
+
+    private static class MainListAdapter extends BaseAdapter {
         List<String> titles = new ArrayList<String>();
         List<Object> items = new ArrayList<Object>();
         private Context context;
@@ -126,14 +144,11 @@ public class MainActivity extends Activity {
 
         @Override
         public int getCount() {
-            return items.size() * 2 + 1;
+            return items.size();
         }
 
         @Override
         public Object getItem(int position) {
-            if (position + 1 == getCount() - 1) {
-                return null;
-            }
             if (position % 2 == 0) {
                 return titles.get(position / 2);
             }
@@ -142,18 +157,15 @@ public class MainActivity extends Activity {
 
         @Override
         public int getViewTypeCount() {
-            return 3;
+            return 2;
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (position == getCount() - 1) {
-                return 2;//loader
-            }
             if (position % 2 == 0) {
                 return 0;//title type
             }
-            return 1;
+            return 1;//content
         }
 
         @Override
@@ -163,19 +175,11 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (position == getCount() - 1) {
-                if (convertView == null) {
-                    convertView = new ProgressBar(context);
-                }
-                return convertView;
-            }
-            return null;
+            TextView text = new TextView(context);
+            text.setText("Pos: " + items.get(position));
+            return text;
         }
 
 
-        @Override
-        public boolean startLoad() {
-            return false;
-        }
     }
 }
