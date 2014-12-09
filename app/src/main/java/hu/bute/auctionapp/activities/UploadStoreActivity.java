@@ -1,34 +1,31 @@
 package hu.bute.auctionapp.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
+import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.StoreData;
+import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 public class UploadStoreActivity extends Activity {
-    private static final int PICK_LOCATION_REQUEST = 1894;
+    private ImageButton pickImageBtn;
+    private ImageButton okBtn;
+    private ImageButton cancelBtn;
     private EditText storeNameET;
-    private Button getLocationBtn;
-    private Button pickImageBtn;
-    private Button okBtn;
-    private Button cancelBtn;
-    private StoreData data;
+    private String pictureFileName;
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view.equals(getLocationBtn)) {
-                pickLocation();
-            } else if (view.equals(pickImageBtn)) {
+            if (view.equals(pickImageBtn)) {
                 pickImage();
             } else if (view.equals(okBtn)) {
-                setResult(RESULT_OK);
-                finish();
+                uploadStore();
             } else if (view.equals(cancelBtn)) {
                 setResult(RESULT_CANCELED);
                 finish();
@@ -36,35 +33,46 @@ public class UploadStoreActivity extends Activity {
         }
     };
 
+    private void uploadStore() {
+        if (storeNameET.getText().toString().equals("")) {
+            storeNameET.setError(getString(R.string.field_is_empty));
+            return;
+        }
+
+        Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
+        String storeName = storeNameET.getText().toString();
+        StoreData data = new StoreData(storeName, 0);
+        data.setPictureFileName(pictureFileName);
+        AuctionApplication app = (AuctionApplication) getApplication();
+        app.cloud.saveStore(data, new CloudHandler.ResultCallback() {
+            @Override
+            public void onResult(Object result) {
+                if ((Boolean) result == false) {
+                    Toast.makeText(UploadStoreActivity.this, R.string.store_uploading_failed, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(UploadStoreActivity.this, R.string.store_uploading_successful, Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_store);
-        data = new StoreData("", "", 0, 0, 0);
-        //storeNameET = (EditText) findViewById(R.id.storeNameET);
-        getLocationBtn = (Button) findViewById(R.id.getLocationBtn);
-        getLocationBtn.setOnClickListener(btnClickListener);
-        pickImageBtn = (Button) findViewById(R.id.pickImageBtn);
+        pickImageBtn = (ImageButton) findViewById(R.id.pickImageBtn);
         pickImageBtn.setOnClickListener(btnClickListener);
-        okBtn = (Button) findViewById(R.id.okBtn);
+        okBtn = (ImageButton) findViewById(R.id.okBtn);
         okBtn.setOnClickListener(btnClickListener);
-        cancelBtn = (Button) findViewById(R.id.cancelBtn);
+        cancelBtn = (ImageButton) findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(btnClickListener);
+
+        storeNameET = (EditText) findViewById(R.id.storeNameUploadET);
     }
 
     private void pickImage() {
 
-    }
-
-    public void pickLocation() {
-        startActivityForResult(new Intent(this, PickLocationActivity.class), PICK_LOCATION_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_LOCATION_REQUEST && resultCode == RESULT_OK) {
-
-        }
     }
 }

@@ -61,11 +61,8 @@ public class ParseHandler implements CloudHandler {
 
     private void parseObjectToStore(ParseObject obj, final ResultCallback callback) {
         String name = obj.getString(STORE_NAME);
-        String address = obj.getString(STORE_ADDRESS);
-        double gpsLat = obj.getNumber(STORE_GPS_LATITUDE).doubleValue();
-        double gpsLon = obj.getNumber(STORE_GPS_LONGITUDE).doubleValue();
         int clicks = obj.getNumber(STORE_CLICKS).intValue();
-        final StoreData result = new StoreData(name, address, gpsLon, gpsLat, clicks);
+        final StoreData result = new StoreData(name, clicks);
         result.setObjectId(obj.getObjectId());
 
         final ParseFile picture = obj.getParseFile(STORE_LOGO_PICTRUE);
@@ -332,41 +329,48 @@ public class ParseHandler implements CloudHandler {
 
     private void saveStore(StoreData data, final ParseObject storeObj, final ResultCallback callback) {
         storeObj.put(STORE_NAME, data.getName());
-        storeObj.put(STORE_ADDRESS, data.getAddress());
-        storeObj.put(STORE_GPS_LATITUDE, data.getGpsLatitude());
-        storeObj.put(STORE_GPS_LONGITUDE, data.getGpsLongitude());
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(data.getName(), opt);
-        int imgWidth = opt.outWidth;
+        storeObj.put(STORE_CLICKS, data.getClicks());
+        if (data.getPictureFileName() != null) {
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(data.getName(), opt);
+            int imgWidth = opt.outWidth;
 
-        int realWidth = 128;
-        int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
-        opt.inSampleSize = scaleFactor;
-        opt.inJustDecodeBounds = false;
+            int realWidth = 128;
+            int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
+            opt.inSampleSize = scaleFactor;
+            opt.inJustDecodeBounds = false;
 
-        Bitmap img = BitmapFactory.decodeFile(data.getName(),opt);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-        final ParseFile picture = new ParseFile(baos.toByteArray());
-        picture.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    storeObj.put(STORE_LOGO_PICTRUE, picture);
-                    storeObj.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                callback.onResult(true);
-                            } else {
-                                callback.onResult(false);
+            Bitmap img = BitmapFactory.decodeFile(data.getName(), opt);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+            final ParseFile picture = new ParseFile(baos.toByteArray());
+            picture.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        storeObj.put(STORE_LOGO_PICTRUE, picture);
+                        storeObj.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    callback.onResult(true);
+                                } else {
+                                    callback.onResult(false);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            storeObj.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    callback.onResult(e == null);
+                }
+            });
+        }
     }
 
     @Override

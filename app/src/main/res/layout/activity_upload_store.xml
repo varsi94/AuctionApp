@@ -10,14 +10,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-
-
-        <Button
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pickImageBtn"
-            android:text="@string/pick_logo_image" />
+            android:hint="@string/store_name"
+            android:id="@+id/storeNameUploadET"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/nophoto"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pickImageBtn"
+                android:src="@android:drawable/ic_menu_gallery"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deleteImageBtn"
+                android:src="@android:drawable/ic_menu_delete"/>
+            </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -26,17 +46,19 @@
         android:orientation="horizontal"
         android:weightSum="2"
         android:layout_alignParentBottom="true">
-        <Button
+        <ImageButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cancelBtn"
             android:text="@string/cancel_label"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:layout_weight="1"/>
-        <Button
+        <ImageButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/okBtn"
             android:text="@string/ok_label"
+            android:src="@android:drawable/ic_menu_upload"
             android:layout_weight="1"/>
         </LinearLayout>
 </RelativeLayout>

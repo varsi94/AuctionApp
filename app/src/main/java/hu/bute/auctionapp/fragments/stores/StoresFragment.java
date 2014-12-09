@@ -89,4 +89,10 @@ public class StoresFragment extends ListFragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    public void refreshStores() {
+        StoresAdapter adapter = (StoresAdapter)getListAdapter();
+        if (adapter != null) {
+            adapter.refresh();
+        }
+    }
 }

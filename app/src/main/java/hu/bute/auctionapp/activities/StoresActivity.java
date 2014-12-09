@@ -97,7 +97,9 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPLOAD_STORE_REQUEST && resultCode == RESULT_OK) {
-            System.out.println("RESULT_OK");
+            for (int i = 0; i < 3; i++) {
+                mSectionsPagerAdapter.refreshFragment(i);
+            }
         }
     }
 
@@ -126,14 +128,19 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private StoresFragment fragments[];
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            fragments = new StoresFragment[3];
+            for (int i = 0; i < 3; i++) {
+                fragments[i] = StoresFragment.newInstance(i);
+            }
         }
 
         @Override
         public Fragment getItem(int position) {
-            return StoresFragment.newInstance(position);
+            return fragments[position];
         }
 
         @Override
@@ -153,6 +160,10 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
                     return getString(R.string.title_favourites).toUpperCase(l);
             }
             return null;
+        }
+
+        public void refreshFragment(int pos) {
+            fragments[pos].refreshStores();
         }
     }
 

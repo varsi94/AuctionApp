@@ -16,17 +16,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/storeNameTv"
+            android:id="@+id/storeNameET"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationTV"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            />
 
         <TextView
             android:layout_width="match_parent"

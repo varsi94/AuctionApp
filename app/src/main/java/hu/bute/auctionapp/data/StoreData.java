@@ -6,18 +6,12 @@ package hu.bute.auctionapp.data;
  */
 public class StoreData {
     private String name;
-    private String address;
-    private double gpsLongitude;
-    private double gpsLatitude;
     private String pictureFileName;
     private String objectId;
     private int clicks;
 
-    public StoreData(String name, String address, double gpsLongitude, double gpsLatitude, int clicks) {
+    public StoreData(String name, int clicks) {
         this.name = name;
-        this.address = address;
-        this.gpsLongitude = gpsLongitude;
-        this.gpsLatitude = gpsLatitude;
         this.clicks = clicks;
     }
 
@@ -27,30 +21,6 @@ public class StoreData {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public double getGpsLongitude() {
-        return gpsLongitude;
-    }
-
-    public void setGpsLongitude(double gpsLongitude) {
-        this.gpsLongitude = gpsLongitude;
-    }
-
-    public double getGpsLatitude() {
-        return gpsLatitude;
-    }
-
-    public void setGpsLatitude(double gpsLatitude) {
-        this.gpsLatitude = gpsLatitude;
     }
 
     public String getPictureFileName() {

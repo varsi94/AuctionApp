@@ -43,6 +43,10 @@
     <string name="properties">Properties</string>
     <string name="comment">Comment...</string>
     <string name="you_are_here">You\'re here</string>
+    <string name="field_is_empty">Field is empty!</string>
+    <string name="store_uploading_failed">Store uploading failed!</string>
+    <string name="store_uploading_successful">Store uploading was successful!</string>
+    <string name="uploading">Uploading...</string>
 
 
 </resources>
