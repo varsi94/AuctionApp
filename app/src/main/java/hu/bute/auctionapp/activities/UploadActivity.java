@@ -2,6 +2,8 @@ package hu.bute.auctionapp.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -22,6 +26,7 @@ public class UploadActivity extends Activity {
             Environment.getExternalStorageDirectory().getAbsolutePath() +
                     "/tmp_image.jpg";
     private final int REQUEST_CAMERA_IMAGE = 101;
+    private ImageView ivDrawer;
 
     static final String[] storeNames = new String[] { "Tesco", "Lidl","Aldi", "Auchan Csömör",
     "Árkád", "Aréna Pláza", "Mammut", "WestEnd" , "Campona", "Auchan Dunakeszi", "Auchan Budaörs",
@@ -59,6 +64,10 @@ public class UploadActivity extends Activity {
             }
         });
 
+        ivDrawer = (ImageView) findViewById(R.id.ivDrawer);
+
+
+
         AutoCompleteTextView tv = (AutoCompleteTextView)
                 findViewById(R.id.store);
         ArrayAdapter<String> storeAdapter =
@@ -71,6 +80,34 @@ public class UploadActivity extends Activity {
 
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+        if (requestCode == REQUEST_CAMERA_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    BitmapFactory.Options opt = new BitmapFactory.Options();
+                    opt.inJustDecodeBounds = true;
+                    BitmapFactory.decodeFile(IMAGEPATH, opt);
+                    int imgWidth = opt.outWidth;
+                    int imgHeight = opt.outHeight;
+
+                    int realWidth = ivDrawer.getMeasuredWidth();
+                    int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
+                    opt.inSampleSize = scaleFactor;
+                    opt.inJustDecodeBounds = false;
+
+                    Bitmap img = BitmapFactory.decodeFile(IMAGEPATH,opt);
+
+                    ivDrawer.setImageBitmap(img);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    Toast.makeText(this, "ERROR: " + t, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
 
