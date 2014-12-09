@@ -72,12 +72,22 @@
                 android:background="#8c96ff"
                 />
 
-            <EditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:textSize="20dp"/>
+
+
+            <DatePicker
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/duration"
                 android:hint="@string/duration"
-                android:inputType="date"/>
+                android:calendarViewShown="false">
+
+            </DatePicker>
+
 
             <EditText
                 android:layout_width="match_parent"
@@ -139,13 +149,6 @@
 
 
                 </TableLayout>
-
-
-
-
-
-
-
 
         </LinearLayout>
 

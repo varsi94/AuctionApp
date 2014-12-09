@@ -122,7 +122,6 @@ public class MainActivity extends Activity {
         View storesButton = findViewById(R.id.main_stores);
         View searchButton = findViewById(R.id.main_search);
         View productsButton = findViewById(R.id.main_products);
-        View favoritesButton = findViewById(R.id.main_favorites);
         View uploadAdButton = findViewById(R.id.main_upload_ad);
         DynamicLoaderListView list = (DynamicLoaderListView) findViewById(R.id.main_list);
         adapter = new MainListAdapter(this);
@@ -145,12 +144,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ProductsActivity.class));
-            }
-        });
-        favoritesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(MainActivity.this, StoresActivity.class));
             }
         });
         uploadAdButton.setOnClickListener(new View.OnClickListener() {

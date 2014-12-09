@@ -15,7 +15,6 @@
     <string name="title_most_viewed">Most viewed</string>
     <string name="title_favourites">Favourites</string>
     <string name="title_activity_products">Products</string>
-    <string name="favorites">Favorites</string>
     <string name="stores">Stores</string>
     <string name="products">Products</string>
     <string name="upload_ad">Upload ad</string>
@@ -39,7 +38,7 @@
     <string name="cancel_label">Cancel</string>
     <string name="title_activity_pick_location">Pick location</string>
     <string name="location">Location</string>
-    <string name="duration">Duration end</string>
+    <string name="duration">Duration end:</string>
     <string name="properties">Properties</string>
     <string name="comment">Comment...</string>
     <string name="you_are_here">You\'re here</string>

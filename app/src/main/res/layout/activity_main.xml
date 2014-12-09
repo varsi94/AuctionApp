@@ -48,7 +48,7 @@
                 android:layout_column="0"
                 android:layout_margin="@dimen/close_buttons_margin"
                 android:layout_weight="1"
-                android:background="#0000ff"
+                android:background="#ffff00"
                 android:text="@string/products" />
 
             <Button
@@ -58,22 +58,10 @@
                 android:layout_column="1"
                 android:layout_margin="@dimen/close_buttons_margin"
                 android:layout_weight="1"
-                android:background="#ffff00"
+                android:background="#ff3f00"
                 android:text="@string/stores" />
         </TableRow>
 
-        <TableRow>
-
-            <Button
-                android:id="@+id/main_favorites"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_margin="@dimen/close_buttons_margin"
-                android:layout_weight="1"
-                android:background="#96158c"
-                android:text="@string/favorites" />
-        </TableRow>
 
     </TableLayout>
 
