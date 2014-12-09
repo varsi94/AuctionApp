@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.adapters.StoresAdapter;
+import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,9 +23,12 @@ import hu.bute.auctionapp.adapters.StoresAdapter;
  * create an instance of this fragment.
  */
 public class StoresFragment extends ListFragment {
-    private OnFragmentInteractionListener mListener;
     private static final String TYPE_KEY = "type";
+    private OnFragmentInteractionListener mListener;
     private int type;
+
+    public StoresFragment() {
+    }
 
     public static StoresFragment newInstance(int type) {
         StoresFragment fragment = new StoresFragment();
@@ -33,27 +38,28 @@ public class StoresFragment extends ListFragment {
         return fragment;
     }
 
-    public StoresFragment() {
-
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             type = savedInstanceState.getInt(TYPE_KEY);
-            setListAdapter(new StoresAdapter(getActivity(), type));
         } else if (getArguments() != null) {
             Bundle args = getArguments();
             type = args.getInt(TYPE_KEY);
-            setListAdapter(new StoresAdapter(getActivity(), type));
         }
+        //setListAdapter(new StoresAdapter((hu.bute.auctionapp.AuctionApplication) getActivity().getApplication(), type));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_storelist, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        DynamicListHandler handler = new DynamicListHandler(getListView(), new StoresAdapter((AuctionApplication) getActivity().getApplication(), type));
     }
 
     public void onButtonPressed(Uri uri) {

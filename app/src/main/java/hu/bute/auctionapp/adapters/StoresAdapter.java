@@ -17,19 +17,21 @@ import java.util.List;
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.StoreData;
+import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 /**
  * Osztály az áruházak megjelenítésére.
  * Created by Varsi on 2014.12.08..
  */
-public class StoresAdapter extends BaseAdapter{
+public class StoresAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
     public static final int MOST_RECENT = 0;
     public static final int MOST_VIEWED = 1;
     public static final int FAVOURITES = 2;
     private int type;
     private List<StoreData> storeDatas;
     private AuctionApplication app;
+    private boolean wantsLoad = true;
     private Context context;
 
     public StoresAdapter(Context context, int type) {
@@ -37,7 +39,7 @@ public class StoresAdapter extends BaseAdapter{
         this.app = (AuctionApplication) context.getApplicationContext();
         this.context = context;
         storeDatas = new ArrayList<StoreData>();
-        switch (type) {
+        /*switch (type) {
             case MOST_RECENT:
                 loadMostRecent();
                 break;
@@ -49,30 +51,35 @@ public class StoresAdapter extends BaseAdapter{
                 break;
             default:
                 throw new IllegalArgumentException("Invalid storelist type!");
-        }
+        }*/
     }
 
     private void loadFavourites() {
+        wantsLoad = false;
     }
 
     private void loadMostViewed() {
-        app.cloud.getStoresByView(new CloudHandler.ResultCallback() {
+        final int toload = 2;
+        app.cloud.getStoresByViewDirectly(new CloudHandler.ResultCallback() {
             @Override
             public void onResult(Object result) {
-                storeDatas = (List<StoreData>) result;
-                notifyDataSetChanged();
+                List<StoreData> incoming = (List<StoreData>) result;
+                wantsLoad = incoming.size() >= toload;
+                storeDatas.addAll(incoming);
             }
-        });
+        }, storeDatas.size(), toload);
     }
 
     private void loadMostRecent() {
-        app.cloud.getStoresByLastChanged(new CloudHandler.ResultCallback() {
+        final int toload = 2;
+        app.cloud.getStoresByLastChangedDirectly(new CloudHandler.ResultCallback() {
             @Override
             public void onResult(Object result) {
-                storeDatas = (List<StoreData>) result;
-                notifyDataSetChanged();
+                List<StoreData> incoming = (List<StoreData>) result;
+                wantsLoad = incoming.size() >= toload;
+                storeDatas.addAll(incoming);
             }
-        });
+        }, storeDatas.size(), toload);
     }
 
     @Override
@@ -91,7 +98,10 @@ public class StoresAdapter extends BaseAdapter{
     }
 
     public void refresh() {
-        switch (type) {
+        wantsLoad = true;
+        storeDatas.clear();
+        notifyDataSetChanged();
+        /*switch (type) {
             case MOST_RECENT:
                 loadMostRecent();
                 break;
@@ -103,14 +113,7 @@ public class StoresAdapter extends BaseAdapter{
                 break;
             default:
                 throw new IllegalArgumentException("Invalid storelist type!");
-        }
-    }
-
-    private static class ViewHolder {
-        public TextView storeNameTV;
-        public ImageView pictureIV;
-        public TextView clicksTV;
-        public TextView typeTV;
+        }*/
     }
 
     @Override
@@ -143,5 +146,35 @@ public class StoresAdapter extends BaseAdapter{
             }
         }
         return view;
+    }
+
+    @Override
+    public boolean wantsToLoad() {
+        return wantsLoad;
+    }
+
+    @Override
+    public void doLoading() {
+        System.out.println("StoresAdapter.doLoading");
+        switch (type) {
+            case MOST_RECENT:
+                loadMostRecent();
+                break;
+            case MOST_VIEWED:
+                loadMostViewed();
+                break;
+            case FAVOURITES:
+                loadFavourites();
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid storelist type!");
+        }
+    }
+
+    private static class ViewHolder {
+        public TextView storeNameTV;
+        public ImageView pictureIV;
+        public TextView clicksTV;
+        public TextView typeTV;
     }
 }

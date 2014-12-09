@@ -72,7 +72,7 @@ public class ParseHandler implements CloudHandler {
         return null;
     }
 
-    private UserData parseObjectToUser(ParseObject obj) {
+    private static UserData parseObjectToUser(ParseObject obj) {
         if (obj == null)
             return null;
         String userName = obj.getString(USER_USERNAME);
@@ -84,7 +84,8 @@ public class ParseHandler implements CloudHandler {
 
     private void parseObjectToStore(ParseObject obj, boolean fileSave, final ResultCallback callback) {
         String name = obj.getString(STORE_NAME);
-        int clicks = obj.getNumber(STORE_CLICKS).intValue();
+        Number clicknum = obj.getNumber(STORE_CLICKS);
+        int clicks = clicknum == null ? 0 : clicknum.intValue();
         String storeType = obj.getString(STORE_TYPE);
         final StoreData result = new StoreData(name, clicks, storeType);
         result.setObjectId(obj.getObjectId());
@@ -237,35 +238,6 @@ public class ParseHandler implements CloudHandler {
     public void getStores(final ResultCallback callback) {
     }
 
-    @Override
-    public void getStoresByView(final ResultCallback callback) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
-        query.orderByDescending(STORE_CLICKS);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if (e == null) {
-                    final List<StoreData> result = new ArrayList<StoreData>();
-                    final int max = parseObjects.size();
-                    final int[] counter = {0};
-                    for (ParseObject obj : parseObjects) {
-                        parseObjectToStore(obj, true, new ResultCallback() {
-                            @Override
-                            public void onResult(Object data) {
-                                result.add((StoreData) data);
-                                counter[0] = counter[0] + 1;
-                                if (counter[0] == max) {
-                                    callback.onResult(result);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    callback.onResult(new ArrayList<StoreData>());
-                }
-            }
-        });
-    }
 
     private void saveToFile(String fileName, byte[] bytes) {
         FileOutputStream fos = null;
@@ -308,33 +280,69 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public void getStoresByLastChanged(final ResultCallback callback) {
+    public void getStoresByViewDirectly(final ResultCallback callback, int skip, int limit) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
+        query.setSkip(skip);
+        query.setLimit(limit);
+        query.orderByDescending(STORE_CLICKS);
+        final List<StoreData> result = new ArrayList<StoreData>();
+        try {
+            List<ParseObject> parseObjects = query.find();
+            final int max = parseObjects.size();
+            if (max != 0) {
+                final int[] counter = {0};
+                for (ParseObject obj : parseObjects) {
+                    parseObjectToStore(obj, true, new ResultCallback() {
+                        @Override
+                        public void onResult(Object data) {
+                            result.add((StoreData) data);
+                            counter[0] = counter[0] + 1;
+                            if (counter[0] == max) {
+                                callback.onResult(result);
+                            }
+                        }
+                    });
+                }
+            } else {
+                callback.onResult(result);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            callback.onResult(result);
+        }
+    }
+
+    @Override
+    public void getStoresByLastChangedDirectly(final ResultCallback callback, int skip, int limit) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.orderByDescending("updatedAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if (e == null) {
-                    final List<StoreData> result = new ArrayList<StoreData>();
-                    final int max = parseObjects.size();
-                    final int[] counter = {0};
-                    for (ParseObject obj : parseObjects) {
-                        parseObjectToStore(obj, true, new ResultCallback() {
-                            @Override
-                            public void onResult(Object data) {
-                                result.add((StoreData) data);
-                                counter[0] = counter[0] + 1;
-                                if (counter[0] == max) {
-                                    callback.onResult(result);
-                                }
+        query.setSkip(skip);
+        query.setLimit(limit);
+        final List<StoreData> result = new ArrayList<StoreData>();
+        try {
+            List<ParseObject> parseObjects = query.find();
+            final int max = parseObjects.size();
+            if (max != 0) {
+                final int[] counter = {0};
+                for (ParseObject obj : parseObjects) {
+                    parseObjectToStore(obj, true, new ResultCallback() {
+                        @Override
+                        public void onResult(Object data) {
+                            result.add((StoreData) data);
+                            counter[0] = counter[0] + 1;
+                            if (counter[0] == max) {
+                                callback.onResult(result);
                             }
-                        });
-                    }
-                } else {
-                    callback.onResult(new ArrayList<StoreData>());
+                        }
+                    });
                 }
+            } else {
+                callback.onResult(result);
             }
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+            callback.onResult(result);
+        }
     }
 
     private void saveStore(StoreData data, final ParseObject storeObj, final ResultCallback callback) {
