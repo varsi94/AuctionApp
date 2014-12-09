@@ -333,7 +333,7 @@ public class ParseHandler implements CloudHandler {
         if (data.getPictureFileName() != null) {
             BitmapFactory.Options opt = new BitmapFactory.Options();
             opt.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(data.getName(), opt);
+            BitmapFactory.decodeFile(data.getPictureFileName(), opt);
             int imgWidth = opt.outWidth;
 
             int realWidth = 128;
@@ -341,7 +341,7 @@ public class ParseHandler implements CloudHandler {
             opt.inSampleSize = scaleFactor;
             opt.inJustDecodeBounds = false;
 
-            Bitmap img = BitmapFactory.decodeFile(data.getName(), opt);
+            Bitmap img = BitmapFactory.decodeFile(data.getPictureFileName(), opt);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
             final ParseFile picture = new ParseFile(baos.toByteArray());

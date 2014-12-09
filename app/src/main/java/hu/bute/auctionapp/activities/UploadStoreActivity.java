@@ -1,10 +1,17 @@
 package hu.bute.auctionapp.activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import hu.bute.auctionapp.AuctionApplication;
@@ -13,10 +20,13 @@ import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 public class UploadStoreActivity extends Activity {
+    private static final int PICK_IMAGE = 1562;
     private ImageButton pickImageBtn;
     private ImageButton okBtn;
     private ImageButton cancelBtn;
+    private ImageButton deleteImageBtn;
     private EditText storeNameET;
+    private ImageView previewImage;
     private String pictureFileName;
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
@@ -29,9 +39,47 @@ public class UploadStoreActivity extends Activity {
             } else if (view.equals(cancelBtn)) {
                 setResult(RESULT_CANCELED);
                 finish();
+            } else if (view.equals(deleteImageBtn)) {
+                deleteImage();
             }
         }
     };
+
+    private void deleteImage() {
+        previewImage.setImageResource(R.drawable.nophoto);
+        pictureFileName = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(
+                    selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(filePath, opt);
+            int imgWidth = opt.outWidth;
+
+            int realWidth = 128;
+            int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
+            opt.inSampleSize = scaleFactor;
+            opt.inJustDecodeBounds = false;
+
+            Bitmap img = BitmapFactory.decodeFile(filePath,opt);
+            previewImage.setImageBitmap(img);
+            pictureFileName = filePath;
+        }
+    }
 
     private void uploadStore() {
         if (storeNameET.getText().toString().equals("")) {
@@ -68,11 +116,15 @@ public class UploadStoreActivity extends Activity {
         okBtn.setOnClickListener(btnClickListener);
         cancelBtn = (ImageButton) findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(btnClickListener);
+        deleteImageBtn = (ImageButton) findViewById(R.id.deleteImageBtn);
+        deleteImageBtn.setOnClickListener(btnClickListener);
 
         storeNameET = (EditText) findViewById(R.id.storeNameUploadET);
+        previewImage = (ImageView) findViewById(R.id.imagePreview);
     }
 
     private void pickImage() {
-
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, PICK_IMAGE);
     }
 }
