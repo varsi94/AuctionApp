@@ -1,16 +1,27 @@
 package hu.bute.auctionapp.activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
+
+import java.io.File;
 
 import hu.bute.auctionapp.R;
 
 public class UploadActivity extends Activity {
+
+    public static final String IMAGEPATH =
+            Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    "/tmp_image.jpg";
+    private final int REQUEST_CAMERA_IMAGE = 101;
 
     static final String[] storeNames = new String[] { "Tesco", "Lidl","Aldi", "Auchan Csömör",
     "Árkád", "Aréna Pláza", "Mammut", "WestEnd" , "Campona", "Auchan Dunakeszi", "Auchan Budaörs",
@@ -21,12 +32,30 @@ public class UploadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        View uploadButton = findViewById(R.id.uploadbtn);
+        View uploadButton = findViewById(R.id.imgBtnUpload);
         uploadButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v)
             {
 
+            }
+        });
+
+        final ImageButton imgBtnPhoto =
+                (ImageButton) findViewById(R.id.imgBtnPhoto);
+        imgBtnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File imageFile = new File(IMAGEPATH);
+                Uri imageFileUri = Uri.fromFile(imageFile);
+                Intent cameraIntent =
+                        new Intent(
+                                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(
+                        android.provider.MediaStore.EXTRA_OUTPUT,
+                        imageFileUri);
+                startActivityForResult(cameraIntent,
+                        REQUEST_CAMERA_IMAGE);
             }
         });
 
@@ -43,6 +72,8 @@ public class UploadActivity extends Activity {
 
 
     }
+
+
 
 
     @Override

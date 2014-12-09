@@ -90,18 +90,53 @@
                 android:id="@+id/comment"
                 android:hint="@string/comment"/>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/uploadbtn"
-                android:text="Upload"
-                android:background="#8c96ff"/>
 
-            <Button
+            <ImageView
+                android:id="@+id/ivDrawer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/camera"
-                android:text="Take a picture"/>
+                android:scaleType="center"
+                android:src="@drawable/nophoto"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+
+                <TableRow>
+                    <ImageButton
+                        android:id="@+id/imgBtnPhoto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/close_buttons_margin"
+                        android:layout_weight="1"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:layout_column="0"/>
+
+                    <ImageButton
+                        android:id="@+id/imgBtnUpload"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/close_buttons_margin"
+                        android:layout_weight="1"
+                        android:src="@android:drawable/ic_menu_upload"
+                        android:layout_column="1"/>
+
+                    <ImageButton
+                        android:id="@+id/imgBtnDelete"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/close_buttons_margin"
+                        android:layout_weight="1"
+                        android:src="@android:drawable/ic_menu_delete"
+                        android:layout_column="2"/>
+                </TableRow>
+
+
+
+                </TableLayout>
+
+
 
 
 
