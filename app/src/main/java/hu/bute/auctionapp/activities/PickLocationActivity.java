@@ -201,8 +201,8 @@ public class PickLocationActivity extends FragmentActivity {
         } catch (IOException e) {
             //ignore.
         }
-        builder.setMessage(getString(R.string.confirm_location_message, address));
         final String finalAddress = address.trim();
+        builder.setMessage(getString(R.string.confirm_location_message, finalAddress));
         builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

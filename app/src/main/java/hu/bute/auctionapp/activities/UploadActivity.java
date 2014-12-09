@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,18 +20,22 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
+import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.adapters.StoresAdapterForSpinner;
+import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
+import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 public class UploadActivity extends Activity {
-
     public static final String IMAGEPATH =
             Environment.getExternalStorageDirectory().getAbsolutePath() +
                     "/tmp_image.jpg";
     private static final int PICK_LOCATION_REQUEST = 250;
-    private final int REQUEST_CAMERA_IMAGE = 101;
+    private static final int REQUEST_CAMERA_IMAGE = 101;
     private ImageView ivDrawer;
 
     private static final String[] currencyTypes = new String[] { "EUR", "USD", "HUF", "GBP"};
@@ -38,21 +43,20 @@ public class UploadActivity extends Activity {
             "Service", "Tool", "Other"};
 
     private EditText locationET;
+    private EditText productNameET;
+    private EditText priceET;
+    private Spinner currencySpinner;
+    private Spinner categorySpinner;
+    private Spinner storeNameSpinner;
+    private DatePicker durationDP;
+    private EditText propertiesET;
+    private EditText commentET;
     private PickLocationActivity.LocationInfo locationInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-
-        View uploadButton = findViewById(R.id.imgBtnUpload);
-        uploadButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v)
-            {
-
-            }
-        });
 
         final ImageButton imgBtnPhoto =
                 (ImageButton) findViewById(R.id.imgBtnPhoto);
@@ -101,6 +105,80 @@ public class UploadActivity extends Activity {
         });
 
         locationET = (EditText) findViewById(R.id.addressET);
+
+
+        View uploadButton = findViewById(R.id.btnUpload);
+        uploadButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                uploadProduct();
+            }
+        });
+
+        ImageButton imageDeleteBtn = (ImageButton) findViewById(R.id.imgBtnDelete);
+        imageDeleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File f = new File(IMAGEPATH);
+                if (f.exists()) {
+                    f.delete();
+                    ivDrawer.setImageResource(R.drawable.nophoto);
+                }
+            }
+        });
+
+        productNameET = (EditText) findViewById(R.id.productname);
+        priceET = (EditText) findViewById(R.id.price);
+        currencySpinner = (Spinner) findViewById(R.id.currency);
+        categorySpinner = (Spinner) findViewById(R.id.category);
+        storeNameSpinner = (Spinner) findViewById(R.id.store);
+        durationDP = (DatePicker) findViewById(R.id.duration);
+        propertiesET = (EditText) findViewById(R.id.properties);
+        commentET = (EditText) findViewById(R.id.comment);
+    }
+
+    private void uploadProduct() {
+        if (productNameET.getText().toString().equals("")) {
+            productNameET.setError(getString(R.string.field_is_empty));
+            return;
+        } else if (priceET.getText().toString().equals("")) {
+            priceET.setError(getString(R.string.field_is_empty));
+            return;
+        }
+        String name = productNameET.getText().toString();
+        StoreData store = (StoreData) storeNameSpinner.getSelectedItem();
+        double price = Double.parseDouble(priceET.getText().toString());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(durationDP.getYear(), durationDP.getMonth(), durationDP.getDayOfMonth());
+        Date durationEnd = calendar.getTime();
+        ProductData data = new ProductData(name, store, price, durationEnd);
+        if (locationInfo != null) {
+            data.setAddress(locationInfo.getLocation());
+            data.setGpsLat(locationInfo.getGpsLat());
+            data.setGpsLon(locationInfo.getGpsLon());
+        } else {
+            data.setAddress("");
+        }
+
+        data.setComment(commentET.getText().toString());
+        data.setProperties(propertiesET.getText().toString());
+        data.setCurrency((String) currencySpinner.getSelectedItem());
+        File f = new File(IMAGEPATH);
+        if (f.exists()) {
+            data.setPictureFileName(IMAGEPATH);
+        }
+
+        AuctionApplication app = (AuctionApplication) getApplication();
+        app.cloud.saveProduct(data, new CloudHandler.ResultCallback() {
+            @Override
+            public void onResult(Object result) {
+                if (result == true) {
+                    Toast.makeText(UploadActivity.this, getString(R.string.product_upload_successful), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(UploadActivity.this, getString(R.string.product_upload_failed), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -119,7 +197,7 @@ public class UploadActivity extends Activity {
                     opt.inSampleSize = scaleFactor;
                     opt.inJustDecodeBounds = false;
 
-                    Bitmap img = BitmapFactory.decodeFile(IMAGEPATH,opt);
+                    Bitmap img = BitmapFactory.decodeFile(IMAGEPATH, opt);
 
                     ivDrawer.setImageBitmap(img);
                 } catch (Throwable t) {
