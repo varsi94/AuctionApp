@@ -30,10 +30,12 @@ public class StoresAdapter extends BaseAdapter{
     private int type;
     private List<StoreData> storeDatas;
     private AuctionApplication app;
+    private Context context;
 
     public StoresAdapter(Context context, int type) {
         this.type = type;
-        this.app = (AuctionApplication)context;
+        this.app = (AuctionApplication) context.getApplicationContext();
+        this.context = context;
         storeDatas = new ArrayList<StoreData>();
         switch (type) {
             case MOST_RECENT:
@@ -116,7 +118,7 @@ public class StoresAdapter extends BaseAdapter{
         StoreData data = storeDatas.get(i);
         ViewHolder holder = null;
         if (view == null) {
-            LayoutInflater inflater = LayoutInflater.from(app);
+            LayoutInflater inflater = LayoutInflater.from(context);
             view = inflater.inflate(R.layout.store_line, null);
             holder = new ViewHolder();
             holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);

@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -20,18 +22,23 @@ import java.io.File;
 
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.adapters.StoresAdapterForSpinner;
+import hu.bute.auctionapp.data.StoreData;
 
 public class UploadActivity extends Activity {
 
     public static final String IMAGEPATH =
             Environment.getExternalStorageDirectory().getAbsolutePath() +
                     "/tmp_image.jpg";
+    private static final int PICK_LOCATION_REQUEST = 250;
     private final int REQUEST_CAMERA_IMAGE = 101;
     private ImageView ivDrawer;
 
-    static final String[] currencyTypes = new String[] { "EUR", "USD", "HUF", "GBP"};
-    static final String[] productTypes = new String[] {"Food", "Drink", "Clothes", "Electronic device",
+    private static final String[] currencyTypes = new String[] { "EUR", "USD", "HUF", "GBP"};
+    private static final String[] productTypes = new String[] {"Food", "Drink", "Clothes", "Electronic device",
             "Service", "Tool", "Other"};
+
+    private EditText locationET;
+    private PickLocationActivity.LocationInfo locationInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +75,8 @@ public class UploadActivity extends Activity {
         ivDrawer = (ImageView) findViewById(R.id.ivDrawer);
         Spinner tv = (Spinner) findViewById(R.id.store);
 
-        StoresAdapterForSpinner storeAdapter = new StoresAdapterForSpinner(getApplicationContext());
+        ArrayAdapter<StoreData> storeAdapter = new StoresAdapterForSpinner(
+                this, android.R.layout.simple_dropdown_item_1line);
         tv.setAdapter(storeAdapter);
 
         //Currency adapter
@@ -83,6 +91,16 @@ public class UploadActivity extends Activity {
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, productTypes);
         ctgry.setAdapter(categoryAdapter);
+
+        Button pickLocationBtn = (Button) findViewById(R.id.getLocationBtn);
+        pickLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(UploadActivity.this, PickLocationActivity.class), PICK_LOCATION_REQUEST);
+            }
+        });
+
+        locationET = (EditText) findViewById(R.id.addressET);
     }
 
     @Override
@@ -95,7 +113,6 @@ public class UploadActivity extends Activity {
                     opt.inJustDecodeBounds = true;
                     BitmapFactory.decodeFile(IMAGEPATH, opt);
                     int imgWidth = opt.outWidth;
-                    int imgHeight = opt.outHeight;
 
                     int realWidth = ivDrawer.getMeasuredWidth();
                     int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
@@ -110,11 +127,15 @@ public class UploadActivity extends Activity {
                     Toast.makeText(this, "ERROR: " + t, Toast.LENGTH_LONG).show();
                 }
             }
+        } else if (requestCode == PICK_LOCATION_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                PickLocationActivity.LocationInfo info =
+                        (PickLocationActivity.LocationInfo)data.getSerializableExtra(PickLocationActivity.LOCATION_INFO);
+                locationET.setText(info.getLocation());
+                locationInfo = info;
+            }
         }
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

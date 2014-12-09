@@ -24,21 +24,21 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/clicksTV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="4dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/typeTV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="4dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
     </LinearLayout>
 </LinearLayout>
