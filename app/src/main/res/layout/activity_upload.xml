@@ -69,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/get_location"
                 android:id="@+id/getLocationBtn"
+                android:background="#8c96ff"
                 />
 
             <EditText
@@ -111,7 +112,8 @@
                         android:layout_margin="@dimen/close_buttons_margin"
                         android:layout_weight="1"
                         android:src="@android:drawable/ic_menu_camera"
-                        android:layout_column="0"/>
+                        android:layout_column="0"
+                        android:background="#8c96ff"/>
 
                     <ImageButton
                         android:id="@+id/imgBtnUpload"
@@ -120,7 +122,8 @@
                         android:layout_margin="@dimen/close_buttons_margin"
                         android:layout_weight="1"
                         android:src="@android:drawable/ic_menu_upload"
-                        android:layout_column="1"/>
+                        android:layout_column="1"
+                        android:background="#8c96ff"/>
 
                     <ImageButton
                         android:id="@+id/imgBtnDelete"
@@ -129,7 +132,8 @@
                         android:layout_margin="@dimen/close_buttons_margin"
                         android:layout_weight="1"
                         android:src="@android:drawable/ic_menu_delete"
-                        android:layout_column="2"/>
+                        android:layout_column="2"
+                        android:background="#8c96ff"/>
                 </TableRow>
 
 

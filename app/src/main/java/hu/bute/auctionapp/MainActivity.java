@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,8 +18,8 @@ import hu.bute.auctionapp.activities.LoginActivity;
 import hu.bute.auctionapp.activities.ProductsActivity;
 import hu.bute.auctionapp.activities.SearchActivity;
 import hu.bute.auctionapp.activities.StoresActivity;
-import hu.bute.auctionapp.widgets.DynamicLoaderListView;
 import hu.bute.auctionapp.activities.UploadActivity;
+import hu.bute.auctionapp.widgets.DynamicLoaderListView;
 
 
 public class MainActivity extends Activity {
@@ -158,5 +160,22 @@ public class MainActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.upload_store) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

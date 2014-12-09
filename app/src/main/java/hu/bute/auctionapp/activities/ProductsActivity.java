@@ -1,22 +1,20 @@
 package hu.bute.auctionapp.activities;
 
-import java.util.Locale;
-
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.Locale;
 
 import hu.bute.auctionapp.R;
 
@@ -143,11 +141,11 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener 
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section).toUpperCase(l);
+                    return getString(R.string.title_most_recent).toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_section).toUpperCase(l);
+                    return getString(R.string.title_most_viewed).toUpperCase(l);
                 case 2:
-                    return getString(R.string.title_section).toUpperCase(l);
+                    return getString(R.string.title_favourites).toUpperCase(l);
             }
             return null;
         }

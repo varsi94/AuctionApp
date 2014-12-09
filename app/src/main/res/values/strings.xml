@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="register">Sign up</string>
     <string name="signIn">Sign in</string>
+    <string name="signOut">Sign out</string>
     <string name="title_activity_register">Sign up</string>
     <string name="successfulSignUp">Sign up successful!</string>
     <string name="title_activity_stores">Stores</string>
@@ -14,7 +15,6 @@
     <string name="title_most_viewed">Most viewed</string>
     <string name="title_favourites">Favourites</string>
     <string name="title_activity_products">Products</string>
-    <string name="title_section">Section</string>
     <string name="favorites">Favorites</string>
     <string name="stores">Stores</string>
     <string name="products">Products</string>
