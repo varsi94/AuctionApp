@@ -18,14 +18,13 @@ public class ProductData {
     private Date durationEnd;
     private String properties;
     private String comment;
+    private String currency;
 
-    public ProductData(String name, StoreData store, double price, Date durationEnd, String properties, String comment) {
+    public ProductData(String name, StoreData store, double price, Date durationEnd) {
         this.name = name;
         this.store = store;
         this.price = price;
         this.durationEnd = durationEnd;
-        this.properties = properties;
-        this.comment = comment;
     }
 
     public String getName() {
@@ -114,5 +113,13 @@ public class ProductData {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

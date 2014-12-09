@@ -154,7 +154,7 @@
                     android:src="@android:drawable/ic_menu_camera"/>
 
                 <ImageButton
-                    android:id="@+id/imgBtnUpload"
+                    android:id="@+id/btnUpload"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_column="1"

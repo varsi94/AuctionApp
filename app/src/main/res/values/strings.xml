@@ -56,6 +56,8 @@
     <string name="search_label">Search</string>
     <string name="no_result_found">No result found!</string>
     <string name="more">MORE</string>
+    <string name="product_upload_successful">Product upload was successful!</string>
+    <string name="product_upload_failed">Product upload failed!</string>
 
 
 </resources>
