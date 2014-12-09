@@ -1,6 +1,9 @@
 package hu.bute.auctionapp.data;
 
+import java.util.Date;
+
 /**
+ * A hirdetések adatainak tárolására alkalmas osztály.
  * Created by Andras on 2014.12.04..
  */
 public class ProductData {
@@ -8,5 +11,108 @@ public class ProductData {
     private StoreData store;
     private String pictureFileName;
     private String objectId;
-    private String price;
+    private double price;
+    private String address;
+    private double gpsLat;
+    private double gpsLon;
+    private Date durationEnd;
+    private String properties;
+    private String comment;
+
+    public ProductData(String name, StoreData store, double price, Date durationEnd, String properties, String comment) {
+        this.name = name;
+        this.store = store;
+        this.price = price;
+        this.durationEnd = durationEnd;
+        this.properties = properties;
+        this.comment = comment;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public StoreData getStore() {
+        return store;
+    }
+
+    public void setStore(StoreData store) {
+        this.store = store;
+    }
+
+    public String getPictureFileName() {
+        return pictureFileName;
+    }
+
+    public void setPictureFileName(String pictureFileName) {
+        this.pictureFileName = pictureFileName;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public double getGpsLat() {
+        return gpsLat;
+    }
+
+    public void setGpsLat(double gpsLat) {
+        this.gpsLat = gpsLat;
+    }
+
+    public double getGpsLon() {
+        return gpsLon;
+    }
+
+    public void setGpsLon(double gpsLon) {
+        this.gpsLon = gpsLon;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Date getDurationEnd() {
+        return durationEnd;
+    }
+
+    public void setDurationEnd(Date durationEnd) {
+        this.durationEnd = durationEnd;
+    }
+
+    public String getProperties() {
+        return properties;
+    }
+
+    public void setProperties(String properties) {
+        this.properties = properties;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }

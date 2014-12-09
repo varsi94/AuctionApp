@@ -34,6 +34,7 @@ public class StoresAdapter extends BaseAdapter{
     public StoresAdapter(Context context, int type) {
         this.type = type;
         this.app = (AuctionApplication)context;
+        storeDatas = new ArrayList<StoreData>();
         switch (type) {
             case MOST_RECENT:
                 loadMostRecent();
@@ -47,8 +48,6 @@ public class StoresAdapter extends BaseAdapter{
             default:
                 throw new IllegalArgumentException("Invalid storelist type!");
         }
-
-        storeDatas = new ArrayList<StoreData>();
     }
 
     private void loadFavourites() {

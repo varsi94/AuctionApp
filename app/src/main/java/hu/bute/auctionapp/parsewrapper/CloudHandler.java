@@ -33,5 +33,7 @@ public interface CloudHandler {
 
     public void getProduct(String objectid, ResultCallback callback);
 
-    public void saveProduct(ProductData data);
+    public void saveProduct(ProductData data, ResultCallback callback);
+
+    public void getStoresWithoutImages(ResultCallback callback);
 }

@@ -10,15 +10,15 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
 
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.adapters.StoresAdapterForTV;
 
 public class UploadActivity extends Activity {
 
@@ -68,18 +68,11 @@ public class UploadActivity extends Activity {
 
 
 
-        AutoCompleteTextView tv = (AutoCompleteTextView)
+        Spinner tv = (Spinner)
                 findViewById(R.id.store);
-        ArrayAdapter<String> storeAdapter =
-                new ArrayAdapter<String>(this,
-                        android.R.layout.
-                                simple_dropdown_item_1line, storeNames);
+
+        StoresAdapterForTV storeAdapter = new StoresAdapterForTV(getApplicationContext());
         tv.setAdapter(storeAdapter);
-
-
-
-
-
     }
 
     @Override

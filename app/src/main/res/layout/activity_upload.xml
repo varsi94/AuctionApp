@@ -49,13 +49,11 @@
                 android:hint="@string/product_price"/>
 
 
-            <AutoCompleteTextView
+            <Spinner
                 android:id="@+id/store"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/store_name" >
-                <requestFocus />
-            </AutoCompleteTextView>
+                android:hint="@string/store_name" />
 
             <EditText
                 android:layout_width="match_parent"
