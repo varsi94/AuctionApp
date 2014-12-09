@@ -52,6 +52,7 @@ public class UploadActivity extends Activity {
     private EditText propertiesET;
     private EditText commentET;
     private PickLocationActivity.LocationInfo locationInfo;
+    private boolean hasPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +124,7 @@ public class UploadActivity extends Activity {
                 if (f.exists()) {
                     f.delete();
                     ivDrawer.setImageResource(R.drawable.nophoto);
+                    hasPhoto = false;
                 }
             }
         });
@@ -135,6 +137,7 @@ public class UploadActivity extends Activity {
         durationDP = (DatePicker) findViewById(R.id.duration);
         propertiesET = (EditText) findViewById(R.id.properties);
         commentET = (EditText) findViewById(R.id.comment);
+        hasPhoto = false;
     }
 
     private void uploadProduct() {
@@ -164,7 +167,7 @@ public class UploadActivity extends Activity {
         data.setProperties(propertiesET.getText().toString());
         data.setCurrency((String) currencySpinner.getSelectedItem());
         File f = new File(IMAGEPATH);
-        if (f.exists()) {
+        if (hasPhoto) {
             data.setPictureFileName(IMAGEPATH);
         }
 
@@ -200,9 +203,9 @@ public class UploadActivity extends Activity {
                     Bitmap img = BitmapFactory.decodeFile(IMAGEPATH, opt);
 
                     ivDrawer.setImageBitmap(img);
+                    hasPhoto = true;
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(this, "ERROR: " + t, Toast.LENGTH_LONG).show();
                 }
             }
         } else if (requestCode == PICK_LOCATION_REQUEST) {
