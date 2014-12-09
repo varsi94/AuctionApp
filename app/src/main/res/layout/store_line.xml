@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/iconPicImageView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:id="@+id/iconPicImageView"
-        android:layout_margin="@dimen/activity_vertical_margin"/>
+        android:layout_gravity="center_vertical"
+        android:layout_margin="8dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical">
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/storeNameET"
-            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/clicksTV"
-            android:layout_margin="@dimen/activity_vertical_margin"/>
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/typeTV"
-            android:layout_margin="16dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
 </LinearLayout>

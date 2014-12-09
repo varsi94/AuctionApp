@@ -49,6 +49,8 @@
     <string name="uploading">Uploading...</string>
     <string name="typeLabel">"Type: "</string>
     <string name="store_type">Store type:</string>
+    <string name="ok">OK</string>
+    <string name="results">Results:</string>
 
 
 </resources>

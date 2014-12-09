@@ -1,139 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    android:gravity="center_horizontal"
-    android:paddingBottom="16dp"
-    >
+    android:paddingTop="16dp">
 
     <ProgressBar
         android:id="@+id/uploadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ScrollView
+        android:id="@+id/uploadForm"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/uploadForm">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/upload"
-                android:textSize="24dp"/>
-
+                android:textSize="24sp" />
 
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/productname"
-                android:hint="@string/product_name"/>
-
-            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:stretchColumns="*">
+                android:hint="@string/product_name" />
 
-                <TableRow>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/price"
-                        android:inputType="numberDecimal"
-                        android:hint="@string/product_price"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/currency">
-                    </Spinner>
-                </TableRow>
+                <EditText
+                    android:id="@+id/price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/product_price"
+                    android:inputType="numberDecimal" />
+
+                <Spinner
+                    android:id="@+id/currency"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
 
-
-            </TableLayout>
+            </LinearLayout>
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category"
-                android:textSize="20dp"/>
+                android:textSize="20sp" />
 
             <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/category"
-                >
-                </Spinner>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/store_name"
-                android:textSize="20dp"/>
+                android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/store"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <EditText
+                android:id="@+id/addressET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/address"
-                android:id="@+id/addressET"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:hint="@string/address" />
 
             <Button
+                android:id="@+id/getLocationBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/get_location"
-                android:id="@+id/getLocationBtn"
                 android:background="#8c96ff"
-                />
+                android:text="@string/get_location" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/duration"
-                android:textSize="20dp"/>
+                android:textSize="20sp" />
 
 
             <DatePicker
+                android:id="@+id/duration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/duration"
-                android:hint="@string/duration"
-                android:calendarViewShown="false">
+                android:calendarViewShown="false"
+                android:hint="@string/duration">
 
             </DatePicker>
 
 
             <EditText
+                android:id="@+id/properties"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/properties"
-                android:hint="@string/properties"/>
+                android:hint="@string/properties" />
 
             <EditText
+                android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/comment"
-                android:hint="@string/comment"/>
+                android:hint="@string/comment" />
 
 
             <ImageView
@@ -141,48 +134,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="center"
-                android:src="@drawable/nophoto"/>
+                android:src="@drawable/nophoto" />
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:stretchColumns="*">
-
-                <TableRow>
-                    <ImageButton
-                        android:id="@+id/imgBtnPhoto"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/close_buttons_margin"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/ic_menu_camera"
-                        android:layout_column="0"
-                        android:background="#8c96ff"/>
-
-                    <ImageButton
-                        android:id="@+id/imgBtnUpload"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/close_buttons_margin"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/ic_menu_upload"
-                        android:layout_column="1"
-                        android:background="#8c96ff"/>
-
-                    <ImageButton
-                        android:id="@+id/imgBtnDelete"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/close_buttons_margin"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/ic_menu_delete"
-                        android:layout_column="2"
-                        android:background="#8c96ff"/>
-                </TableRow>
+                android:orientation="horizontal">
 
 
+                <ImageButton
+                    android:id="@+id/imgBtnPhoto"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_margin="@dimen/close_buttons_margin"
+                    android:layout_weight="1"
+                    android:background="#8c96ff"
+                    android:src="@android:drawable/ic_menu_camera" />
 
-                </TableLayout>
+                <ImageButton
+                    android:id="@+id/imgBtnUpload"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_margin="@dimen/close_buttons_margin"
+                    android:layout_weight="1"
+                    android:background="#8c96ff"
+                    android:src="@android:drawable/ic_menu_upload" />
+
+                <ImageButton
+                    android:id="@+id/imgBtnDelete"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_margin="@dimen/close_buttons_margin"
+                    android:layout_weight="1"
+                    android:background="#8c96ff"
+                    android:src="@android:drawable/ic_menu_delete" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 

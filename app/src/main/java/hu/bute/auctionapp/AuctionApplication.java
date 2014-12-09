@@ -1,7 +1,6 @@
 package hu.bute.auctionapp;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.parse.Parse;
@@ -39,11 +38,17 @@ public class AuctionApplication extends Application {
 
     public void setUser(UserData user) {
         this.user = user;
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .edit()
-                .putString(KEY_USER_NAME, user.getName())
-                .putString(KEY_USER_PASS, user.getPasswordMD5())
-                .commit();
+        if (user != null) {
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putString(KEY_USER_NAME, user.getName())
+                    .putString(KEY_USER_PASS, user.getPasswordMD5())
+                    .commit();
+        } else {
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit().remove(KEY_USER_NAME).remove(KEY_USER_PASS)
+                    .commit();
+        }
     }
 
     public boolean hasUser() {

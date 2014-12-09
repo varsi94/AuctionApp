@@ -23,73 +23,7 @@ import hu.bute.auctionapp.widgets.DynamicLoaderListView;
 
 
 public class MainActivity extends Activity {
-    private static class MainListAdapter extends BaseAdapter implements DynamicLoaderListView.OnLoadListener {
-        private Context context;
-
-        List<String> titles = new ArrayList<String>();
-        List<Object> items = new ArrayList<Object>();
-
-        public MainListAdapter(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public int getCount() {
-            return titles.size() + items.size() + 1;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            if (position + 1 == getCount() - 1) {
-                return null;
-            }
-            if (position % 2 == 0) {
-                return titles.get(position / 2);
-            }
-            return items.get(position / 2);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 3;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (position == getCount() - 1) {
-                return 2;//loader
-            }
-            if (position % 2 == 0) {
-                return 0;//title type
-            }
-            return 1;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (position == getCount() - 1) {
-                if (convertView == null) {
-                    convertView = new ProgressBar(context);
-                }
-                return convertView;
-            }
-            return null;
-        }
-
-
-        @Override
-        public boolean startLoad() {
-            return false;
-        }
-    }
-
     private static final int REQUEST_LOGIN = 9746;
-
     private AuctionApplication app;
     private MainListAdapter adapter;
 
@@ -149,7 +83,7 @@ public class MainActivity extends Activity {
         uploadAdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 startActivity(new Intent(MainActivity.this, UploadActivity.class));
+                startActivity(new Intent(MainActivity.this, UploadActivity.class));
             }
         });
 
@@ -164,11 +98,84 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        switch (id) {
+            case R.id.upload_store:
+                break;
+            case R.id.signOut:
+                app.setUser(null);
+                startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
+                break;
+            default:
+                break;
+        }
         if (id == R.id.upload_store) {
 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private static class MainListAdapter extends BaseAdapter implements DynamicLoaderListView.OnLoadListener {
+        List<String> titles = new ArrayList<String>();
+        List<Object> items = new ArrayList<Object>();
+        private Context context;
+
+        public MainListAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return items.size() * 2 + 1;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            if (position + 1 == getCount() - 1) {
+                return null;
+            }
+            if (position % 2 == 0) {
+                return titles.get(position / 2);
+            }
+            return items.get(position / 2);
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 3;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == getCount() - 1) {
+                return 2;//loader
+            }
+            if (position % 2 == 0) {
+                return 0;//title type
+            }
+            return 1;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (position == getCount() - 1) {
+                if (convertView == null) {
+                    convertView = new ProgressBar(context);
+                }
+                return convertView;
+            }
+            return null;
+        }
+
+
+        @Override
+        public boolean startLoad() {
+            return false;
+        }
     }
 }
