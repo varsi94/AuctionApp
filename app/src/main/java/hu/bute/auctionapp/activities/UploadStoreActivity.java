@@ -93,7 +93,7 @@ public class UploadStoreActivity extends Activity {
 
         Toast.makeText(this, R.string.uploading, Toast.LENGTH_LONG).show();
         String storeName = storeNameET.getText().toString();
-        StoreData data = new StoreData(storeName, 0, "");
+        StoreData data = new StoreData(storeName, 0, (String) storeTypeSpinner.getSelectedItem());
         data.setPictureFileName(pictureFileName);
         AuctionApplication app = (AuctionApplication) getApplication();
         app.cloud.saveStore(data, new CloudHandler.ResultCallback() {

@@ -340,6 +340,7 @@ public class ParseHandler implements CloudHandler {
     private void saveStore(StoreData data, final ParseObject storeObj, final ResultCallback callback) {
         storeObj.put(STORE_NAME, data.getName());
         storeObj.put(STORE_CLICKS, data.getClicks());
+        storeObj.put(STORE_TYPE, data.getType());
         if (data.getPictureFileName() != null) {
             BitmapFactory.Options opt = new BitmapFactory.Options();
             opt.inJustDecodeBounds = true;
