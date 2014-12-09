@@ -9,13 +9,9 @@ import hu.bute.auctionapp.data.UserData;
  * Created by Varsi on 2014.12.04..
  */
 public interface CloudHandler {
-    public void getStoresByView(ResultCallback callback);
+    public void getStoresByViewDirectly(ResultCallback callback, int skip, int limit);
 
-    public void getStoresByLastChanged(ResultCallback callback);
-
-    public interface ResultCallback {
-        public void onResult(Object result);
-    }
+    public void getStoresByLastChangedDirectly(ResultCallback callback, int skip, int limit);
 
     public void getUser(String objectid, ResultCallback callback);
 
@@ -36,4 +32,8 @@ public interface CloudHandler {
     public void saveProduct(ProductData data, ResultCallback callback);
 
     public void getStoresWithoutImages(ResultCallback callback);
+
+    public interface ResultCallback {
+        public void onResult(Object result);
+    }
 }

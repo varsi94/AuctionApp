@@ -47,6 +47,10 @@ public class DynamicListHandler {
         });
     }
 
+    public DynamicListHandler(ListView target, BaseAdapter adapter) {
+        this(target, adapter, (DynamicLoader) adapter);
+    }
+
     private void checkWantsLoad() {
         if (!isLoading && listener.wantsToLoad()) {
             new LoaderAsyncTask().execute();
@@ -111,7 +115,7 @@ public class DynamicListHandler {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == getCount() - 1 && listener.wantsToLoad()) {
+            if (listener.wantsToLoad() && position == getCount() - 1) {
                 return getViewTypeCount() - 1;
             }
             return adapter.getItemViewType(position);
@@ -140,14 +144,14 @@ public class DynamicListHandler {
 
         @Override
         public Object getItem(int position) {
-            if (position == getCount() - 1 && listener.wantsToLoad())
+            if (listener.wantsToLoad() && position == getCount() - 1)
                 return null;
             return adapter.getItem(position);
         }
 
         @Override
         public long getItemId(int position) {
-            if (position == getCount() - 1 && listener.wantsToLoad())
+            if (listener.wantsToLoad() && position == getCount() - 1)
                 return position;
             return adapter.getItemId(position);
         }
