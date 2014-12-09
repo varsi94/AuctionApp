@@ -111,7 +111,7 @@ public class DynamicListHandler {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == getCount() - 1) {
+            if (position == getCount() - 1 && listener.wantsToLoad()) {
                 return getViewTypeCount() - 1;
             }
             return adapter.getItemViewType(position);
@@ -119,36 +119,42 @@ public class DynamicListHandler {
 
         @Override
         public int getViewTypeCount() {
+            if (listener.wantsToLoad()) {
+                return adapter.getViewTypeCount() + 1;
+            }
             return adapter.getViewTypeCount() + 1;
         }
 
         @Override
         public boolean isEmpty() {
-            return adapter.isEmpty();
+            return adapter.isEmpty() && !listener.wantsToLoad();
         }
 
         @Override
         public int getCount() {
-            return adapter.getCount() + 1;
+            if (listener.wantsToLoad()) {
+                return adapter.getCount() + 1;
+            }
+            return adapter.getCount();
         }
 
         @Override
         public Object getItem(int position) {
-            if (position == getCount() - 1)
+            if (position == getCount() - 1 && listener.wantsToLoad())
                 return null;
             return adapter.getItem(position);
         }
 
         @Override
         public long getItemId(int position) {
-            if (position == getCount() - 1)
+            if (position == getCount() - 1 && listener.wantsToLoad())
                 return position;
             return adapter.getItemId(position);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (position == getCount() - 1) {
+            if (position == getCount() - 1 && listener.wantsToLoad()) {
                 if (convertView == null) {
                     convertView = new ProgressBar(list.getContext());
                 }

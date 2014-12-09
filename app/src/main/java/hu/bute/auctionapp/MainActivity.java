@@ -23,7 +23,7 @@ import hu.bute.auctionapp.activities.UploadActivity;
 import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 
 
-public class MainActivity extends Activity implements DynamicListHandler.DynamicLoader {
+public class MainActivity extends Activity {
     private static final int REQUEST_LOGIN = 9746;
     private AuctionApplication app;
     private MainListAdapter adapter;
@@ -62,7 +62,7 @@ public class MainActivity extends Activity implements DynamicListHandler.Dynamic
         View uploadAdButton = findViewById(R.id.main_upload_ad);
         ListView list = (ListView) findViewById(R.id.main_list);
         adapter = new MainListAdapter(this);
-        loadhandler = new DynamicListHandler(list, adapter, this);
+        loadhandler = new DynamicListHandler(list, adapter, adapter);
 
 
         storesButton.setOnClickListener(new View.OnClickListener() {
@@ -115,25 +115,8 @@ public class MainActivity extends Activity implements DynamicListHandler.Dynamic
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean wantsToLoad() {
-        return true;
-    }
 
-    @Override
-    public void doLoading() {
-        System.out.println("MainActivity.doLoading");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        adapter.items.add(adapter.items.size());
-        adapter.items.add(adapter.items.size());
-        adapter.items.add(adapter.items.size());
-    }
-
-    private static class MainListAdapter extends BaseAdapter {
+    private static class MainListAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
         List<String> titles = new ArrayList<String>();
         List<Object> items = new ArrayList<Object>();
         private Context context;
@@ -180,6 +163,22 @@ public class MainActivity extends Activity implements DynamicListHandler.Dynamic
             return text;
         }
 
+        @Override
+        public boolean wantsToLoad() {
+            return items.size() < 40;
+        }
+
+        @Override
+        public void doLoading() {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            items.add(items.size());
+            items.add(items.size());
+            items.add(items.size());
+        }
 
     }
 }
