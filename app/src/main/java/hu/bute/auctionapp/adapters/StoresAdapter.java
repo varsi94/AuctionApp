@@ -1,5 +1,6 @@
 package hu.bute.auctionapp.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -23,7 +24,7 @@ import hu.bute.auctionapp.parsewrapper.CloudHandler;
  * Osztály az áruházak megjelenítésére.
  * Created by Varsi on 2014.12.08..
  */
-public class StoresAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
+public class StoresAdapter extends BaseAdapter{
     public static final int MOST_RECENT = 0;
     public static final int MOST_VIEWED = 1;
     public static final int FAVOURITES = 2;
@@ -31,11 +32,12 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     private List<StoreData> storeDatas;
     private AuctionApplication app;
     private boolean wantsLoad = true;
+    private Context context;
 
-
-    public StoresAdapter(AuctionApplication context, int type) {
+    public StoresAdapter(Context context, int type) {
         this.type = type;
-        this.app = context;
+        this.app = (AuctionApplication) context.getApplicationContext();
+        this.context = context;
         storeDatas = new ArrayList<StoreData>();
         /*switch (type) {
             case MOST_RECENT:
@@ -119,7 +121,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         StoreData data = storeDatas.get(i);
         ViewHolder holder = null;
         if (view == null) {
-            LayoutInflater inflater = LayoutInflater.from(app);
+            LayoutInflater inflater = LayoutInflater.from(context);
             view = inflater.inflate(R.layout.store_line, null);
             holder = new ViewHolder();
             holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);

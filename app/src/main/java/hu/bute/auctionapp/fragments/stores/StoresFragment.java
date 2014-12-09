@@ -91,14 +91,14 @@ public class StoresFragment extends ListFragment {
         mListener = null;
     }
 
+    public interface OnFragmentInteractionListener {
+        public void onFragmentInteraction(Uri uri);
+    }
+
     public void refreshStores() {
-        StoresAdapter adapter = (StoresAdapter) getListAdapter();
+        StoresAdapter adapter = (StoresAdapter)getListAdapter();
         if (adapter != null) {
             adapter.refresh();
         }
-    }
-
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
     }
 }
