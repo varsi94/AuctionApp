@@ -24,7 +24,7 @@ import hu.bute.auctionapp.parsewrapper.CloudHandler;
  * Osztály az áruházak megjelenítésére.
  * Created by Varsi on 2014.12.08..
  */
-public class StoresAdapter extends BaseAdapter{
+public class StoresAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
     public static final int MOST_RECENT = 0;
     public static final int MOST_VIEWED = 1;
     public static final int FAVOURITES = 2;
