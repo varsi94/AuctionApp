@@ -36,12 +36,10 @@ public class UploadActivity extends Activity {
                     "/tmp_image.jpg";
     private static final int PICK_LOCATION_REQUEST = 250;
     private static final int REQUEST_CAMERA_IMAGE = 101;
-    private ImageView ivDrawer;
-
     private static final String[] currencyTypes = new String[] { "EUR", "USD", "HUF", "GBP"};
     private static final String[] productTypes = new String[] {"Food", "Drink", "Clothes", "Electronic device",
             "Service", "Tool", "Other"};
-
+    private ImageView ivDrawer;
     private EditText locationET;
     private EditText productNameET;
     private EditText priceET;
@@ -166,7 +164,6 @@ public class UploadActivity extends Activity {
         data.setComment(commentET.getText().toString());
         data.setProperties(propertiesET.getText().toString());
         data.setCurrency((String) currencySpinner.getSelectedItem());
-        File f = new File(IMAGEPATH);
         if (hasPhoto) {
             data.setPictureFileName(IMAGEPATH);
         }
