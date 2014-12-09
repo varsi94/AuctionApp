@@ -9,25 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <EditText
-            android:id="@+id/storeNameET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/store_name"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/get_location"
-            android:id="@+id/getLocationBtn"
-            />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/address"
-            android:id="@+id/addressET"
-            android:enabled="false"/>
+
 
         <Button
             android:layout_width="match_parent"

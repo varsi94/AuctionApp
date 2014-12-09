@@ -57,13 +57,19 @@
                 <requestFocus />
             </AutoCompleteTextView>
 
-            <AutoCompleteTextView
-                android:id="@+id/location"
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/location" >
-                <requestFocus />
-            </AutoCompleteTextView>
+                android:hint="@string/address"
+                android:id="@+id/addressET"
+                android:enabled="false"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/get_location"
+                android:id="@+id/getLocationBtn"
+                />
 
             <EditText
                 android:layout_width="match_parent"

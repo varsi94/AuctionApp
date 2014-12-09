@@ -41,7 +41,7 @@ public class UploadStoreActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_store);
         data = new StoreData("", "", 0, 0, 0);
-        storeNameET = (EditText) findViewById(R.id.storeNameET);
+        //storeNameET = (EditText) findViewById(R.id.storeNameET);
         getLocationBtn = (Button) findViewById(R.id.getLocationBtn);
         getLocationBtn.setOnClickListener(btnClickListener);
         pickImageBtn = (Button) findViewById(R.id.pickImageBtn);

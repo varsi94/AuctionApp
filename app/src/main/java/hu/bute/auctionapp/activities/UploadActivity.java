@@ -16,10 +16,6 @@ public class UploadActivity extends Activity {
     "Árkád", "Aréna Pláza", "Mammut", "WestEnd" , "Campona", "Auchan Dunakeszi", "Auchan Budaörs",
     "Auchan Maglód", "Auchan Óbuda", "Auchan Fót"};
 
-    static final String[] cityNames = new String[] { "Győr", "Szombathely","Sopron", "Csömör",
-            "Szeged", "Kecskemét", "Debrecen", "Karcag" , "Budapest", "Dunakeszi", "Budaörs",
-            "Maglód", "Óbuda", "Fót"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +38,6 @@ public class UploadActivity extends Activity {
                                 simple_dropdown_item_1line, storeNames);
         tv.setAdapter(storeAdapter);
 
-        AutoCompleteTextView tv2 = (AutoCompleteTextView)
-                findViewById(R.id.location);
-        ArrayAdapter<String> cityAdapter =
-                new ArrayAdapter<String>(this,
-                        android.R.layout.
-                                simple_dropdown_item_1line, cityNames);
-        tv2.setAdapter(cityAdapter);
 
 
 
