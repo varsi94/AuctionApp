@@ -31,11 +31,9 @@ public class UploadActivity extends Activity {
                     "/tmp_image.jpg";
     private static final int PICK_LOCATION_REQUEST = 250;
     private final int REQUEST_CAMERA_IMAGE = 101;
+    private String[] currencyTypes;
     private ImageView ivDrawer;
-
-    private static final String[] currencyTypes = new String[] { "EUR", "USD", "HUF", "GBP"};
-    private static final String[] productTypes = new String[] {"Food", "Drink", "Clothes", "Electronic device",
-            "Service", "Tool", "Other"};
+    private String[] productTypes;
 
     private EditText locationET;
     private PickLocationActivity.LocationInfo locationInfo;
@@ -43,13 +41,14 @@ public class UploadActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        productTypes = getResources().getStringArray(R.array.product_types);
+        currencyTypes = getResources().getStringArray(R.array.currency_types);
         setContentView(R.layout.activity_upload);
 
         View uploadButton = findViewById(R.id.imgBtnUpload);
-        uploadButton.setOnClickListener(new View.OnClickListener(){
+        uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
             }
         });
@@ -82,12 +81,12 @@ public class UploadActivity extends Activity {
         //Currency adapter
         Spinner crcy = (Spinner)
                 findViewById(R.id.currency);
-        ArrayAdapter<String> currencyAdapter =new ArrayAdapter<String>(this,
+        ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, currencyTypes);
         crcy.setAdapter(currencyAdapter);
 
         //Category adapter
-        Spinner ctgry = (Spinner)findViewById(R.id.category);
+        Spinner ctgry = (Spinner) findViewById(R.id.category);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, productTypes);
         ctgry.setAdapter(categoryAdapter);
@@ -115,11 +114,11 @@ public class UploadActivity extends Activity {
                     int imgWidth = opt.outWidth;
 
                     int realWidth = ivDrawer.getMeasuredWidth();
-                    int scaleFactor = Math.round((float)imgWidth / (float)realWidth);
+                    int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
                     opt.inSampleSize = scaleFactor;
                     opt.inJustDecodeBounds = false;
 
-                    Bitmap img = BitmapFactory.decodeFile(IMAGEPATH,opt);
+                    Bitmap img = BitmapFactory.decodeFile(IMAGEPATH, opt);
 
                     ivDrawer.setImageBitmap(img);
                 } catch (Throwable t) {
@@ -130,7 +129,7 @@ public class UploadActivity extends Activity {
         } else if (requestCode == PICK_LOCATION_REQUEST) {
             if (resultCode == RESULT_OK) {
                 PickLocationActivity.LocationInfo info =
-                        (PickLocationActivity.LocationInfo)data.getSerializableExtra(PickLocationActivity.LOCATION_INFO);
+                        (PickLocationActivity.LocationInfo) data.getSerializableExtra(PickLocationActivity.LOCATION_INFO);
                 locationET.setText(info.getLocation());
                 locationInfo = info;
             }

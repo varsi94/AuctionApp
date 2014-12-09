@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="store_types">
+        <item>Electronic devices</item>
+        <item>Supermarket</item>
+        <item>Bar</item>
+        <item>Tobacco shop</item>
+        <item>Fashion</item>
+        <item>Services</item>
+        <item>Other</item>
+    </string-array>
+</resources>

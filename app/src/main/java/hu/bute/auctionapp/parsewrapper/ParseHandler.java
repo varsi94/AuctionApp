@@ -82,6 +82,36 @@ public class ParseHandler implements CloudHandler {
         return result;
     }
 
+    private StoreData parseObjectToStoreDirectly(ParseObject obj, boolean fileSave) {
+        String name = obj.getString(STORE_NAME);
+        Number clicknum = obj.getNumber(STORE_CLICKS);
+        int clicks = clicknum == null ? 0 : clicknum.intValue();
+        String storeType = obj.getString(STORE_TYPE);
+        final StoreData result = new StoreData(name, clicks, storeType);
+        result.setObjectId(obj.getObjectId());
+
+        final ParseFile picture = obj.getParseFile(STORE_LOGO_PICTRUE);
+        if (picture == null || !fileSave) {
+            return result;
+        }
+        File f = context.getFileStreamPath(picture.getName());
+        Date lastModified = obj.getUpdatedAt();
+        Date fileLastModified = new Date(f.lastModified());
+        if (f.exists() && fileLastModified.compareTo(lastModified) > 0) {
+            result.setPictureFileName(picture.getName());
+        } else {
+            try {
+                byte[] bytes = picture.getData();
+                String fileName = picture.getName();
+                saveToFile(fileName, bytes);
+                result.setPictureFileName(fileName);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
     private void parseObjectToStore(ParseObject obj, boolean fileSave, final ResultCallback callback) {
         String name = obj.getString(STORE_NAME);
         Number clicknum = obj.getNumber(STORE_CLICKS);
@@ -280,7 +310,7 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public void getStoresByViewDirectly(final ResultCallback callback, int skip, int limit) {
+    public List<StoreData> getStoresByViewDirectly(int skip, int limit) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
@@ -288,61 +318,33 @@ public class ParseHandler implements CloudHandler {
         final List<StoreData> result = new ArrayList<StoreData>();
         try {
             List<ParseObject> parseObjects = query.find();
-            final int max = parseObjects.size();
-            if (max != 0) {
-                final int[] counter = {0};
-                for (ParseObject obj : parseObjects) {
-                    parseObjectToStore(obj, true, new ResultCallback() {
-                        @Override
-                        public void onResult(Object data) {
-                            result.add((StoreData) data);
-                            counter[0] = counter[0] + 1;
-                            if (counter[0] == max) {
-                                callback.onResult(result);
-                            }
-                        }
-                    });
-                }
-            } else {
-                callback.onResult(result);
+            for (ParseObject obj : parseObjects) {
+                StoreData store = parseObjectToStoreDirectly(obj, true);
+                result.add(store);
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            callback.onResult(result);
         }
+        return result;
     }
 
     @Override
-    public void getStoresByLastChangedDirectly(final ResultCallback callback, int skip, int limit) {
+    public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
-        query.orderByDescending("updatedAt");
         query.setSkip(skip);
         query.setLimit(limit);
+        query.orderByDescending("updatedAt");
         final List<StoreData> result = new ArrayList<StoreData>();
         try {
             List<ParseObject> parseObjects = query.find();
-            final int max = parseObjects.size();
-            if (max != 0) {
-                final int[] counter = {0};
-                for (ParseObject obj : parseObjects) {
-                    parseObjectToStore(obj, true, new ResultCallback() {
-                        @Override
-                        public void onResult(Object data) {
-                            result.add((StoreData) data);
-                            counter[0] = counter[0] + 1;
-                            if (counter[0] == max) {
-                                callback.onResult(result);
-                            }
-                        }
-                    });
-                }
-            } else {
-                callback.onResult(result);
+            for (ParseObject obj : parseObjects) {
+                StoreData store = parseObjectToStoreDirectly(obj, true);
+                result.add(store);
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            callback.onResult(result);
         }
+        return result;
     }
 
     private void saveStore(StoreData data, final ParseObject storeObj, final ResultCallback callback) {
@@ -490,5 +492,24 @@ public class ParseHandler implements CloudHandler {
                 }
             }
         });
+    }
+
+    @Override
+    public List<StoreData> getMostPopularStoreDirectly(String category, int count) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
+        query.orderByDescending(STORE_CLICKS);
+        query.whereEqualTo(STORE_TYPE, category);
+        query.setLimit(count);
+        List<StoreData> result = new ArrayList<>();
+        try {
+            List<ParseObject> obj = query.find();
+            for (ParseObject po : obj) {
+                StoreData store = parseObjectToStoreDirectly(po, true);
+                result.add(store);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

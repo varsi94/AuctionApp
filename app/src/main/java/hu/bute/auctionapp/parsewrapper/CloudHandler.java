@@ -1,5 +1,7 @@
 package hu.bute.auctionapp.parsewrapper;
 
+import java.util.List;
+
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.data.UserData;
@@ -9,9 +11,9 @@ import hu.bute.auctionapp.data.UserData;
  * Created by Varsi on 2014.12.04..
  */
 public interface CloudHandler {
-    public void getStoresByViewDirectly(ResultCallback callback, int skip, int limit);
+    public List<StoreData> getStoresByViewDirectly(int skip, int limit);
 
-    public void getStoresByLastChangedDirectly(ResultCallback callback, int skip, int limit);
+    public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit);
 
     public void getUser(String objectid, ResultCallback callback);
 
@@ -32,6 +34,8 @@ public interface CloudHandler {
     public void saveProduct(ProductData data, ResultCallback callback);
 
     public void getStoresWithoutImages(ResultCallback callback);
+
+    public List<StoreData> getMostPopularStoreDirectly(String category, int count);
 
     public interface ResultCallback {
         public void onResult(Object result);

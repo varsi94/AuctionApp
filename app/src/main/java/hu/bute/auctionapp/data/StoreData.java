@@ -33,6 +33,10 @@ public class StoreData {
         this.pictureFileName = pictureFileName;
     }
 
+    public boolean hasPicture() {
+        return pictureFileName != null;
+    }
+
     public String getObjectId() {
         return objectId;
     }

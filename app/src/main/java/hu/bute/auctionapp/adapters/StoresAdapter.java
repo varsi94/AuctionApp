@@ -18,7 +18,6 @@ import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
-import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 /**
  * Osztály az áruházak megjelenítésére.
@@ -60,26 +59,16 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
 
     private void loadMostViewed() {
         final int toload = 2;
-        app.cloud.getStoresByViewDirectly(new CloudHandler.ResultCallback() {
-            @Override
-            public void onResult(Object result) {
-                List<StoreData> incoming = (List<StoreData>) result;
-                wantsLoad = incoming.size() >= toload;
-                storeDatas.addAll(incoming);
-            }
-        }, storeDatas.size(), toload);
+        List<StoreData> incoming = app.cloud.getStoresByViewDirectly(storeDatas.size(), toload);
+        wantsLoad = incoming.size() >= toload;
+        storeDatas.addAll(incoming);
     }
 
     private void loadMostRecent() {
         final int toload = 2;
-        app.cloud.getStoresByLastChangedDirectly(new CloudHandler.ResultCallback() {
-            @Override
-            public void onResult(Object result) {
-                List<StoreData> incoming = (List<StoreData>) result;
-                wantsLoad = incoming.size() >= toload;
-                storeDatas.addAll(incoming);
-            }
-        }, storeDatas.size(), toload);
+        List<StoreData> incoming = app.cloud.getStoresByLastChangedDirectly(storeDatas.size(), toload);
+        wantsLoad = incoming.size() >= toload;
+        storeDatas.addAll(incoming);
     }
 
     @Override
@@ -155,7 +144,6 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
 
     @Override
     public void doLoading() {
-        System.out.println("StoresAdapter.doLoading");
         switch (type) {
             case MOST_RECENT:
                 loadMostRecent();
