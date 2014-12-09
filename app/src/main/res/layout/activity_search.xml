@@ -33,7 +33,7 @@
             android:id="@+id/okbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff968c"
+            android:background="#00ca44"
             android:text="@string/ok" />
 
         <TextView
