@@ -1,10 +1,18 @@
 package hu.bute.auctionapp.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -14,10 +22,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
+
 import hu.bute.auctionapp.R;
 
 public class PickLocationActivity extends FragmentActivity {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private Button searchBtn;
+    private EditText searchET;
+    public static final String LOCATION_INFO = "location_info";
     private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -47,6 +63,42 @@ public class PickLocationActivity extends FragmentActivity {
         }
     };
 
+    public static class LocationInfo implements Serializable {
+        private String location;
+        private double gpsLat;
+        private double gpsLon;
+
+        public LocationInfo(String location, double gpsLat, double gpsLon) {
+            this.location = location;
+            this.gpsLat = gpsLat;
+            this.gpsLon = gpsLon;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public double getGpsLat() {
+            return gpsLat;
+        }
+
+        public void setGpsLat(double gpsLat) {
+            this.gpsLat = gpsLat;
+        }
+
+        public double getGpsLon() {
+            return gpsLon;
+        }
+
+        public void setGpsLon(double gpsLon) {
+            this.gpsLon = gpsLon;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +106,34 @@ public class PickLocationActivity extends FragmentActivity {
         setUpMapIfNeeded();
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
+
+        searchBtn = (Button) findViewById(R.id.searchBtn);
+        searchET = (EditText) findViewById(R.id.searchET);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Geocoder geocoder = new Geocoder(PickLocationActivity.this, Locale.ENGLISH);
+                List<Address> addresses;
+                try {
+                    addresses = geocoder.getFromLocationName(searchET.getText().toString(), 1);
+                    if (addresses.size() == 0) {
+                        Toast.makeText(PickLocationActivity.this, R.string.no_result_found, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Address address = addresses.get(0);
+                    LatLng pos = new LatLng(address.getLatitude(), address.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.
+                            newLatLngZoom(pos, 15);
+                    mMap.animateCamera(cameraUpdate);
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.position(pos);
+                    mMap.addMarker(marker);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -81,8 +161,8 @@ public class PickLocationActivity extends FragmentActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+            SupportMapFragment mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+            mMap = mapFragment.getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
@@ -101,8 +181,45 @@ public class PickLocationActivity extends FragmentActivity {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                Toast.makeText(PickLocationActivity.this, latLng.latitude + " " + latLng.longitude, Toast.LENGTH_LONG).show();
+                confirmLocation(latLng);
             }
         });
+    }
+
+    private void confirmLocation(final LatLng latLng) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.confirm_location);
+        Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
+        String address = "";
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addresses.size() > 0) {
+                for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex(); i++) {
+                    address = address + addresses.get(0).getAddressLine(i) + "\n";
+                }
+            }
+        } catch (IOException e) {
+            //ignore.
+        }
+        builder.setMessage(getString(R.string.confirm_location_message, address));
+        final String finalAddress = address.trim();
+        builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LocationInfo info = new LocationInfo(finalAddress, latLng.latitude, latLng.longitude);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(LOCATION_INFO, info);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel_label, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
     }
 }

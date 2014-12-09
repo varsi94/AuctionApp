@@ -1,5 +1,31 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:id="@+id/map"
-    tools:context="hu.bute.auctionapp.activities.PickLocationActivity"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:context="hu.bute.auctionapp.activities.PickLocationActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:id="@+id/searchET"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/search_label"
+            android:id="@+id/searchBtn" />
+    </LinearLayout>
+
+    <fragment android:layout_width="match_parent"
+        android:layout_height="match_parent" android:id="@+id/map"
+        tools:context="hu.bute.auctionapp.activities.PickLocationActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+</LinearLayout>

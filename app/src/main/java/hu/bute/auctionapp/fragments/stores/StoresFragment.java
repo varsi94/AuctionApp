@@ -42,11 +42,11 @@ public class StoresFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             type = savedInstanceState.getInt(TYPE_KEY);
-            setListAdapter(new StoresAdapter(getActivity().getApplication(), type));
+            setListAdapter(new StoresAdapter(getActivity(), type));
         } else if (getArguments() != null) {
             Bundle args = getArguments();
             type = args.getInt(TYPE_KEY);
-            setListAdapter(new StoresAdapter(getActivity().getApplication(), type));
+            setListAdapter(new StoresAdapter(getActivity(), type));
         }
     }
 

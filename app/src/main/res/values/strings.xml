@@ -51,6 +51,10 @@
     <string name="store_type">Store type:</string>
     <string name="ok">OK</string>
     <string name="results">Results:</string>
+    <string name="confirm_location">Confirm location</string>
+    <string name="confirm_location_message">This is the address: %s. Confirm?</string>
+    <string name="search_label">Search</string>
+    <string name="no_result_found">No result found!</string>
 
 
 </resources>
