@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -28,9 +29,9 @@ public class UploadActivity extends Activity {
     private final int REQUEST_CAMERA_IMAGE = 101;
     private ImageView ivDrawer;
 
-    static final String[] storeNames = new String[] { "Tesco", "Lidl","Aldi", "Auchan Csömör",
-    "Árkád", "Aréna Pláza", "Mammut", "WestEnd" , "Campona", "Auchan Dunakeszi", "Auchan Budaörs",
-    "Auchan Maglód", "Auchan Óbuda", "Auchan Fót"};
+    static final String[] currencyTypes = new String[] { "EUR", "USD", "HUF", "GBP"};
+    static final String[] productTypes = new String[] {"Food", "Drink", "Clothes", "Electronic device",
+            "Service", "Tool", "Other"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,19 @@ public class UploadActivity extends Activity {
 
         StoresAdapterForSpinner storeAdapter = new StoresAdapterForSpinner(getApplicationContext());
         tv.setAdapter(storeAdapter);
+
+        //Currency adapter
+        Spinner crcy = (Spinner)
+                findViewById(R.id.currency);
+        ArrayAdapter<String> currencyAdapter =new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, currencyTypes);
+        crcy.setAdapter(currencyAdapter);
+
+        //Category adapter
+        Spinner ctgry = (Spinner)findViewById(R.id.category);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, productTypes);
+        ctgry.setAdapter(categoryAdapter);
     }
 
     @Override

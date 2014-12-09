@@ -41,19 +41,55 @@
                 android:id="@+id/productname"
                 android:hint="@string/product_name"/>
 
-            <EditText
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/price"
-                android:inputType="numberDecimal"
-                android:hint="@string/product_price"/>
+                android:stretchColumns="*">
 
+                <TableRow>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/price"
+                        android:inputType="numberDecimal"
+                        android:hint="@string/product_price"/>
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/currency">
+                    </Spinner>
+                </TableRow>
+
+
+
+            </TableLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/category"
+                android:textSize="20dp"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/category"
+                >
+                </Spinner>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/store_name"
+                android:textSize="20dp"/>
 
             <Spinner
                 android:id="@+id/store"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/store_name" />
+                />
 
             <EditText
                 android:layout_width="match_parent"
