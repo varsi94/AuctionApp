@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#00ffff"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#00ffff"
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              tools:context=".MainActivity">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_margin="@dimen/close_buttons_margin"
                 android:layout_weight="1"
                 android:background="#8c96ff"
-                android:text="@string/upload_ad" />
+                android:text="@string/upload_ad"/>
 
             <Button
                 android:id="@+id/main_search"
@@ -35,7 +35,7 @@
                 android:layout_margin="@dimen/close_buttons_margin"
                 android:layout_weight="1"
                 android:background="#ff968c"
-                android:text="@string/search" />
+                android:text="@string/search"/>
         </TableRow>
 
         <TableRow>
@@ -48,7 +48,7 @@
                 android:layout_margin="@dimen/close_buttons_margin"
                 android:layout_weight="1"
                 android:background="#ffff00"
-                android:text="@string/products" />
+                android:text="@string/products"/>
 
             <Button
                 android:id="@+id/main_stores"
@@ -58,7 +58,7 @@
                 android:layout_margin="@dimen/close_buttons_margin"
                 android:layout_weight="1"
                 android:background="#ff3f00"
-                android:text="@string/stores" />
+                android:text="@string/stores"/>
         </TableRow>
 
 
@@ -67,6 +67,7 @@
     <ListView
         android:id="@+id/main_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@null"/>
 
 </LinearLayout>

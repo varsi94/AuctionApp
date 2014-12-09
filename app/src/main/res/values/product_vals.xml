@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="product_types">
+        <item>Food</item>
+        <item>Drink</item>
+        <item>Clothes</item>
+        <item>Electronic device</item>
+        <item>Service</item>
+        <item>Tool</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="currency_types">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>HUF</item>
+        <item>GBP</item>
+    </string-array>
+</resources>

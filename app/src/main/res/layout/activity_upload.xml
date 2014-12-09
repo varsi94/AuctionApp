@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:paddingBottom="16dp"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:paddingTop="16dp">
 
     <ProgressBar
         android:id="@+id/uploadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ScrollView
         android:id="@+id/uploadForm"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,14 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/upload"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
 
             <EditText
                 android:id="@+id/productname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/product_name" />
+                android:hint="@string/product_name"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,13 +52,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/product_price"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"/>
 
                 <Spinner
                     android:id="@+id/currency"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
 
 
             </LinearLayout>
@@ -67,18 +68,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
             <Spinner
                 android:id="@+id/category"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/store_name"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
             <Spinner
                 android:id="@+id/store"
@@ -90,20 +91,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:hint="@string/address" />
+                android:hint="@string/address"/>
 
             <Button
                 android:id="@+id/getLocationBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#8c96ff"
-                android:text="@string/get_location" />
+                android:text="@string/get_location"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/duration"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
 
             <DatePicker
@@ -120,13 +121,13 @@
                 android:id="@+id/properties"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/properties" />
+                android:hint="@string/properties"/>
 
             <EditText
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/comment" />
+                android:hint="@string/comment"/>
 
 
             <ImageView
@@ -134,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="center"
-                android:src="@drawable/nophoto" />
+                android:src="@drawable/nophoto"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,7 +151,7 @@
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
                     android:background="#8c96ff"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:src="@android:drawable/ic_menu_camera"/>
 
                 <ImageButton
                     android:id="@+id/btnUpload"
@@ -160,7 +161,7 @@
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
                     android:background="#8c96ff"
-                    android:src="@android:drawable/ic_menu_upload" />
+                    android:src="@android:drawable/ic_menu_upload"/>
 
                 <ImageButton
                     android:id="@+id/imgBtnDelete"
@@ -170,7 +171,7 @@
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
                     android:background="#8c96ff"
-                    android:src="@android:drawable/ic_menu_delete" />
+                    android:src="@android:drawable/ic_menu_delete"/>
 
 
             </LinearLayout>

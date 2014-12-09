@@ -28,11 +28,6 @@ public class UploadStoreActivity extends Activity {
     private ImageButton okBtn;
     private ImageButton cancelBtn;
     private ImageButton deleteImageBtn;
-    private Spinner storeTypeSpinner;
-    private EditText storeNameET;
-    private ImageView previewImage;
-    private String pictureFileName;
-
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -48,6 +43,10 @@ public class UploadStoreActivity extends Activity {
             }
         }
     };
+    private Spinner storeTypeSpinner;
+    private EditText storeNameET;
+    private ImageView previewImage;
+    private String pictureFileName;
 
     private void deleteImage() {
         previewImage.setImageResource(R.drawable.nophoto);
@@ -127,7 +126,7 @@ public class UploadStoreActivity extends Activity {
         previewImage = (ImageView) findViewById(R.id.imagePreview);
         storeTypeSpinner = (Spinner) findViewById(R.id.storeTypeSpinner);
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, StoreTypes.getValues());
+                new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, StoreTypes.getValues(this));
         storeTypeSpinner.setAdapter(adapter);
     }
 
