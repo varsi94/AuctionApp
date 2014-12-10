@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.activities.ProductDetailsActivity;
@@ -88,6 +89,12 @@ public class ProductFragment extends ListFragment implements AbsListView.OnItemC
         Intent i = new Intent(getActivity(), ProductDetailsActivity.class);
         i.putExtra(ProductDetailsActivity.PRODUCT_KEY, data);
         startActivity(i);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
     }
 
     @Override

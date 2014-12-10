@@ -22,6 +22,7 @@ public class ProductData implements Serializable {
     private String currency;
     private int clicks;
     private String category;
+    private boolean favorite;
 
     public ProductData(String name, StoreData store, double price, Date durationEnd) {
         this.name = name;
@@ -141,5 +142,13 @@ public class ProductData implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }
