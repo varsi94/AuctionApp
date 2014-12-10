@@ -1,13 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        debugConfig {
-            keyAlias 'C6:A7:55:D8:5E:DA:93:A0:C5:12:67:3E:B5:0D:DD:F9:4E:94:F3:F2'
-            keyPassword 'android'
-            storePassword 'android'
-        }
-    }
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
     defaultConfig {
