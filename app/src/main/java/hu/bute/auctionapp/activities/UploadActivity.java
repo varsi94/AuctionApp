@@ -164,6 +164,7 @@ public class UploadActivity extends Activity {
         data.setComment(commentET.getText().toString());
         data.setProperties(propertiesET.getText().toString());
         data.setCurrency((String) currencySpinner.getSelectedItem());
+        data.setCategory((String) categorySpinner.getSelectedItem());
         if (hasPhoto) {
             data.setPictureFileName(IMAGEPATH);
         }

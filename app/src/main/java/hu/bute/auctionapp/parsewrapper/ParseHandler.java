@@ -53,6 +53,8 @@ public class ParseHandler implements CloudHandler {
     private static final String PRODUCT_ADDRESS = "address";
     private static final String PRODUCT_PICTURE = "picture";
     private static final String PRODUCT_CURRENCTY = "currency";
+    private static final String PRODUCT_CLICKS = "clicks";
+    private static final String PRODUCT_CATEGORY = "category";
     private Context context;
 
     public ParseHandler(Context context) {
@@ -145,6 +147,84 @@ public class ParseHandler implements CloudHandler {
                 }
             });
         }
+    }
+
+    @Override
+    public List<ProductData> getProductsByViewDirectly(int skip, int limit) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
+        query.setSkip(skip);
+        query.setLimit(limit);
+        query.orderByDescending(PRODUCT_CLICKS);
+        final List<ProductData> result = new ArrayList<ProductData>();
+        try {
+            List<ParseObject> parseObjects = query.find();
+            for (ParseObject obj : parseObjects) {
+                ProductData product = null;
+                try {
+                    product = parseObjectToProductDirectly(obj);
+                    result.add(product);
+                } catch (StoreNotFoundException e) {
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private ProductData parseObjectToProductDirectly(ParseObject obj) throws StoreNotFoundException {
+        ParseObject store = obj.getParseObject(PRODUCT_STOREID);
+        try {
+            store.fetch();
+            StoreData storeData = parseObjectToStoreDirectly(store, false);
+            ProductData result = new ProductData(obj.getString(PRODUCT_NAME), storeData, obj.getDouble(PRODUCT_PRICE), obj.getDate(PRODUCT_DURATION_END));
+            result.setAddress(obj.getString(PRODUCT_ADDRESS));
+            result.setGpsLat(obj.getDouble(PRODUCT_GPS_LAT));
+            result.setGpsLon(obj.getDouble(PRODUCT_GPS_LON));
+            result.setComment(obj.getString(PRODUCT_COMMENTS));
+            result.setProperties(obj.getString(PRODUCT_PROPERTIES));
+            result.setCurrency(obj.getString(PRODUCT_CURRENCTY));
+            result.setClicks(obj.getInt(PRODUCT_CLICKS));
+            result.setCategory(obj.getString(PRODUCT_CATEGORY));
+            ParseFile picture = obj.getParseFile(PRODUCT_PICTURE);
+            try {
+                if (picture != null) {
+                    byte[] bytes = picture.getData();
+                    String fileName = picture.getName();
+                    saveToFile(fileName, bytes);
+                    result.setPictureFileName(fileName);
+                }
+            } catch (ParseException e) {
+                result.setPictureFileName(null);
+            }
+            return result;
+        } catch (ParseException e) {
+            throw new StoreNotFoundException();
+        }
+    }
+
+    @Override
+    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
+        query.setSkip(skip);
+        query.setLimit(limit);
+        query.orderByDescending("updatedAt");
+        final List<ProductData> result = new ArrayList<ProductData>();
+        try {
+            List<ParseObject> parseObjects = query.find();
+            for (ParseObject obj : parseObjects) {
+                ProductData product = null;
+                try {
+                    product = parseObjectToProductDirectly(obj);
+                    result.add(product);
+                } catch (StoreNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
@@ -268,7 +348,6 @@ public class ParseHandler implements CloudHandler {
     @Override
     public void getStores(final ResultCallback callback) {
     }
-
 
     private void saveToFile(String fileName, byte[] bytes) {
         FileOutputStream fos = null;
@@ -412,6 +491,8 @@ public class ParseHandler implements CloudHandler {
         obj.put(PRODUCT_PROPERTIES, data.getProperties());
         obj.put(PRODUCT_DURATION_END, data.getDurationEnd());
         obj.put(PRODUCT_CURRENCTY, data.getCurrency());
+        obj.put(PRODUCT_CLICKS, data.getClicks());
+        obj.put(PRODUCT_CATEGORY, data.getCategory());
         ParseQuery<ParseObject> storeQuery = ParseQuery.getQuery(STORE_CLASSNAME);
         storeQuery.getInBackground(data.getStore().getObjectId(), new GetCallback<ParseObject>() {
             @Override
@@ -419,47 +500,47 @@ public class ParseHandler implements CloudHandler {
                 if (e == null) {
                     obj.put(PRODUCT_STOREID, result);
                     if (data.getPictureFileName() != null) {
-                            BitmapFactory.Options opt = new BitmapFactory.Options();
-                            opt.inJustDecodeBounds = true;
-                            BitmapFactory.decodeFile(data.getPictureFileName(), opt);
-                            int imgWidth = opt.outWidth;
+                        BitmapFactory.Options opt = new BitmapFactory.Options();
+                        opt.inJustDecodeBounds = true;
+                        BitmapFactory.decodeFile(data.getPictureFileName(), opt);
+                        int imgWidth = opt.outWidth;
 
-                            int realWidth = 512;
-                            int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
-                            opt.inSampleSize = scaleFactor;
-                            opt.inJustDecodeBounds = false;
+                        int realWidth = 512;
+                        int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
+                        opt.inSampleSize = scaleFactor;
+                        opt.inJustDecodeBounds = false;
 
-                            Bitmap img = BitmapFactory.decodeFile(data.getPictureFileName(), opt);
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-                            final ParseFile picture = new ParseFile(baos.toByteArray());
-                            picture.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        obj.put(PRODUCT_PICTURE, picture);
-                                        obj.saveInBackground(new SaveCallback() {
-                                            @Override
-                                            public void done(ParseException e) {
-                                                if (e == null) {
-                                                    callback.onResult(true);
-                                                } else {
-                                                    callback.onResult(false);
-                                                }
+                        Bitmap img = BitmapFactory.decodeFile(data.getPictureFileName(), opt);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                        final ParseFile picture = new ParseFile(baos.toByteArray());
+                        picture.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    obj.put(PRODUCT_PICTURE, picture);
+                                    obj.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                callback.onResult(true);
+                                            } else {
+                                                callback.onResult(false);
                                             }
-                                        });
-                                    }
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            obj.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    callback.onResult(e == null);
-                                }
-                            });
-                        }
+                            }
+                        });
+                    } else {
+                        obj.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                callback.onResult(e == null);
+                            }
+                        });
                     }
+                }
             }
         });
     }
@@ -511,5 +592,9 @@ public class ParseHandler implements CloudHandler {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private class StoreNotFoundException extends Exception {
+
     }
 }

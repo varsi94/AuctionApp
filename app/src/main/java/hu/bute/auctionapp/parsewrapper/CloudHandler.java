@@ -15,6 +15,10 @@ public interface CloudHandler {
 
     public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit);
 
+    public List<ProductData> getProductsByViewDirectly(int skip, int limit);
+
+    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit);
+
     public void getUser(String objectid, ResultCallback callback);
 
     public void getUser(String username, String password, ResultCallback callback);

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.fragments.StoresFragment;
 import hu.bute.auctionapp.fragments.CategoryFragment;
 import hu.bute.auctionapp.fragments.stores.StoresFragment;
 

@@ -1,4 +1,4 @@
-package hu.bute.auctionapp.fragments.stores;
+package hu.bute.auctionapp.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;

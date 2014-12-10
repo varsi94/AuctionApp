@@ -44,7 +44,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
 
     private List<StoreData> loadFavourites() {
         wantsLoad = false;
-        return null;
+        return new ArrayList<StoreData>();
     }
 
     private List<StoreData> loadMostViewed() {
