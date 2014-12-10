@@ -5,41 +5,48 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import java.util.Locale;
 
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.fragments.CategoryFragment;
 import hu.bute.auctionapp.fragments.ProductFragment;
 
-public class ProductsActivity extends Activity implements ActionBar.TabListener {
+public class ProductsActivity extends Activity implements ActionBar.TabListener, CategoryFragment.OnCategorySelectedListener {
+    public static final String KEY_FILTER = "filt_key";
+    private static final int UPLOAD_PRODUCT_REQUEST = 1520;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    ViewPager mViewPager;
+    private String filter = null;
+
+    public static <T> int indexof(T[] array, T element) {
+        if (element == null) {
+            for (int i = 0; i < array.length; ++i) {
+                if (array[i] == null)
+                    return i;
+            }
+            return -1;
+        } else {
+            for (int i = 0; i < array.length; ++i) {
+                if (element.equals(array[i]))
+                    return i;
+            }
+        }
+        return -1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
+        filter = getIntent().getStringExtra(KEY_FILTER);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -74,29 +81,46 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener 
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+        mViewPager.setCurrentItem(1);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_products, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.upload_product) {
+            startActivityForResult(new Intent(ProductsActivity.this, UploadActivity.class), UPLOAD_PRODUCT_REQUEST);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        System.out.println("requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if (requestCode == UPLOAD_PRODUCT_REQUEST && resultCode == RESULT_OK) {
+            clearFragments();
+        }
+    }
+
+    private void clearFragments() {
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+            Fragment f = getFragment(i);
+            if (f instanceof ProductFragment) {
+                ProductFragment pf = (ProductFragment) f;
+                pf.setFilter(filter);
+                pf.refresh();
+            }
+        }
     }
 
     @Override
@@ -114,71 +138,65 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener 
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
-        }
+    private Fragment getFragment(int pos) {
+        return getFragmentManager().findFragmentByTag(getFragmentTag(pos));
+    }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
+    private String getFragmentTag(int fragmentPosition) {
+        return "android:switcher:" + mViewPager.getId() + ":" + fragmentPosition;
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_products, container, false);
-            return rootView;
+    @Override
+    public void onBackPressed() {
+        if (filter != null) {
+            filter = null;
+            mViewPager.setCurrentItem(0, true);
+            clearFragments();
+            Fragment f = getFragment(0);
+            if (f instanceof CategoryFragment) {
+                CategoryFragment catf = (CategoryFragment) f;
+                catf.setSelection(-1);
+            }
+        } else {
+            super.onBackPressed();
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+    @Override
+    public void categorySelected(int index, String category) {
+        this.filter = category;
+        clearFragments();
+        mViewPager.setCurrentItem(1, true);
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        String[] tabs;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            tabs = getResources().getStringArray(R.array.product_tab_titles);
         }
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return ProductFragment.newInstance(position);
+            switch (position) {
+                case 0:
+                    return CategoryFragment.newInstance(R.array.product_types, indexof(getResources().getStringArray(R.array.product_types), filter));
+                default:
+                    return ProductFragment.newInstance(position - 1, filter);
+            }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return tabs.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_most_recent).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_most_viewed).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_favourites).toUpperCase(l);
-            }
-            return null;
+            return tabs[position];
         }
+
     }
 }

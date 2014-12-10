@@ -15,4 +15,10 @@
         <item>HUF</item>
         <item>GBP</item>
     </string-array>
+    <string-array name="product_tab_titles">
+        <item>CATEGORIES</item>
+        <item>MOST RECENT</item>
+        <item>MOST VIEWED</item>
+        <item>FAVORITES</item>
+    </string-array>
 </resources>

@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="hu.bute.auctionapp.activities.ProductsActivity">
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="hu.bute.auctionapp.activities.StoresActivity">
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:id="@+id/upload_product"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="ifRoom"
+        android:title="@string/upload_product"/>
 </menu>

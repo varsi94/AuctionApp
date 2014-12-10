@@ -150,11 +150,14 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<ProductData> getProductsByViewDirectly(int skip, int limit) {
+    public List<ProductData> getProductsByViewDirectly(int skip, int limit, String filter) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
         query.orderByDescending(PRODUCT_CLICKS);
+        if (filter != null) {
+            query.whereEqualTo(PRODUCT_CATEGORY, filter);
+        }
         final List<ProductData> result = new ArrayList<ProductData>();
         try {
             List<ParseObject> parseObjects = query.find();
@@ -204,11 +207,14 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit) {
+    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit, String filter) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
         query.orderByDescending("updatedAt");
+        if (filter != null) {
+            query.whereEqualTo(PRODUCT_CATEGORY, filter);
+        }
         final List<ProductData> result = new ArrayList<ProductData>();
         try {
             List<ParseObject> parseObjects = query.find();

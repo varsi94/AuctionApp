@@ -2,18 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:paddingBottom="16dp"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
-              android:paddingTop="16dp">
+              android:padding="4dp">
 
     <ProgressBar
         android:id="@+id/uploadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
         android:visibility="gone"/>
 
     <ScrollView
@@ -32,7 +28,6 @@
                 android:layout_height="match_parent"
                 android:text="@string/upload"
                 android:textSize="24sp"/>
-
 
             <EditText
                 android:id="@+id/productname"
@@ -60,7 +55,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-
             </LinearLayout>
 
 
@@ -86,19 +80,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <EditText
-                android:id="@+id/addressET"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/address"/>
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/getLocationBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#8c96ff"
-                android:text="@string/get_location"/>
+                <TextView
+                    android:id="@+id/addressTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:hint="@string/address"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/getLocationBtn"
+                    style="@style/textviewButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/get_location"/>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -112,10 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:calendarViewShown="false"
-                android:hint="@string/duration">
-
-            </DatePicker>
-
+                android:hint="@string/duration"/>
 
             <EditText
                 android:id="@+id/properties"
@@ -147,7 +148,6 @@
                     android:id="@+id/imgBtnPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_column="0"
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
                     android:background="#8c96ff"
@@ -157,7 +157,6 @@
                     android:id="@+id/btnUpload"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_column="1"
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
                     android:background="#8c96ff"
@@ -167,7 +166,6 @@
                     android:id="@+id/imgBtnDelete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_column="2"
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
                     android:background="#8c96ff"

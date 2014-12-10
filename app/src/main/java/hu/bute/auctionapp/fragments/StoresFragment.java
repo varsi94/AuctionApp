@@ -1,9 +1,6 @@
 package hu.bute.auctionapp.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.ListFragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +11,12 @@ import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.adapters.StoresAdapter;
 import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StoresFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StoresFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StoresFragment extends ListFragment {
     private static final String KEY_TYPE = "type";
     private static final String KEY_FILTER = "filter";
-    private OnFragmentInteractionListener mListener;
     private int type;
     private String filter;
     private StoresAdapter mAdapter;
-
-    public StoresFragment() {
-    }
 
     public static StoresFragment newInstance(int type, String filter) {
         StoresFragment fragment = new StoresFragment();
@@ -53,13 +38,12 @@ public class StoresFragment extends ListFragment {
             type = args.getInt(KEY_TYPE);
             filter = args.getString(KEY_FILTER);
         }
-        //setListAdapter(new StoresAdapter((hu.bute.auctionapp.AuctionApplication) getActivity().getApplication(), type));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_storelist, container, false);
+        return inflater.inflate(R.layout.fragment_store_list, container, false);
     }
 
     @Override
@@ -69,22 +53,6 @@ public class StoresFragment extends ListFragment {
         DynamicListHandler handler = new DynamicListHandler(getListView(), mAdapter);
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -96,10 +64,9 @@ public class StoresFragment extends ListFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    public void refreshStores() {
+    public void refresh() {
         if (mAdapter != null) {
             mAdapter.refresh(filter);
         }
@@ -110,7 +77,4 @@ public class StoresFragment extends ListFragment {
         this.filter = filter;
     }
 
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
-    }
 }

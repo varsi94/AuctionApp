@@ -72,10 +72,6 @@ public class CategoryFragment extends ListFragment {
         }
     }
 
-    public void clearSelection() {
-        setSelection(-1);
-    }
-
     public void setSelection(int selection) {
         this.selection = selection;
         getArguments().putInt(KEY_INIT_SELECTION, selection);

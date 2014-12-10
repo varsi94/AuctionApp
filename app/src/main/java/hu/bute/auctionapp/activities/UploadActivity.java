@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class UploadActivity extends Activity {
     private ImageView ivDrawer;
     private String[] productTypes;
 
-    private EditText locationET;
+    private TextView locationET;
     private EditText productNameET;
     private EditText priceET;
     private Spinner currencySpinner;
@@ -55,7 +55,7 @@ public class UploadActivity extends Activity {
         super.onCreate(savedInstanceState);
         productTypes = getResources().getStringArray(R.array.product_types);
         currencyTypes = getResources().getStringArray(R.array.currency_types);
-        setContentView(R.layout.activity_upload);
+        setContentView(R.layout.activity_upload_product);
 
         final ImageButton imgBtnPhoto =
                 (ImageButton) findViewById(R.id.imgBtnPhoto);
@@ -95,7 +95,7 @@ public class UploadActivity extends Activity {
                 android.R.layout.simple_dropdown_item_1line, productTypes);
         ctgry.setAdapter(categoryAdapter);
 
-        Button pickLocationBtn = (Button) findViewById(R.id.getLocationBtn);
+        View pickLocationBtn = findViewById(R.id.getLocationBtn);
         pickLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +103,7 @@ public class UploadActivity extends Activity {
             }
         });
 
-        locationET = (EditText) findViewById(R.id.addressET);
-
+        locationET = (TextView) findViewById(R.id.addressTextView);
 
         View uploadButton = findViewById(R.id.btnUpload);
         uploadButton.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +174,8 @@ public class UploadActivity extends Activity {
             public void onResult(Object result) {
                 if (result.equals(true)) {
                     Toast.makeText(UploadActivity.this, getString(R.string.product_upload_successful), Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK);
+                    finish();
                 } else {
                     Toast.makeText(UploadActivity.this, getString(R.string.product_upload_failed), Toast.LENGTH_LONG).show();
                 }

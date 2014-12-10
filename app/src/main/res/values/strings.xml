@@ -58,6 +58,7 @@
     <string name="more">MORE</string>
     <string name="product_upload_successful">Product upload was successful!</string>
     <string name="product_upload_failed">Product upload failed!</string>
+    <string name="upload_product">Upload product</string>
 
 
 </resources>

@@ -142,7 +142,7 @@ public class MainActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (position == 0) {
                 if (convertView == null) {
-                    convertView = getLayoutInflater().inflate(R.layout.main_top_buttons, parent, false);
+                    convertView = getLayoutInflater().inflate(R.layout.list_main_top_buttons, parent, false);
                 }
                 View storesButton = convertView.findViewById(R.id.main_stores);
                 View searchButton = convertView.findViewById(R.id.main_search);

@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,7 +16,7 @@ import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.fragments.CategoryFragment;
 import hu.bute.auctionapp.fragments.StoresFragment;
 
-public class StoresActivity extends Activity implements ActionBar.TabListener, StoresFragment.OnFragmentInteractionListener, CategoryFragment.OnCategorySelectedListener {
+public class StoresActivity extends Activity implements ActionBar.TabListener, CategoryFragment.OnCategorySelectedListener {
     public static final String KEY_FILTER = "filt_key";
     private static final int UPLOAD_STORE_REQUEST = 1520;
 
@@ -107,7 +106,6 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println("requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (requestCode == UPLOAD_STORE_REQUEST && resultCode == RESULT_OK) {
             clearFragments();
         }
@@ -119,7 +117,7 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
             if (f instanceof StoresFragment) {
                 StoresFragment sf = (StoresFragment) f;
                 sf.setFilter(filter);
-                sf.refreshStores();
+                sf.refresh();
             }
         }
     }
@@ -139,10 +137,6 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     private Fragment getFragment(int pos) {
         return getFragmentManager().findFragmentByTag(getFragmentTag(pos));
@@ -161,7 +155,7 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
             Fragment f = getFragment(0);
             if (f instanceof CategoryFragment) {
                 CategoryFragment catf = (CategoryFragment) f;
-                catf.clearSelection();
+                catf.setSelection(-1);
             }
         } else {
             super.onBackPressed();
@@ -170,16 +164,9 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
 
     @Override
     public void categorySelected(int index, String category) {
-        System.out.println("index = " + index);
         this.filter = category;
         clearFragments();
         mViewPager.setCurrentItem(1, true);
-        /*getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out, R.anim.fragment_fade_in, R.anim.fragment_fade_out)
-                .replace(android.R.id.content, CategoryFragment.newInstance(R.array.product_types), "cattag")
-                .addToBackStack("guestback")
-                .commit();*/
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

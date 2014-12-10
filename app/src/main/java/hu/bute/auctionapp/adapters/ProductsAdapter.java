@@ -33,8 +33,10 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
     private AuctionApplication app;
     private boolean wantsLoad = true;
     private Context context;
+    private String filter;
 
-    public ProductsAdapter(Context context, int type) {
+    public ProductsAdapter(Context context, int type, String filter) {
+        this.filter = filter;
         this.context = context;
         this.type = type;
         app = (AuctionApplication) context.getApplicationContext();
@@ -47,18 +49,19 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
     }
 
     private List<ProductData> loadMostViewed() {
-        List<ProductData> incoming = app.cloud.getProductsByViewDirectly(products.size(), LOAD_COUNT);
+        List<ProductData> incoming = app.cloud.getProductsByViewDirectly(products.size(), LOAD_COUNT, filter);
         return incoming;
     }
 
     private List<ProductData> loadMostRecent() {
-        List<ProductData> incoming = app.cloud.getProdcutsByLastChangedDirectly(products.size(), LOAD_COUNT);
+        List<ProductData> incoming = app.cloud.getProdcutsByLastChangedDirectly(products.size(), LOAD_COUNT, filter);
         return incoming;
     }
 
-    public void refresh() {
-        wantsLoad = true;
+    public void refresh(String filter) {
+        this.filter = filter;
         products.clear();
+        wantsLoad = true;
         notifyDataSetChanged();
     }
 
