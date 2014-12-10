@@ -10,6 +10,7 @@ import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -53,13 +54,12 @@ public class ParseHandler implements CloudHandler {
     private static final String PRODUCT_DURATION_END = "duration_end";
     private static final String PRODUCT_PROPERTIES = "properties";
     private static final String PRODUCT_COMMENTS = "comments";
-    private static final String PRODUCT_GPS_LAT = "gps_lat";
-    private static final String PRODUCT_GPS_LON = "gps_lon";
     private static final String PRODUCT_ADDRESS = "address";
     private static final String PRODUCT_PICTURE = "picture";
     private static final String PRODUCT_CURRENCTY = "currency";
     private static final String PRODUCT_CLICKS = "clicks";
     private static final String PRODUCT_CATEGORY = "category";
+    private static final String PRODUCT_LOCATION = "location";
     private Context context;
 
     public ParseHandler(Context context) {
@@ -206,8 +206,9 @@ public class ParseHandler implements CloudHandler {
             StoreData storeData = parseObjectToStoreDirectly(store, false);
             ProductData result = new ProductData(obj.getString(PRODUCT_NAME), storeData, obj.getDouble(PRODUCT_PRICE), obj.getDate(PRODUCT_DURATION_END));
             result.setAddress(obj.getString(PRODUCT_ADDRESS));
-            result.setGpsLat(obj.getDouble(PRODUCT_GPS_LAT));
-            result.setGpsLon(obj.getDouble(PRODUCT_GPS_LON));
+            ParseGeoPoint gp = obj.getParseGeoPoint(PRODUCT_LOCATION);
+            result.setGpsLat(gp.getLatitude());
+            result.setGpsLon(gp.getLongitude());
             result.setComment(obj.getString(PRODUCT_COMMENTS));
             result.setProperties(obj.getString(PRODUCT_PROPERTIES));
             result.setCurrency(obj.getString(PRODUCT_CURRENCTY));
@@ -527,8 +528,8 @@ public class ParseHandler implements CloudHandler {
             obj.put(PRODUCT_NAME, data.getName());
             obj.put(PRODUCT_PRICE, data.getPrice());
             obj.put(PRODUCT_ADDRESS, data.getAddress());
-            obj.put(PRODUCT_GPS_LAT, data.getGpsLat());
-            obj.put(PRODUCT_GPS_LON, data.getGpsLon());
+            ParseGeoPoint gp = new ParseGeoPoint(data.getGpsLat(), data.getGpsLon());
+            obj.put(PRODUCT_LOCATION, gp);
             obj.put(PRODUCT_COMMENTS, data.getComment());
             obj.put(PRODUCT_PROPERTIES, data.getProperties());
             obj.put(PRODUCT_DURATION_END, data.getDurationEnd());
