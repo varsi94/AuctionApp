@@ -106,6 +106,14 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key"/>
+        <activity
+            android:name=".activities.ProductDetailsActivity"
+            android:label="@string/title_activity_product_details"
+            android:parentActivityName=".activities.ProductsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hu.bute.auctionapp.activities.ProductsActivity" />
+        </activity>
     </application>
 
 </manifest>

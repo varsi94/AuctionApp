@@ -1,10 +1,12 @@
 package hu.bute.auctionapp.data;
 
+import java.io.Serializable;
+
 /**
  * Áruházak adatainak tárolása.
  * Created by Andras on 2014.12.04..
  */
-public class StoreData {
+public class StoreData implements Serializable {
     private String name;
     private String pictureFileName;
     private String objectId;

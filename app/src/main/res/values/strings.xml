@@ -60,5 +60,13 @@
     <string name="product_upload_failed">Product upload failed!</string>
     <string name="upload_product">Upload product</string>
 
+    <string name="title_activity_product_details">Product details</string>
+    <string name="price_label">Price:</string>
+    <string name="duration_end_label">Duration end:</string>
+    <string name="location_label">Location:</string>
+    <string name="properties_label">Properties:</string>
+    <string name="comments_label">Comments:</string>
+    <string name="store_label">Store:</string>
+    <string name="category_label">Category:</string>
 
 </resources>
