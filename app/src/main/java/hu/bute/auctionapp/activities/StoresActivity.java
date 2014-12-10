@@ -13,12 +13,11 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Locale;
-
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.fragments.CategoryFragment;
 import hu.bute.auctionapp.fragments.stores.StoresFragment;
 
-public class StoresActivity extends Activity implements ActionBar.TabListener, StoresFragment.OnFragmentInteractionListener {
+public class StoresActivity extends Activity implements ActionBar.TabListener, StoresFragment.OnFragmentInteractionListener, CategoryFragment.OnCategorySelectedListener {
     private static final int UPLOAD_STORE_REQUEST = 1520;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -73,6 +72,7 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+        mViewPager.setCurrentItem(1);
     }
 
     @Override
@@ -137,34 +137,38 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
         return "android:switcher:" + mViewPager.getId() + ":" + fragmentPosition;
     }
 
+    @Override
+    public void categorySelected(int index) {
+        System.out.println("index = " + index);
+        //getFragmentManager().beginTransaction().add(StoresFragment.newInstance(2), getFragmentTag(4)).addToBackStack("catguest").commit();
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        String[] tabs;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            tabs = getResources().getStringArray(R.array.store_tab_titles);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return StoresFragment.newInstance(position);
+            switch (position) {
+                case 0:
+                    return CategoryFragment.newInstance(R.array.store_types);
+                default:
+                    return StoresFragment.newInstance(position - 1);
+            }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return tabs.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_most_recent).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_most_viewed).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_favourites).toUpperCase(l);
-            }
-            return null;
+            return tabs[position];
         }
 
     }

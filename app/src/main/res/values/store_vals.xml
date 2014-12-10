@@ -9,4 +9,10 @@
         <item>Services</item>
         <item>Other</item>
     </string-array>
+    <string-array name="store_tab_titles">
+        <item>CATEGORIES</item>
+        <item>MOST RECENT</item>
+        <item>MOST VIEWED</item>
+        <item>FAVORITES</item>
+    </string-array>
 </resources>
