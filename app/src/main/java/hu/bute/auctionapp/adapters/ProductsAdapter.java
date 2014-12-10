@@ -83,7 +83,7 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
         ViewHolder holder = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.fragment_product_list, null);
+            convertView = inflater.inflate(R.layout.fragment_product_listitem, null);
             holder = new ViewHolder();
             holder.pictureImageView = (ImageView) convertView.findViewById(R.id.iconPicImageView);
             holder.productNameTV = (TextView) convertView.findViewById(R.id.productNameTV);
