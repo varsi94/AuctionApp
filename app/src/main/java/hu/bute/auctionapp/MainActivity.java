@@ -31,7 +31,6 @@ import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 public class MainActivity extends Activity {
     private static final int REQUEST_LOGIN = 9746;
     private AuctionApplication app;
-    private MainListAdapter adapter;
 
     private DynamicListHandler loadhandler;
 
@@ -66,8 +65,7 @@ public class MainActivity extends Activity {
         View productsButton = findViewById(R.id.main_products);
         View uploadAdButton = findViewById(R.id.main_upload_ad);
         ListView list = (ListView) findViewById(R.id.main_list);
-        adapter = new MainListAdapter(this);
-        loadhandler = new DynamicListHandler(list, adapter);
+        loadhandler = new DynamicListHandler(list, new MainListAdapter(this));
 
 
         storesButton.setOnClickListener(new View.OnClickListener() {
@@ -122,13 +120,12 @@ public class MainActivity extends Activity {
 
 
     private class MainListAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
-        List<String> titles;
+        List<String> titles = new ArrayList<String>();
         List<Object> items = new ArrayList<Object>();
         private Context context;
 
         public MainListAdapter(Context context) {
             this.context = context;
-            titles = new ArrayList<String>();
             for (String s : context.getResources().getStringArray(R.array.store_types)) {
                 titles.add(s);
             }
@@ -167,8 +164,6 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
-
             if (position % 2 == 0) {
                 TitleViewHolder holder;
                 if (convertView == null) {
@@ -219,14 +214,23 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void doLoading() {
+        public Object doLoading() {
             int index = items.size();
             String category = titles.get(index);
             List<StoreData> stores = app.cloud.getMostPopularStoreDirectly(category, 3);
             if (stores.size() == 0) {
                 titles.remove(index);
+                return null;
             } else {
-                items.add(stores);
+
+                return stores;
+            }
+        }
+
+        @Override
+        public void addLoaded(Object result) {
+            if (result != null) {
+                items.add(result);
             }
         }
 

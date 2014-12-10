@@ -12,19 +12,22 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class DynamicListHandler {
+public class DynamicListHandler implements ListAdapter {
     private final ListView list;
-    private final AdapterWrapper wrapper;
     private final DynamicLoader listener;
-    private boolean isLoading = false;
+    private boolean isLoading;
+    private boolean needProgressbar;
 
     private int animateIndex = 0;
+    private BaseAdapter adapter;
 
     public DynamicListHandler(ListView target, BaseAdapter adapter, final DynamicLoader listener) {
+        this.needProgressbar = true;
+        this.isLoading = false;
         this.list = target;
-        this.wrapper = new AdapterWrapper(adapter);
+        this.adapter = adapter;
         this.listener = listener;
-        list.setAdapter(wrapper);
+        list.setAdapter(this);
         list.setFooterDividersEnabled(false);
         list.setOnScrollListener(new AbsListView.OnScrollListener() {
             int currentFirstVisibleItem;
@@ -56,132 +59,140 @@ public class DynamicListHandler {
     }
 
     private void checkWantsLoad() {
-        if (!isLoading && listener.wantsToLoad()) {
+        if (!isLoading && needProgressbar) {
             new LoaderAsyncTask().execute();
         }
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return adapter.hasStableIds();
+    }
+
+    @Override
+    public void registerDataSetObserver(DataSetObserver observer) {
+        adapter.registerDataSetObserver(observer);
+    }
+
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver observer) {
+        adapter.unregisterDataSetObserver(observer);
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return adapter.areAllItemsEnabled();
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return adapter.isEnabled(position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (needProgressbar && position == getCount() - 1) {
+            return getViewTypeCount() - 1;
+        }
+        return adapter.getItemViewType(position);
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        if (needProgressbar) {
+            return adapter.getViewTypeCount() + 1;
+        }
+        return adapter.getViewTypeCount();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return adapter.isEmpty() && !needProgressbar;
+    }
+
+    @Override
+    public int getCount() {
+        if (needProgressbar) {
+            return adapter.getCount() + 1;
+        }
+        return adapter.getCount();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        if (needProgressbar && position == getCount() - 1)
+            return null;
+        return adapter.getItem(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (needProgressbar && position == getCount() - 1)
+            return position;
+        return adapter.getItemId(position);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        System.out.println("position = " + position);
+        System.out.println("getCount() = " + getCount());
+        System.out.println("needProgressbar = " + needProgressbar);
+        if (position == getCount() - 1 && needProgressbar) {
+            if (convertView == null) {
+                convertView = new ProgressBar(list.getContext());
+            }
+        } else {
+            convertView = adapter.getView(position, convertView, parent);
+        }
+        final Animation anim;
+        if (position >= animateIndex) {
+            anim = AnimationUtils.loadAnimation(list.getContext(), android.R.anim.fade_in);
+            animateIndex = position + 1;
+        } else {
+            anim = null;
+        }
+        convertView.setAnimation(anim);
+        return convertView;
     }
 
     public interface DynamicLoader {
         public boolean wantsToLoad();
 
-        public void doLoading();
+        public Object doLoading();
+
+        public void addLoaded(Object result);
     }
 
-    private class LoaderAsyncTask extends AsyncTask<Void, Void, Void> {
+    private class LoaderAsyncTask extends AsyncTask<Void, Void, Object> {
         private int preloadSize = 0;
 
         LoaderAsyncTask() {
-            preloadSize = wrapper.adapter.getCount();
+        }
+
+        @Override
+        protected void onPreExecute() {
             isLoading = true;
+            if (!needProgressbar) {
+                needProgressbar = true;
+                adapter.notifyDataSetChanged();
+            }
+            preloadSize = adapter.getCount();
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            listener.doLoading();
-            return null;
+        protected Object doInBackground(Void... params) {
+            return listener.doLoading();
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Object aresult) {
             isLoading = false;
-            wrapper.adapter.notifyDataSetChanged();
+
+            listener.addLoaded(aresult);
+
+            needProgressbar = listener.wantsToLoad();
             animateIndex = preloadSize;
-        }
-    }
-
-    private class AdapterWrapper implements ListAdapter {
-        private BaseAdapter adapter;
-
-        public AdapterWrapper(BaseAdapter adapter) {
-            this.adapter = adapter;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return adapter.hasStableIds();
-        }
-
-        @Override
-        public void registerDataSetObserver(DataSetObserver observer) {
-            adapter.registerDataSetObserver(observer);
-        }
-
-        @Override
-        public void unregisterDataSetObserver(DataSetObserver observer) {
-            adapter.unregisterDataSetObserver(observer);
-        }
-
-        @Override
-        public boolean areAllItemsEnabled() {
-            return adapter.areAllItemsEnabled();
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return adapter.isEnabled(position);
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (listener.wantsToLoad() && position == getCount() - 1) {
-                return getViewTypeCount() - 1;
-            }
-            return adapter.getItemViewType(position);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            if (listener.wantsToLoad()) {
-                return adapter.getViewTypeCount() + 1;
-            }
-            return adapter.getViewTypeCount() + 1;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return adapter.isEmpty() && !listener.wantsToLoad();
-        }
-
-        @Override
-        public int getCount() {
-            if (listener.wantsToLoad()) {
-                return adapter.getCount() + 1;
-            }
-            return adapter.getCount();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            if (listener.wantsToLoad() && position == getCount() - 1)
-                return null;
-            return adapter.getItem(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            if (listener.wantsToLoad() && position == getCount() - 1)
-                return position;
-            return adapter.getItemId(position);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (position == getCount() - 1 && listener.wantsToLoad()) {
-                if (convertView == null) {
-                    convertView = new ProgressBar(list.getContext());
-                }
-            } else {
-                convertView = adapter.getView(position, convertView, parent);
-            }
-            final Animation anim;
-            if (position >= animateIndex) {
-                anim = AnimationUtils.loadAnimation(list.getContext(), android.R.anim.fade_in);
-                animateIndex = position + 1;
-            } else {
-                anim = null;
-            }
-            convertView.setAnimation(anim);
-            return convertView;
+            adapter.notifyDataSetChanged();
         }
     }
 }

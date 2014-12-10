@@ -27,6 +27,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     public static final int MOST_RECENT = 0;
     public static final int MOST_VIEWED = 1;
     public static final int FAVOURITES = 2;
+    private static final int LOAD_COUNT = 2;
     private int type;
     private List<StoreData> storeDatas;
     private AuctionApplication app;
@@ -53,22 +54,19 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         }*/
     }
 
-    private void loadFavourites() {
+    private List<StoreData> loadFavourites() {
         wantsLoad = false;
+        return null;
     }
 
-    private void loadMostViewed() {
-        final int toload = 2;
-        List<StoreData> incoming = app.cloud.getStoresByViewDirectly(storeDatas.size(), toload);
-        wantsLoad = incoming.size() >= toload;
-        storeDatas.addAll(incoming);
+    private List<StoreData> loadMostViewed() {
+        List<StoreData> incoming = app.cloud.getStoresByViewDirectly(storeDatas.size(), LOAD_COUNT);
+        return incoming;
     }
 
-    private void loadMostRecent() {
-        final int toload = 2;
-        List<StoreData> incoming = app.cloud.getStoresByLastChangedDirectly(storeDatas.size(), toload);
-        wantsLoad = incoming.size() >= toload;
-        storeDatas.addAll(incoming);
+    private List<StoreData> loadMostRecent() {
+        List<StoreData> incoming = app.cloud.getStoresByLastChangedDirectly(storeDatas.size(), LOAD_COUNT);
+        return incoming;
     }
 
     @Override
@@ -143,20 +141,25 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     }
 
     @Override
-    public void doLoading() {
+    public Object doLoading() {
         switch (type) {
             case MOST_RECENT:
-                loadMostRecent();
-                break;
+                return loadMostRecent();
             case MOST_VIEWED:
-                loadMostViewed();
-                break;
+                return loadMostViewed();
             case FAVOURITES:
-                loadFavourites();
-                break;
+                return loadFavourites();
             default:
                 throw new IllegalArgumentException("Invalid storelist type!");
         }
+        //return null;
+    }
+
+    @Override
+    public void addLoaded(Object result) {
+        List<StoreData> incoming = (List<StoreData>) result;
+        wantsLoad = incoming.size() >= LOAD_COUNT;
+        storeDatas.addAll(incoming);
     }
 
     private static class ViewHolder {
