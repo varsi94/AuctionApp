@@ -26,6 +26,7 @@ public class StoresFragment extends ListFragment {
     private static final String TYPE_KEY = "type";
     private OnFragmentInteractionListener mListener;
     private int type;
+    private StoresAdapter mAdapter;
 
     public StoresFragment() {
     }
@@ -59,7 +60,8 @@ public class StoresFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        DynamicListHandler handler = new DynamicListHandler(getListView(), new StoresAdapter((AuctionApplication) getActivity().getApplication(), type));
+        mAdapter = new StoresAdapter((AuctionApplication) getActivity().getApplication(), type);
+        DynamicListHandler handler = new DynamicListHandler(getListView(), mAdapter);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -91,14 +93,15 @@ public class StoresFragment extends ListFragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+    public void refreshStores() {
+        System.out.println("StoresFragment.refreshStores");
+        System.out.println("mAdapter = " + mAdapter);
+        if (mAdapter != null) {
+            mAdapter.refresh();
+        }
     }
 
-    public void refreshStores() {
-        StoresAdapter adapter = (StoresAdapter)getListAdapter();
-        if (adapter != null) {
-            adapter.refresh();
-        }
+    public interface OnFragmentInteractionListener {
+        public void onFragmentInteraction(Uri uri);
     }
 }

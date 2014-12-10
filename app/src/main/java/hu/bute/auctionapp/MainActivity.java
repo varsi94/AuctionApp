@@ -60,38 +60,8 @@ public class MainActivity extends Activity {
             startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
         }
 
-        View storesButton = findViewById(R.id.main_stores);
-        View searchButton = findViewById(R.id.main_search);
-        View productsButton = findViewById(R.id.main_products);
-        View uploadAdButton = findViewById(R.id.main_upload_ad);
         ListView list = (ListView) findViewById(R.id.main_list);
         loadhandler = new DynamicListHandler(list, new MainListAdapter(this));
-
-
-        storesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, StoresActivity.class));
-            }
-        });
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-            }
-        });
-        productsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProductsActivity.class));
-            }
-        });
-        uploadAdButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, UploadActivity.class));
-            }
-        });
 
     }
 
@@ -133,11 +103,14 @@ public class MainActivity extends Activity {
 
         @Override
         public int getCount() {
-            return items.size() * 2;
+            return 1 + items.size() * 2;
         }
 
         @Override
         public Object getItem(int position) {
+            if (position == 0)
+                return null;
+            position -= 1;
             if (position % 2 == 0) {
                 return titles.get(position / 2);
             }
@@ -146,11 +119,14 @@ public class MainActivity extends Activity {
 
         @Override
         public int getViewTypeCount() {
-            return 2;
+            return 1 + 2;
         }
 
         @Override
         public int getItemViewType(int position) {
+            if (position == 0)
+                return 2;//buttons
+
             if (position % 2 == 0) {
                 return 0;//title type
             }
@@ -164,7 +140,41 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (position % 2 == 0) {
+            if (position == 0) {
+                if (convertView == null) {
+                    convertView = getLayoutInflater().inflate(R.layout.main_top_buttons, parent, false);
+                }
+                View storesButton = convertView.findViewById(R.id.main_stores);
+                View searchButton = convertView.findViewById(R.id.main_search);
+                View productsButton = convertView.findViewById(R.id.main_products);
+                View uploadAdButton = convertView.findViewById(R.id.main_upload_ad);
+                storesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, StoresActivity.class));
+                    }
+                });
+                searchButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                    }
+                });
+                productsButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, ProductsActivity.class));
+                    }
+                });
+                uploadAdButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, UploadActivity.class));
+                    }
+                });
+                return convertView;
+            }
+            if ((position - 1) % 2 == 0) {
                 TitleViewHolder holder;
                 if (convertView == null) {
                     convertView = getLayoutInflater().inflate(R.layout.list_main_title, parent, false);
@@ -173,7 +183,7 @@ public class MainActivity extends Activity {
                 } else {
                     holder = (TitleViewHolder) convertView.getTag();
                 }
-                holder.text.setText(titles.get(position / 2));
+                holder.text.setText(getItem(position) + "");
                 return convertView;
             }
             ContentViewHolder holder;
@@ -184,7 +194,7 @@ public class MainActivity extends Activity {
             } else {
                 holder = (ContentViewHolder) convertView.getTag();
             }
-            List<StoreData> stores = (List<StoreData>) items.get(position / 2);
+            List<StoreData> stores = (List<StoreData>) getItem(position);
             int i = 0;
             for (; i < stores.size() && i < holder.holders.length; ++i) {
                 ContentViewHolder.StoreViewHolder v = holder.holders[i];

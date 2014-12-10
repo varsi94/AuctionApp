@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/main_upload_ad"
+            style="@style/textviewButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_margin="@dimen/close_buttons_margin"
+            android:layout_weight="1"
+            android:text="@string/upload_ad"/>
+
+        <TextView
+            android:id="@+id/main_search"
+            style="@style/textviewButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_margin="@dimen/close_buttons_margin"
+            android:layout_weight="1"
+            android:text="@string/search"/>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/main_products"
+            style="@style/textviewButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_margin="@dimen/close_buttons_margin"
+            android:layout_weight="1"
+            android:text="@string/products"/>
+
+        <TextView
+            android:id="@+id/main_stores"
+            style="@style/textviewButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_margin="@dimen/close_buttons_margin"
+            android:layout_weight="1"
+            android:text="@string/stores"/>
+    </TableRow>
+
+
+</TableLayout>

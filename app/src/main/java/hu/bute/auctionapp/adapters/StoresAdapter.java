@@ -31,7 +31,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     private int type;
     private List<StoreData> storeDatas;
     private AuctionApplication app;
-    private boolean wantsLoad = true;
+    private boolean wantsLoad;
     private Context context;
 
     public StoresAdapter(Context context, int type) {
@@ -39,19 +39,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         this.app = (AuctionApplication) context.getApplicationContext();
         this.context = context;
         storeDatas = new ArrayList<StoreData>();
-        /*switch (type) {
-            case MOST_RECENT:
-                loadMostRecent();
-                break;
-            case MOST_VIEWED:
-                loadMostViewed();
-                break;
-            case FAVOURITES:
-                loadFavourites();
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid storelist type!");
-        }*/
+        this.wantsLoad = true;
     }
 
     private List<StoreData> loadFavourites() {
@@ -85,22 +73,9 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     }
 
     public void refresh() {
-        wantsLoad = true;
         storeDatas.clear();
+        wantsLoad = true;
         notifyDataSetChanged();
-        /*switch (type) {
-            case MOST_RECENT:
-                loadMostRecent();
-                break;
-            case MOST_VIEWED:
-                loadMostViewed();
-                break;
-            case FAVOURITES:
-                loadFavourites();
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid storelist type!");
-        }*/
     }
 
     @Override
@@ -157,9 +132,11 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
 
     @Override
     public void addLoaded(Object result) {
-        List<StoreData> incoming = (List<StoreData>) result;
-        wantsLoad = incoming.size() >= LOAD_COUNT;
-        storeDatas.addAll(incoming);
+        if (result != null) {
+            List<StoreData> incoming = (List<StoreData>) result;
+            wantsLoad = incoming.size() >= LOAD_COUNT;
+            storeDatas.addAll(incoming);
+        }
     }
 
     private static class ViewHolder {

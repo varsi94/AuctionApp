@@ -1,73 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#00ffff"
-              android:orientation="vertical"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
-              android:paddingTop="@dimen/activity_vertical_margin"
-              tools:context=".MainActivity">
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="*">
-
-        <TableRow>
-
-            <Button
-                android:id="@+id/main_upload_ad"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_margin="@dimen/close_buttons_margin"
-                android:layout_weight="1"
-                android:background="#8c96ff"
-                android:text="@string/upload_ad"/>
-
-            <Button
-                android:id="@+id/main_search"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_margin="@dimen/close_buttons_margin"
-                android:layout_weight="1"
-                android:background="#00ca44"
-                android:text="@string/search"/>
-        </TableRow>
-
-        <TableRow>
-
-            <Button
-                android:id="@+id/main_products"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_margin="@dimen/close_buttons_margin"
-                android:layout_weight="1"
-                android:background="#00ca44"
-                android:text="@string/products"/>
-
-            <Button
-                android:id="@+id/main_stores"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_margin="@dimen/close_buttons_margin"
-                android:layout_weight="1"
-                android:background="#8c96ff"
-                android:text="@string/stores"/>
-        </TableRow>
-
-
-    </TableLayout>
-
-    <ListView
-        android:id="@+id/main_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"/>
-
-</LinearLayout>
+<ListView
+    android:id="@+id/main_list"
+    style="@style/cardsListStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="4dp"
+    tools:context=".MainActivity"/>

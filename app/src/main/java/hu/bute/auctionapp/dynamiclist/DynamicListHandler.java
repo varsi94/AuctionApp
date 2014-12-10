@@ -59,8 +59,15 @@ public class DynamicListHandler implements ListAdapter {
     }
 
     private void checkWantsLoad() {
-        if (!isLoading && needProgressbar) {
-            new LoaderAsyncTask().execute();
+        boolean wantsload = listener.wantsToLoad();
+        if (!isLoading) {
+            if (wantsload != needProgressbar) {
+                needProgressbar = wantsload;
+                adapter.notifyDataSetChanged();
+            }
+            if (needProgressbar) {
+                new LoaderAsyncTask().execute();
+            }
         }
     }
 
@@ -134,9 +141,6 @@ public class DynamicListHandler implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        System.out.println("position = " + position);
-        System.out.println("getCount() = " + getCount());
-        System.out.println("needProgressbar = " + needProgressbar);
         if (position == getCount() - 1 && needProgressbar) {
             if (convertView == null) {
                 convertView = new ProgressBar(list.getContext());

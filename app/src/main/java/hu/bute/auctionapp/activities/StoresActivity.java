@@ -96,9 +96,15 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        System.out.println("requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (requestCode == UPLOAD_STORE_REQUEST && resultCode == RESULT_OK) {
+            System.out.println("StoresActivity.onActivityResult");
             for (int i = 0; i < 3; i++) {
-                mSectionsPagerAdapter.refreshFragment(i);
+                Fragment f = getFragment(i);
+                if (f instanceof StoresFragment) {
+                    ((StoresFragment) f).refreshStores();
+                }
             }
         }
     }
@@ -123,24 +129,23 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
 
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+    private Fragment getFragment(int pos) {
+        return getFragmentManager().findFragmentByTag(getFragmentTag(pos));
+    }
+
+    private String getFragmentTag(int fragmentPosition) {
+        return "android:switcher:" + mViewPager.getId() + ":" + fragmentPosition;
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private StoresFragment fragments[];
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            fragments = new StoresFragment[3];
-            for (int i = 0; i < 3; i++) {
-                fragments[i] = StoresFragment.newInstance(i);
-            }
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragments[position];
+            return StoresFragment.newInstance(position);
         }
 
         @Override
@@ -162,9 +167,6 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
             return null;
         }
 
-        public void refreshFragment(int pos) {
-            fragments[pos].refreshStores();
-        }
     }
 
 }
