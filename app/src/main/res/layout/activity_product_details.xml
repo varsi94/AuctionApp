@@ -173,4 +173,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <hu.bute.auctionapp.customviews.FavoriteImageView
+        android:id="@+id/setFavoriteImgBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </LinearLayout>

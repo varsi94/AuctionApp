@@ -45,8 +45,8 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     }
 
     private List<StoreData> loadFavourites() {
-        wantsLoad = false;
-        return new ArrayList<StoreData>();
+        List<StoreData> incoming = app.cloud.getFavoriteStores(storeDatas.size(), LOAD_COUNT, filter);
+        return incoming;
     }
 
     private List<StoreData> loadMostViewed() {

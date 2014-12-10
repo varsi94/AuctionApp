@@ -44,8 +44,8 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
     }
 
     private List<ProductData> loadFavourites() {
-        wantsLoad = false;
-        return new ArrayList<>();
+        List<ProductData> incoming = app.cloud.getFavoriteProducts(products.size(), LOAD_COUNT, filter);
+        return incoming;
     }
 
     private List<ProductData> loadMostViewed() {

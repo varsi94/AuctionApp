@@ -41,6 +41,18 @@ public interface CloudHandler {
 
     public List<StoreData> getMostPopularStoreDirectly(String category, int count);
 
+    public void addFavoriteStore(UserData userData, String objectId);
+
+    public void removeFavoriteStore(UserData userData, String objectId);
+
+    public void addFavoriteProduct(UserData userData, String objectId);
+
+    public void removeFavoriteProduct(UserData userData, String objectId);
+
+    public List<StoreData> getFavoriteStores(int size, int loadCount, String filter);
+
+    public List<ProductData> getFavoriteProducts(int skip, int limit, String filter);
+
     public interface ResultCallback {
         public void onResult(Object result);
     }

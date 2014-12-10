@@ -36,6 +36,10 @@ public class AuctionApplication extends Application {
         }
     }
 
+    public UserData getUser() {
+        return user;
+    }
+
     public void setUser(UserData user) {
         this.user = user;
         if (user != null) {

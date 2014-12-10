@@ -3,6 +3,7 @@ package hu.bute.auctionapp.parsewrapper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -11,6 +12,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.data.UserData;
@@ -36,6 +39,8 @@ public class ParseHandler implements CloudHandler {
     private static final String USER_USERNAME = "username";
     private static final String USER_PASSWORD = "password";
     private static final String USER_CLASSNAME = "AuctionUser";
+    private static final String USER_FAVORITE_STORES = "favoriteStores";
+    private static final String USER_FAVORITE_PRODUCTS = "favoriteProducts";
     private static final String STORE_CLASSNAME = "Stores";
     private static final String STORE_NAME = "name";
     private static final String STORE_LOGO_PICTRUE = "logo_pic";
@@ -81,6 +86,21 @@ public class ParseHandler implements CloudHandler {
         String userName = obj.getString(USER_USERNAME);
         String passwordMD5 = obj.getString(USER_PASSWORD);
         UserData result = new UserData(userName, passwordMD5);
+        ParseRelation<ParseObject> stores = obj.getRelation(USER_FAVORITE_STORES);
+        ParseRelation<ParseObject> products = obj.getRelation(USER_FAVORITE_PRODUCTS);
+        try {
+            List<ParseObject> storesList = stores.getQuery().find();
+            List<ParseObject> productList = products.getQuery().find();
+            for (ParseObject data : storesList) {
+                result.getFavoriteStoreIds().add(data.getObjectId());
+            }
+            for (ParseObject data : productList) {
+                result.getFavoriteProductIds().add(data.getObjectId());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         result.setObjectId(obj.getObjectId());
         return result;
     }
@@ -92,6 +112,8 @@ public class ParseHandler implements CloudHandler {
         String storeType = obj.getString(STORE_TYPE);
         final StoreData result = new StoreData(name, clicks, storeType);
         result.setObjectId(obj.getObjectId());
+        AuctionApplication app = (AuctionApplication) context.getApplicationContext();
+        result.setFavorite(app.getUser().getFavoriteStoreIds().contains(obj.getObjectId()));
 
         final ParseFile picture = obj.getParseFile(STORE_LOGO_PICTRUE);
         if (picture == null || !fileSave) {
@@ -122,6 +144,8 @@ public class ParseHandler implements CloudHandler {
         String storeType = obj.getString(STORE_TYPE);
         final StoreData result = new StoreData(name, clicks, storeType);
         result.setObjectId(obj.getObjectId());
+        AuctionApplication app = (AuctionApplication) context.getApplicationContext();
+        result.setFavorite(app.getUser().getFavoriteStoreIds().contains(obj.getObjectId()));
 
         final ParseFile picture = obj.getParseFile(STORE_LOGO_PICTRUE);
         if (picture == null || !fileSave) {
@@ -191,6 +215,9 @@ public class ParseHandler implements CloudHandler {
             result.setCategory(obj.getString(PRODUCT_CATEGORY));
             ParseFile picture = obj.getParseFile(PRODUCT_PICTURE);
             result.setObjectId(obj.getObjectId());
+
+            AuctionApplication app = (AuctionApplication) context.getApplicationContext();
+            result.setFavorite(app.getUser().getFavoriteProductIds().contains(obj.getObjectId()));
             try {
                 if (picture != null) {
                     byte[] bytes = picture.getData();
@@ -325,12 +352,7 @@ public class ParseHandler implements CloudHandler {
                     } else {
                         parseObject.put(USER_USERNAME, userData.getName());
                         parseObject.put(USER_PASSWORD, userData.getPasswordMD5());
-                        parseObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                callback.onResult(userData);
-                            }
-                        });
+                        callback.onResult(userData);
                     }
                 }
             });
@@ -628,6 +650,153 @@ public class ParseHandler implements CloudHandler {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private ParseObject getParseObjectDirectly(String objectId, String className) throws ParseException {
+        ParseQuery<ParseObject> obj = new ParseQuery<ParseObject>(className);
+        return obj.get(objectId);
+    }
+
+    @Override
+    public void addFavoriteStore(final UserData userData, final String objectId) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ParseObject user = getParseObjectDirectly(userData.getObjectId(), USER_CLASSNAME);
+                    ParseRelation<ParseObject> relation = user.getRelation(USER_FAVORITE_STORES);
+                    ParseObject store = getParseObjectDirectly(objectId, STORE_CLASSNAME);
+                    relation.add(store);
+                    user.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        task.execute();
+    }
+
+    @Override
+    public void removeFavoriteStore(final UserData userData, final String objectId) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ParseObject user = getParseObjectDirectly(userData.getObjectId(), USER_CLASSNAME);
+                    ParseRelation<ParseObject> relation = user.getRelation(USER_FAVORITE_STORES);
+                    ParseObject store = getParseObjectDirectly(objectId, STORE_CLASSNAME);
+                    relation.remove(store);
+                    user.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        task.execute();
+    }
+
+    @Override
+    public void addFavoriteProduct(final UserData userData, final String objectId) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ParseObject user = getParseObjectDirectly(userData.getObjectId(), USER_CLASSNAME);
+                    ParseRelation<ParseObject> relation = user.getRelation(USER_FAVORITE_PRODUCTS);
+                    ParseObject product = getParseObjectDirectly(objectId, PRODUCT_CLASSNAME);
+                    relation.add(product);
+                    user.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        task.execute();
+    }
+
+    @Override
+    public void removeFavoriteProduct(final UserData userData, final String objectId) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ParseObject user = getParseObjectDirectly(userData.getObjectId(), USER_CLASSNAME);
+                    ParseRelation<ParseObject> relation = user.getRelation(USER_FAVORITE_PRODUCTS);
+                    ParseObject product = getParseObjectDirectly(objectId, PRODUCT_CLASSNAME);
+                    relation.remove(product);
+                    user.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        task.execute();
+    }
+
+    @Override
+    public List<StoreData> getFavoriteStores(int skip, int limit, String filter) {
+        AuctionApplication app = (AuctionApplication) context.getApplicationContext();
+        try {
+            ParseObject user = getParseObjectDirectly(app.getUser().getObjectId(), USER_CLASSNAME);
+            ParseQuery<ParseObject> query = user.getRelation(USER_FAVORITE_STORES).getQuery();
+            query.setSkip(skip);
+            query.setLimit(limit);
+            if (filter != null) {
+                query.whereEqualTo(STORE_TYPE, filter);
+            }
+            final List<StoreData> result = new ArrayList<StoreData>();
+
+            try {
+                List<ParseObject> parseObjects = query.find();
+                for (ParseObject obj : parseObjects) {
+                    StoreData store = parseObjectToStoreDirectly(obj, true);
+                    result.add(store);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return result;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ProductData> getFavoriteProducts(int skip, int limit, String filter) {
+        AuctionApplication app = (AuctionApplication) context.getApplicationContext();
+        try {
+            ParseObject user = getParseObjectDirectly(app.getUser().getObjectId(), USER_CLASSNAME);
+            ParseQuery<ParseObject> query = user.getRelation(USER_FAVORITE_PRODUCTS).getQuery();
+            query.setSkip(skip);
+            query.setLimit(limit);
+            if (filter != null) {
+                query.whereEqualTo(PRODUCT_CATEGORY, filter);
+            }
+            final List<ProductData> result = new ArrayList<ProductData>();
+            try {
+                List<ParseObject> parseObjects = query.find();
+                for (ParseObject obj : parseObjects) {
+                    ProductData product = null;
+                    try {
+                        product = parseObjectToProductDirectly(obj);
+                        result.add(product);
+                    } catch (StoreNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return result;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
     private class StoreNotFoundException extends Exception {

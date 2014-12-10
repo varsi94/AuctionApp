@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.customviews.FavoriteImageView;
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
@@ -28,6 +30,7 @@ public class ProductDetailsActivity extends Activity {
     private TextView propertiesTV;
     private TextView commentsTV;
     private ImageView previewIV;
+    private FavoriteImageView setFavoriteBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +51,25 @@ public class ProductDetailsActivity extends Activity {
         categoryTV = (TextView) findViewById(R.id.categoryTV);
         storeTV = (TextView) findViewById(R.id.storeNameTV);
         propertiesTV = (TextView) findViewById(R.id.propertiesTV);
+        setFavoriteBtn = (FavoriteImageView) findViewById(R.id.setFavoriteImgBtn);
+        setFavoriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AuctionApplication app = (AuctionApplication) getApplication();
+                if (data.isFavorite()) {
+                    app.cloud.removeFavoriteProduct(app.getUser(), data.getObjectId());
+                    app.getUser().getFavoriteProductIds().remove(data.getObjectId());
+                } else {
+                    app.cloud.addFavoriteProduct(app.getUser(), data.getObjectId());
+                    app.getUser().getFavoriteProductIds().add(data.getObjectId());
+                }
+                data.setFavorite(!data.isFavorite());
+                setFavoriteBtn.setFavorite(data.isFavorite());
+            }
+        });
         showDetails();
         updateClicks();
+        setFavoriteBtn.setFavorite(data.isFavorite());
     }
 
     private void updateClicks() {
