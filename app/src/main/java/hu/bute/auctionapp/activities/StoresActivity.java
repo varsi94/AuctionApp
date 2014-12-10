@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import java.util.Locale;
 
 import hu.bute.auctionapp.R;
-import hu.bute.auctionapp.fragments.stores.StoresFragment;
+import hu.bute.auctionapp.fragments.StoresFragment;
 
 public class StoresActivity extends Activity implements ActionBar.TabListener, StoresFragment.OnFragmentInteractionListener {
     private static final int UPLOAD_STORE_REQUEST = 1520;

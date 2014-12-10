@@ -19,12 +19,15 @@ public class ProductData {
     private String properties;
     private String comment;
     private String currency;
+    private int clicks;
+    private String category;
 
     public ProductData(String name, StoreData store, double price, Date durationEnd) {
         this.name = name;
         this.store = store;
         this.price = price;
         this.durationEnd = durationEnd;
+        clicks = 0;
     }
 
     public String getName() {
@@ -83,10 +86,6 @@ public class ProductData {
         this.gpsLon = gpsLon;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public Date getDurationEnd() {
         return durationEnd;
     }
@@ -115,11 +114,31 @@ public class ProductData {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getCurrency() {
         return currency;
     }
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public int getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(int clicks) {
+        this.clicks = clicks;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
