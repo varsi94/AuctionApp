@@ -4,6 +4,8 @@ import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
@@ -15,6 +17,8 @@ public class DynamicListHandler {
     private final AdapterWrapper wrapper;
     private final DynamicLoader listener;
     private boolean isLoading = false;
+
+    private int animateIndex = 0;
 
     public DynamicListHandler(ListView target, BaseAdapter adapter, final DynamicLoader listener) {
         this.list = target;
@@ -64,7 +68,10 @@ public class DynamicListHandler {
     }
 
     private class LoaderAsyncTask extends AsyncTask<Void, Void, Void> {
+        private int preloadSize = 0;
+
         LoaderAsyncTask() {
+            preloadSize = wrapper.adapter.getCount();
             isLoading = true;
         }
 
@@ -78,6 +85,7 @@ public class DynamicListHandler {
         protected void onPostExecute(Void aVoid) {
             isLoading = false;
             wrapper.adapter.notifyDataSetChanged();
+            animateIndex = preloadSize;
         }
     }
 
@@ -162,9 +170,18 @@ public class DynamicListHandler {
                 if (convertView == null) {
                     convertView = new ProgressBar(list.getContext());
                 }
-                return convertView;
+            } else {
+                convertView = adapter.getView(position, convertView, parent);
             }
-            return adapter.getView(position, convertView, parent);
+            final Animation anim;
+            if (position >= animateIndex) {
+                anim = AnimationUtils.loadAnimation(list.getContext(), android.R.anim.fade_in);
+                animateIndex = position + 1;
+            } else {
+                anim = null;
+            }
+            convertView.setAnimation(anim);
+            return convertView;
         }
     }
 }
