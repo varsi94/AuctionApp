@@ -175,7 +175,7 @@ public class MainActivity extends Activity {
                 return convertView;
             }
             if ((position - 1) % 2 == 0) {
-                TitleViewHolder holder;
+                final TitleViewHolder holder;
                 if (convertView == null) {
                     convertView = getLayoutInflater().inflate(R.layout.list_main_title, parent, false);
                     holder = new TitleViewHolder(convertView);
@@ -183,10 +183,19 @@ public class MainActivity extends Activity {
                 } else {
                     holder = (TitleViewHolder) convertView.getTag();
                 }
-                holder.text.setText(getItem(position) + "");
+                final String category = (String) getItem(position);
+                holder.text.setText(category + "");
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(MainActivity.this, StoresActivity.class);
+                        i.putExtra(StoresActivity.KEY_FILTER, category);
+                        startActivity(i);
+                    }
+                });
                 return convertView;
             }
-            ContentViewHolder holder;
+            final ContentViewHolder holder;
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.list_main_content, parent, false);
                 holder = new ContentViewHolder(convertView);

@@ -11,9 +11,9 @@ import hu.bute.auctionapp.data.UserData;
  * Created by Varsi on 2014.12.04..
  */
 public interface CloudHandler {
-    public List<StoreData> getStoresByViewDirectly(int skip, int limit);
+    public List<StoreData> getStoresByViewDirectly(int skip, int limit, String filter);
 
-    public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit);
+    public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit, String filter);
 
     public List<ProductData> getProductsByViewDirectly(int skip, int limit);
 

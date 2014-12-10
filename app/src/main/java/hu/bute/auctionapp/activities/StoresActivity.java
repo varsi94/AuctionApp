@@ -18,26 +18,36 @@ import hu.bute.auctionapp.fragments.CategoryFragment;
 import hu.bute.auctionapp.fragments.StoresFragment;
 
 public class StoresActivity extends Activity implements ActionBar.TabListener, StoresFragment.OnFragmentInteractionListener, CategoryFragment.OnCategorySelectedListener {
+    public static final String KEY_FILTER = "filt_key";
     private static final int UPLOAD_STORE_REQUEST = 1520;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
-    SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+
+    private String filter = null;
+
+    public static <T> int indexof(T[] array, T element) {
+        if (element == null) {
+            for (int i = 0; i < array.length; ++i) {
+                if (array[i] == null)
+                    return i;
+            }
+            return -1;
+        } else {
+            for (int i = 0; i < array.length; ++i) {
+                if (element.equals(array[i]))
+                    return i;
+            }
+        }
+        return -1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stores);
+
+        filter = getIntent().getStringExtra(KEY_FILTER);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -99,12 +109,17 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
 
         System.out.println("requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (requestCode == UPLOAD_STORE_REQUEST && resultCode == RESULT_OK) {
-            System.out.println("StoresActivity.onActivityResult");
-            for (int i = 0; i < 3; i++) {
-                Fragment f = getFragment(i);
-                if (f instanceof StoresFragment) {
-                    ((StoresFragment) f).refreshStores();
-                }
+            clearFragments();
+        }
+    }
+
+    private void clearFragments() {
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+            Fragment f = getFragment(i);
+            if (f instanceof StoresFragment) {
+                StoresFragment sf = (StoresFragment) f;
+                sf.setFilter(filter);
+                sf.refreshStores();
             }
         }
     }
@@ -138,9 +153,33 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
     }
 
     @Override
-    public void categorySelected(int index) {
+    public void onBackPressed() {
+        if (filter != null) {
+            filter = null;
+            mViewPager.setCurrentItem(0, true);
+            clearFragments();
+            Fragment f = getFragment(0);
+            if (f instanceof CategoryFragment) {
+                CategoryFragment catf = (CategoryFragment) f;
+                catf.clearSelection();
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void categorySelected(int index, String category) {
         System.out.println("index = " + index);
-        //getFragmentManager().beginTransaction().add(StoresFragment.newInstance(2), getFragmentTag(4)).addToBackStack("catguest").commit();
+        this.filter = category;
+        clearFragments();
+        mViewPager.setCurrentItem(1, true);
+        /*getFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out, R.anim.fragment_fade_in, R.anim.fragment_fade_out)
+                .replace(android.R.id.content, CategoryFragment.newInstance(R.array.product_types), "cattag")
+                .addToBackStack("guestback")
+                .commit();*/
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -155,9 +194,9 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, S
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return CategoryFragment.newInstance(R.array.store_types);
+                    return CategoryFragment.newInstance(R.array.store_types, indexof(getResources().getStringArray(R.array.store_types), filter));
                 default:
-                    return StoresFragment.newInstance(position - 1);
+                    return StoresFragment.newInstance(position - 1, filter);
             }
         }
 

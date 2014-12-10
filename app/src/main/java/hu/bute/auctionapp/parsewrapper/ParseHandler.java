@@ -390,11 +390,14 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<StoreData> getStoresByViewDirectly(int skip, int limit) {
+    public List<StoreData> getStoresByViewDirectly(int skip, int limit, String filter) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
         query.orderByDescending(STORE_CLICKS);
+        if (filter != null) {
+            query.whereEqualTo(STORE_TYPE, filter);
+        }
         final List<StoreData> result = new ArrayList<StoreData>();
         try {
             List<ParseObject> parseObjects = query.find();
@@ -409,11 +412,14 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit) {
+    public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit, String filter) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
         query.orderByDescending("updatedAt");
+        if (filter != null) {
+            query.whereEqualTo(STORE_TYPE, filter);
+        }
         final List<StoreData> result = new ArrayList<StoreData>();
         try {
             List<ParseObject> parseObjects = query.find();

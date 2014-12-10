@@ -23,18 +23,21 @@ import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
  * create an instance of this fragment.
  */
 public class StoresFragment extends ListFragment {
-    private static final String TYPE_KEY = "type";
+    private static final String KEY_TYPE = "type";
+    private static final String KEY_FILTER = "filter";
     private OnFragmentInteractionListener mListener;
     private int type;
+    private String filter;
     private StoresAdapter mAdapter;
 
     public StoresFragment() {
     }
 
-    public static StoresFragment newInstance(int type) {
+    public static StoresFragment newInstance(int type, String filter) {
         StoresFragment fragment = new StoresFragment();
         Bundle args = new Bundle();
-        args.putInt(TYPE_KEY, type);
+        args.putInt(KEY_TYPE, type);
+        args.putString(KEY_FILTER, filter);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,10 +46,12 @@ public class StoresFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            type = savedInstanceState.getInt(TYPE_KEY);
+            type = savedInstanceState.getInt(KEY_TYPE);
+            filter = savedInstanceState.getString(KEY_FILTER);
         } else if (getArguments() != null) {
             Bundle args = getArguments();
-            type = args.getInt(TYPE_KEY);
+            type = args.getInt(KEY_TYPE);
+            filter = args.getString(KEY_FILTER);
         }
         //setListAdapter(new StoresAdapter((hu.bute.auctionapp.AuctionApplication) getActivity().getApplication(), type));
     }
@@ -60,7 +65,7 @@ public class StoresFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new StoresAdapter((AuctionApplication) getActivity().getApplication(), type);
+        mAdapter = new StoresAdapter((AuctionApplication) getActivity().getApplication(), type, filter);
         DynamicListHandler handler = new DynamicListHandler(getListView(), mAdapter);
     }
 
@@ -84,7 +89,8 @@ public class StoresFragment extends ListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(TYPE_KEY, type);
+        outState.putInt(KEY_TYPE, type);
+        outState.putString(KEY_FILTER, filter);
     }
 
     @Override
@@ -94,11 +100,14 @@ public class StoresFragment extends ListFragment {
     }
 
     public void refreshStores() {
-        System.out.println("StoresFragment.refreshStores");
-        System.out.println("mAdapter = " + mAdapter);
         if (mAdapter != null) {
-            mAdapter.refresh();
+            mAdapter.refresh(filter);
         }
+    }
+
+    public void setFilter(String filter) {
+        getArguments().putString(KEY_FILTER, filter);
+        this.filter = filter;
     }
 
     public interface OnFragmentInteractionListener {

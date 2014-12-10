@@ -33,9 +33,11 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     private AuctionApplication app;
     private boolean wantsLoad;
     private Context context;
+    private String filter;
 
-    public StoresAdapter(Context context, int type) {
+    public StoresAdapter(Context context, int type, String filter) {
         this.type = type;
+        this.filter = filter;
         this.app = (AuctionApplication) context.getApplicationContext();
         this.context = context;
         storeDatas = new ArrayList<StoreData>();
@@ -48,12 +50,12 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     }
 
     private List<StoreData> loadMostViewed() {
-        List<StoreData> incoming = app.cloud.getStoresByViewDirectly(storeDatas.size(), LOAD_COUNT);
+        List<StoreData> incoming = app.cloud.getStoresByViewDirectly(storeDatas.size(), LOAD_COUNT, filter);
         return incoming;
     }
 
     private List<StoreData> loadMostRecent() {
-        List<StoreData> incoming = app.cloud.getStoresByLastChangedDirectly(storeDatas.size(), LOAD_COUNT);
+        List<StoreData> incoming = app.cloud.getStoresByLastChangedDirectly(storeDatas.size(), LOAD_COUNT, filter);
         return incoming;
     }
 
@@ -72,7 +74,8 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         return i;
     }
 
-    public void refresh() {
+    public void refresh(String filter) {
+        this.filter = filter;
         storeDatas.clear();
         wantsLoad = true;
         notifyDataSetChanged();
