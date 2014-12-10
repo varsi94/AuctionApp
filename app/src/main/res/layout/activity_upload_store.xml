@@ -58,6 +58,12 @@
                 android:src="@android:drawable/ic_menu_gallery" />
 
             <ImageButton
+                android:id="@+id/createImageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <ImageButton
                 android:id="@+id/deleteImageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
