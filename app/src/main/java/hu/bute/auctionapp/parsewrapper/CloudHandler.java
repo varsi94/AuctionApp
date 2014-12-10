@@ -1,5 +1,7 @@
 package hu.bute.auctionapp.parsewrapper;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 import hu.bute.auctionapp.data.ProductData;
@@ -52,6 +54,8 @@ public interface CloudHandler {
     public List<StoreData> getFavoriteStores(int size, int loadCount, String filter);
 
     public List<ProductData> getFavoriteProducts(int skip, int limit, String filter);
+
+    public ProductData getNearest(LatLng currPos);
 
     public interface ResultCallback {
         public void onResult(Object result);

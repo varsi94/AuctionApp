@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
@@ -219,15 +220,24 @@ public class ParseHandler implements CloudHandler {
 
             AuctionApplication app = (AuctionApplication) context.getApplicationContext();
             result.setFavorite(app.getUser().getFavoriteProductIds().contains(obj.getObjectId()));
-            try {
-                if (picture != null) {
-                    byte[] bytes = picture.getData();
-                    String fileName = picture.getName();
-                    saveToFile(fileName, bytes);
-                    result.setPictureFileName(fileName);
+
+            if (picture != null) {
+                File f = context.getFileStreamPath(picture.getName());
+                Date lastModified = obj.getUpdatedAt();
+                Date fileLastModified = new Date(f.lastModified());
+                if (f.exists() && fileLastModified.compareTo(lastModified) > 0) {
+                    result.setPictureFileName(picture.getName());
+                } else {
+                    try {
+                        byte[] bytes = picture.getData();
+                        String fileName = picture.getName();
+                        saveToFile(fileName, bytes);
+                        result.setPictureFileName(fileName);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (ParseException e) {
-                result.setPictureFileName(null);
+                return result;
             }
             return result;
         } catch (ParseException e) {
@@ -588,7 +598,7 @@ public class ParseHandler implements CloudHandler {
             });
         } else {
             //módosítás
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PRODUCT_CLASSNAME);
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
             query.getInBackground(data.getObjectId(), new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject parseObject, ParseException e) {
@@ -654,7 +664,7 @@ public class ParseHandler implements CloudHandler {
     }
 
     private ParseObject getParseObjectDirectly(String objectId, String className) throws ParseException {
-        ParseQuery<ParseObject> obj = new ParseQuery<ParseObject>(className);
+        ParseQuery<ParseObject> obj = ParseQuery.getQuery(className);
         return obj.get(objectId);
     }
 
@@ -798,6 +808,24 @@ public class ParseHandler implements CloudHandler {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public ProductData getNearest(LatLng currPosition) {
+        ParseGeoPoint gp = new ParseGeoPoint(currPosition.latitude, currPosition.longitude);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
+        query.whereNear(PRODUCT_LOCATION, gp);
+        query.setLimit(1);
+        try {
+            ParseObject obj = query.getFirst();
+            ProductData result = parseObjectToProductDirectly(obj);
+            return result;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (StoreNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private class StoreNotFoundException extends Exception {

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
@@ -86,7 +86,7 @@ public class ProductDetailsActivity extends Activity {
     private void showDetails() {
         productNameTV.setText(data.getName());
         propertiesTV.setText(data.getProperties());
-        SimpleDateFormat sdf = new SimpleDateFormat();
+        DateFormat sdf = DateFormat.getDateInstance();
         durationEndTV.setText(sdf.format(data.getDurationEnd()));
         priceTV.setText(data.getPrice() + " " + data.getCurrency());
         locationTV.setText(data.getAddress());
