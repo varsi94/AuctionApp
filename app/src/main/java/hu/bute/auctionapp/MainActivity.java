@@ -62,7 +62,6 @@ public class MainActivity extends Activity {
 
         ListView list = (ListView) findViewById(R.id.main_list);
         loadhandler = new DynamicListHandler(list, new MainListAdapter(this));
-
     }
 
     @Override
