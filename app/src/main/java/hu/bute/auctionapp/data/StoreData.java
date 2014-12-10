@@ -12,6 +12,7 @@ public class StoreData implements Serializable {
     private String objectId;
     private String type;
     private int clicks;
+    private boolean favorite;
 
     public StoreData(String name, int clicks, String type) {
         this.name = name;
@@ -66,5 +67,13 @@ public class StoreData implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }

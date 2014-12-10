@@ -190,6 +190,7 @@ public class ParseHandler implements CloudHandler {
             result.setClicks(obj.getInt(PRODUCT_CLICKS));
             result.setCategory(obj.getString(PRODUCT_CATEGORY));
             ParseFile picture = obj.getParseFile(PRODUCT_PICTURE);
+            result.setObjectId(obj.getObjectId());
             try {
                 if (picture != null) {
                     byte[] bytes = picture.getData();
@@ -380,13 +381,19 @@ public class ParseHandler implements CloudHandler {
             ParseObject storeObj = ParseObject.create(STORE_CLASSNAME);
             saveStore(data, storeObj, callback);
         } else {
-            //módosítás
+            //módosítás, egyelőre csak a nézettséget frissíti
             ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
             query.getInBackground(data.getObjectId(), new GetCallback<ParseObject>() {
                 @Override
                 public void done(final ParseObject parseObject, ParseException e) {
                     if (e == null && parseObject != null) {
-                        saveStore(data, parseObject, callback);
+                        parseObject.put(STORE_CLICKS, data.getClicks());
+                        parseObject.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                callback.onResult(e == null);
+                            }
+                        });
                     } else {
                         callback.onResult(false);
                     }
@@ -493,68 +500,85 @@ public class ParseHandler implements CloudHandler {
 
     @Override
     public void saveProduct(final ProductData data, final ResultCallback callback) {
-        final ParseObject obj = ParseObject.create(PRODUCT_CLASSNAME);
-        obj.put(PRODUCT_NAME, data.getName());
-        obj.put(PRODUCT_PRICE, data.getPrice());
-        obj.put(PRODUCT_ADDRESS, data.getAddress());
-        obj.put(PRODUCT_GPS_LAT, data.getGpsLat());
-        obj.put(PRODUCT_GPS_LON, data.getGpsLon());
-        obj.put(PRODUCT_COMMENTS, data.getComment());
-        obj.put(PRODUCT_PROPERTIES, data.getProperties());
-        obj.put(PRODUCT_DURATION_END, data.getDurationEnd());
-        obj.put(PRODUCT_CURRENCTY, data.getCurrency());
-        obj.put(PRODUCT_CLICKS, data.getClicks());
-        obj.put(PRODUCT_CATEGORY, data.getCategory());
-        ParseQuery<ParseObject> storeQuery = ParseQuery.getQuery(STORE_CLASSNAME);
-        storeQuery.getInBackground(data.getStore().getObjectId(), new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject result, ParseException e) {
-                if (e == null) {
-                    obj.put(PRODUCT_STOREID, result);
-                    if (data.getPictureFileName() != null) {
-                        BitmapFactory.Options opt = new BitmapFactory.Options();
-                        opt.inJustDecodeBounds = true;
-                        BitmapFactory.decodeFile(data.getPictureFileName(), opt);
-                        int imgWidth = opt.outWidth;
+        if (data.getObjectId() == null) {
+            final ParseObject obj = ParseObject.create(PRODUCT_CLASSNAME);
+            obj.put(PRODUCT_NAME, data.getName());
+            obj.put(PRODUCT_PRICE, data.getPrice());
+            obj.put(PRODUCT_ADDRESS, data.getAddress());
+            obj.put(PRODUCT_GPS_LAT, data.getGpsLat());
+            obj.put(PRODUCT_GPS_LON, data.getGpsLon());
+            obj.put(PRODUCT_COMMENTS, data.getComment());
+            obj.put(PRODUCT_PROPERTIES, data.getProperties());
+            obj.put(PRODUCT_DURATION_END, data.getDurationEnd());
+            obj.put(PRODUCT_CURRENCTY, data.getCurrency());
+            obj.put(PRODUCT_CLICKS, data.getClicks());
+            obj.put(PRODUCT_CATEGORY, data.getCategory());
+            ParseQuery<ParseObject> storeQuery = ParseQuery.getQuery(STORE_CLASSNAME);
+            storeQuery.getInBackground(data.getStore().getObjectId(), new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject result, ParseException e) {
+                    if (e == null) {
+                        obj.put(PRODUCT_STOREID, result);
+                        if (data.getPictureFileName() != null) {
+                            BitmapFactory.Options opt = new BitmapFactory.Options();
+                            opt.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFile(data.getPictureFileName(), opt);
+                            int imgWidth = opt.outWidth;
 
-                        int realWidth = 512;
-                        int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
-                        opt.inSampleSize = scaleFactor;
-                        opt.inJustDecodeBounds = false;
+                            int realWidth = 512;
+                            int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
+                            opt.inSampleSize = scaleFactor;
+                            opt.inJustDecodeBounds = false;
 
-                        Bitmap img = BitmapFactory.decodeFile(data.getPictureFileName(), opt);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-                        final ParseFile picture = new ParseFile(baos.toByteArray());
-                        picture.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    obj.put(PRODUCT_PICTURE, picture);
-                                    obj.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                callback.onResult(true);
-                                            } else {
-                                                callback.onResult(false);
+                            Bitmap img = BitmapFactory.decodeFile(data.getPictureFileName(), opt);
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            img.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                            final ParseFile picture = new ParseFile(baos.toByteArray());
+                            picture.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        obj.put(PRODUCT_PICTURE, picture);
+                                        obj.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                if (e == null) {
+                                                    callback.onResult(true);
+                                                } else {
+                                                    callback.onResult(false);
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
-                            }
-                        });
-                    } else {
-                        obj.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                callback.onResult(e == null);
-                            }
-                        });
+                            });
+                        } else {
+                            obj.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    callback.onResult(e == null);
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            //módosítás
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PRODUCT_CLASSNAME);
+            query.getInBackground(data.getObjectId(), new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    parseObject.put(PRODUCT_CLICKS, data.getClicks());
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            callback.onResult(e == null);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override

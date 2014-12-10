@@ -69,5 +69,7 @@
     <string name="store_label">Store:</string>
     <string name="category_label">Category:</string>
     <string name="action_sign_up_short">Sign up</string>
+    <string name="title_activity_store_details">StoreDetailsActivity</string>
+    <string name="type_label">Type:</string>
 
 </resources>
