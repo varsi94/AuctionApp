@@ -1,6 +1,7 @@
 package hu.bute.auctionapp.fragments;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.activities.ProductDetailsActivity;
 import hu.bute.auctionapp.adapters.ProductsAdapter;
+import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 
 /**
@@ -64,19 +67,13 @@ public class ProductFragment extends ListFragment implements AbsListView.OnItemC
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
 
-        // Set the adapter
-        /*mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);*/
-
-        // Set OnItemClickListener so we can be notified on item clicks
-        //mListView.setOnItemClickListener(this);
-
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getListView().setOnItemClickListener(this);
         DynamicListHandler handler = new DynamicListHandler(getListView(), new ProductsAdapter(getActivity(), section_number));
     }
 
@@ -87,7 +84,10 @@ public class ProductFragment extends ListFragment implements AbsListView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        ProductData data = (ProductData) parent.getAdapter().getItem(position);
+        Intent i = new Intent(getActivity(), ProductDetailsActivity.class);
+        i.putExtra(ProductDetailsActivity.PRODUCT_KEY, data);
+        startActivity(i);
     }
 
     @Override

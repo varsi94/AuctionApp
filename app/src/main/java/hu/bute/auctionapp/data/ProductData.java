@@ -1,12 +1,13 @@
 package hu.bute.auctionapp.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * A hirdetések adatainak tárolására alkalmas osztály.
  * Created by Andras on 2014.12.04..
  */
-public class ProductData {
+public class ProductData implements Serializable {
     private String name;
     private StoreData store;
     private String pictureFileName;
