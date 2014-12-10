@@ -50,7 +50,8 @@
         <activity
             android:name="hu.bute.auctionapp.activities.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName="hu.bute.auctionapp.activities.LoginActivity">
+            android:parentActivityName="hu.bute.auctionapp.activities.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.activities.LoginActivity"/>
@@ -74,7 +75,8 @@
         <activity
             android:name="hu.bute.auctionapp.activities.UploadActivity"
             android:label="@string/title_activity_upload"
-            android:parentActivityName="hu.bute.auctionapp.MainActivity">
+            android:parentActivityName="hu.bute.auctionapp.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.MainActivity"/>
@@ -82,7 +84,8 @@
         <activity
             android:name="hu.bute.auctionapp.activities.SearchActivity"
             android:label="@string/search"
-            android:parentActivityName="hu.bute.auctionapp.MainActivity">
+            android:parentActivityName="hu.bute.auctionapp.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.MainActivity"/>
@@ -90,7 +93,8 @@
         <activity
             android:name="hu.bute.auctionapp.activities.UploadStoreActivity"
             android:label="@string/title_activity_upload_store"
-            android:parentActivityName="hu.bute.auctionapp.activities.StoresActivity">
+            android:parentActivityName="hu.bute.auctionapp.activities.StoresActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.activities.StoresActivity"/>
@@ -106,13 +110,14 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key"/>
+
         <activity
             android:name=".activities.ProductDetailsActivity"
             android:label="@string/title_activity_product_details"
             android:parentActivityName=".activities.ProductsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.activities.ProductsActivity" />
+                android:value="hu.bute.auctionapp.activities.ProductsActivity"/>
         </activity>
     </application>
 

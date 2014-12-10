@@ -71,7 +71,7 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
     }
 
     @Override
-    public Object getItem(int position) {
+    public ProductData getItem(int position) {
         return products.get(position);
     }
 
@@ -86,7 +86,7 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
         ViewHolder holder = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.fragment_product_listitem, null);
+            convertView = inflater.inflate(R.layout.list_frag_products_item, null);
             holder = new ViewHolder();
             holder.pictureImageView = (ImageView) convertView.findViewById(R.id.iconPicImageView);
             holder.productNameTV = (TextView) convertView.findViewById(R.id.productNameTV);

@@ -6,9 +6,11 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import hu.bute.auctionapp.AuctionApplication;
@@ -17,7 +19,7 @@ import hu.bute.auctionapp.data.UserData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
 public class RegisterActivity extends Activity {
-    private EditText emailText;
+    private EditText accountNameText;
     private EditText password1Text;
     private EditText password2Text;
     private View mLoginFormView;
@@ -28,10 +30,20 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        emailText = (EditText) findViewById(R.id.emailText);
+        accountNameText = (EditText) findViewById(R.id.accountNameText);
         password1Text = (EditText) findViewById(R.id.password1Text);
         password2Text = (EditText) findViewById(R.id.password2Text);
-        Button signUpBtn = (Button) findViewById(R.id.signUpBtn);
+        password2Text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.register || id == EditorInfo.IME_NULL) {
+                    attemptSignUp();
+                    return true;
+                }
+                return false;
+            }
+        });
+        View signUpBtn = findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,26 +55,32 @@ public class RegisterActivity extends Activity {
     }
 
     private boolean check(String email, String pwd1, String pwd2) {
-        emailText.setError(null);
+        accountNameText.setError(null);
         password1Text.setError(null);
         password2Text.setError(null);
         if (email.equals("")) {
-            emailText.setError(getString(R.string.error_field_required));
+            accountNameText.setError(getString(R.string.error_field_required));
+            accountNameText.requestFocus();
             return false;
         } else if (pwd1.equals("")) {
             password1Text.setError(getString(R.string.error_field_required));
+            password1Text.requestFocus();
             return false;
         } else if (pwd2.equals("")) {
             password2Text.setError(getString(R.string.error_field_required));
+            password2Text.requestFocus();
             return false;
         } else if (email.length() <= 7) {
-            emailText.setError(getString(R.string.error_invalid_accname));
+            accountNameText.setError(getString(R.string.error_invalid_accname));
+            accountNameText.requestFocus();
             return false;
         } else if (!pwd1.equals(pwd2)) {
             password1Text.setError(getString(R.string.differentPwd));
+            password1Text.requestFocus();
             return false;
         } else if (pwd2.length() <= 4) {
             password1Text.setError(getString(R.string.error_invalid_password));
+            password1Text.requestFocus();
             return false;
         }
         return true;
@@ -99,11 +117,11 @@ public class RegisterActivity extends Activity {
     }
 
     private void attemptSignUp() {
-        boolean b = check(emailText.getText().toString(),
+        boolean b = check(accountNameText.getText().toString(),
                 password1Text.getText().toString(),
                 password2Text.getText().toString());
         if (!b) return;
-        UserData userData = new UserData(emailText.getText().toString(), password1Text.getText().toString());
+        UserData userData = new UserData(accountNameText.getText().toString(), password1Text.getText().toString());
         showProgress(true);
         ((AuctionApplication) getApplication()).cloud.saveUser(
                 userData,

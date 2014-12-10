@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="default_theme_color">#008000</color>
+    <color name="tabs">#006000</color>
+    <color name="tabs_divider">#A0DDA0</color>
+    <color name="actionbar_text">#FFFFFF</color>
     <color name="buttons_text_bg_default">#008000</color>
     <color name="buttons_text_bg_pressed">#70BB70</color>
     <color name="card_bg_pressed">#DDDDDD</color>

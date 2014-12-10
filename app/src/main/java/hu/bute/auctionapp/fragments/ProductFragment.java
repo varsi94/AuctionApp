@@ -1,14 +1,18 @@
 package hu.bute.auctionapp.fragments;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.activities.ProductDetailsActivity;
 import hu.bute.auctionapp.adapters.ProductsAdapter;
+import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
 
 /**
@@ -60,6 +64,13 @@ public class ProductFragment extends ListFragment {
         DynamicListHandler handler = new DynamicListHandler(getListView(), mAdapter);
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        ProductData data = mAdapter.getItem(position);
+        Intent i = new Intent(getActivity(), ProductDetailsActivity.class);
+        i.putExtra(ProductDetailsActivity.PRODUCT_KEY, data);
+        startActivity(i);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

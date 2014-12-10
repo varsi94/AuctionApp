@@ -68,5 +68,6 @@
     <string name="comments_label">Comments:</string>
     <string name="store_label">Store:</string>
     <string name="category_label">Category:</string>
+    <string name="action_sign_up_short">Sign up</string>
 
 </resources>

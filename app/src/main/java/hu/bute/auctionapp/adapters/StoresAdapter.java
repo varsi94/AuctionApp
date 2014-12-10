@@ -65,7 +65,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     }
 
     @Override
-    public Object getItem(int i) {
+    public StoreData getItem(int i) {
         return storeDatas.get(i);
     }
 
@@ -87,7 +87,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         ViewHolder holder = null;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            view = inflater.inflate(R.layout.store_line, null);
+            view = inflater.inflate(R.layout.list_frag_stores_item, null);
             holder = new ViewHolder();
             holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);
             holder.pictureIV = (ImageView) view.findViewById(R.id.iconPicImageView);
