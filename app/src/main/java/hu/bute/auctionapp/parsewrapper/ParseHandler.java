@@ -375,13 +375,19 @@ public class ParseHandler implements CloudHandler {
             ParseObject storeObj = ParseObject.create(STORE_CLASSNAME);
             saveStore(data, storeObj, callback);
         } else {
-            //módosítás
+            //módosítás, egyelőre csak a nézettséget frissíti
             ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
             query.getInBackground(data.getObjectId(), new GetCallback<ParseObject>() {
                 @Override
                 public void done(final ParseObject parseObject, ParseException e) {
                     if (e == null && parseObject != null) {
-                        saveStore(data, parseObject, callback);
+                        parseObject.put(STORE_CLICKS, data.getClicks());
+                        parseObject.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                callback.onResult(e == null);
+                            }
+                        });
                     } else {
                         callback.onResult(false);
                     }

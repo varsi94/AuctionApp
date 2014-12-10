@@ -101,7 +101,7 @@
         </activity>
         <activity
             android:name=".activities.PickLocationActivity"
-            android:label="@string/title_activity_pick_location"></activity>
+            android:label="@string/title_activity_pick_location" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -117,6 +117,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bute.auctionapp.activities.ProductsActivity" />
+        </activity>
+        <activity
+            android:name=".activities.StoreDetailsActivity"
+            android:label="@string/title_activity_store_details"
+            android:parentActivityName=".activities.StoresActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hu.bute.auctionapp.activities.StoresActivity" />
         </activity>
     </application>
 
