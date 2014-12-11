@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -54,6 +55,8 @@ public class SearchActivity extends Activity {
         request = getIntent().getIntExtra(KEY_REQUEST_DATA, REQUEST_DATA_NONE);
         display = getIntent().getIntExtra(KEY_DISPLAY_DATA, DISPLAY_PRODUCT | DISPLAY_STORE);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         setContentView(R.layout.activity_search);
         text = (EditText) findViewById(R.id.search_edittext);
         list = (ListView) findViewById(R.id.search_list_result);
@@ -79,6 +82,16 @@ public class SearchActivity extends Activity {
         searchAdapter = new SearchAdapter();
         dynamicListAdapter = new DynamicListAdapter(list, searchAdapter);
         list.setAdapter(dynamicListAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void startSearch() {

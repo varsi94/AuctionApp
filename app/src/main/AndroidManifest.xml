@@ -83,11 +83,7 @@
         </activity>
         <activity
             android:name=".activities.SearchActivity"
-            android:label="@string/search"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.MainActivity"/>
+            android:label="@string/search">
         </activity>
         <activity
             android:name=".activities.UploadStoreActivity"

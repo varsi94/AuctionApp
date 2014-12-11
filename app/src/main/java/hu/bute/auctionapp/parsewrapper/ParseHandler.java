@@ -19,7 +19,6 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -395,13 +394,12 @@ public class ParseHandler implements CloudHandler {
         try {
             fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fos.write(bytes, 0, bytes.length);
-        } catch (FileNotFoundException e1) {
         } catch (IOException e1) {
         } finally {
             if (fos != null) {
                 try {
                     fos.close();
-                } catch (IOException e1) {
+                } catch (IOException e2) {
                 }
             }
         }
@@ -479,9 +477,9 @@ public class ParseHandler implements CloudHandler {
 
     @Override
     public List<Object> findProdAndStoreDirectly(int skip, int limit, String keyword) {
-        //final List<Object> result = new ArrayList<>();
+        final List<Object> result = new ArrayList<Object>(findProductsDirectly(skip, limit, keyword));
 //TODO big time
-        return new ArrayList<Object>(findProductsDirectly(skip, limit, keyword));
+        return result;
     }
 
     @Override
