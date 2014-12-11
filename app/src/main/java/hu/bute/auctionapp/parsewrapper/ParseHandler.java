@@ -183,7 +183,14 @@ public class ParseHandler implements CloudHandler {
             query.whereEqualTo(PRODUCT_CATEGORY, filter);
         }
         if (storeFilterId != null) {
-            //TODO
+            ParseQuery<ParseObject> storequery = ParseQuery.getQuery(STORE_CLASSNAME);
+            ParseObject storeobj = null;
+            try {
+                storeobj = storequery.get(storeFilterId);
+                query.whereEqualTo(PRODUCT_STOREID, storeobj);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         final List<ProductData> result = new ArrayList<ProductData>();
         try {
@@ -257,7 +264,14 @@ public class ParseHandler implements CloudHandler {
             query.whereEqualTo(PRODUCT_CATEGORY, filter);
         }
         if (storeFilterId != null) {
-            //TODO
+            ParseQuery<ParseObject> storequery = ParseQuery.getQuery(STORE_CLASSNAME);
+            ParseObject storeobj = null;
+            try {
+                storeobj = storequery.get(storeFilterId);
+                query.whereEqualTo(PRODUCT_STOREID, storeobj);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         final List<ProductData> result = new ArrayList<ProductData>();
         try {
@@ -842,7 +856,14 @@ public class ParseHandler implements CloudHandler {
                 query.whereEqualTo(PRODUCT_CATEGORY, filter);
             }
             if (storeFilterId != null) {
-                //TODO
+                ParseQuery<ParseObject> storequery = ParseQuery.getQuery(STORE_CLASSNAME);
+                ParseObject storeobj = null;
+                try {
+                    storeobj = storequery.get(storeFilterId);
+                    query.whereEqualTo(PRODUCT_STOREID, storeobj);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             final List<ProductData> result = new ArrayList<ProductData>();
             try {

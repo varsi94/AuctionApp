@@ -239,7 +239,7 @@ public class MainActivity extends Activity {
 
         @Override
         public boolean wantsToLoad() {
-            return items.size() < titles.size();
+            return app.getUser() != null && items.size() < titles.size();
         }
 
         @Override

@@ -80,6 +80,7 @@ public class SearchActivity extends Activity {
         });
 
         searchAdapter = new SearchAdapter();
+        searchAdapter.clear("");
         dynamicListAdapter = new DynamicListAdapter(list, searchAdapter);
         list.setAdapter(dynamicListAdapter);
     }
@@ -96,7 +97,6 @@ public class SearchActivity extends Activity {
 
     private void startSearch() {
         String keyword = text.getText().toString();
-        searchAdapter.clear(keyword);
         dynamicListAdapter.requestLoad();
     }
 

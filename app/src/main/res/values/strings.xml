@@ -74,5 +74,6 @@
     <string name="nearest_product">Nearest product</string>
     <string name="related_products">Related products</string>
     <string name="similar_products">Similar products</string>
+    <string name="chose_a_store">Chose a store</string>
 
 </resources>

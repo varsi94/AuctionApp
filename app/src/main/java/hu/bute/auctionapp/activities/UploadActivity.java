@@ -148,15 +148,24 @@ public class UploadActivity extends Activity {
     }
 
     private void uploadProduct() {
-        if (productNameET.getText().toString().equals("")) {
+        String name = productNameET.getText().toString();
+        if (name.equals("")) {
             productNameET.setError(getString(R.string.field_is_empty));
+            productNameET.requestFocus();
             return;
         } else if (priceET.getText().toString().equals("")) {
             priceET.setError(getString(R.string.field_is_empty));
+            priceET.requestFocus();
             return;
         }
-        String name = productNameET.getText().toString();
+
         StoreData store = chosenStore;
+        if (store == null) {
+            storeText.setError(getString(R.string.chose_a_store));
+            storeText.requestFocus();
+            return;
+        }
+
         double price = Double.parseDouble(priceET.getText().toString());
         Calendar calendar = Calendar.getInstance();
         calendar.set(durationDP.getYear(), durationDP.getMonth(), durationDP.getDayOfMonth());
