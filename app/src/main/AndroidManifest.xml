@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hu.bute.auctionapp">
+<manifest
+    package="hu.bute.auctionapp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
+        android:required="true"/>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <permission
         android:name="hu.bute.auctionapp.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="hu.bute.auctionapp.permission.MAPS_RECEIVE" />
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="hu.bute.auctionapp.permission.MAPS_RECEIVE"/>
 
     <application
         android:name=".AuctionApplication"
@@ -39,22 +40,22 @@
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:windowSoftInputMode="adjustResize|stateVisible"/>
         <activity
             android:name=".activities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:parentActivityName=".activities.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.activities.LoginActivity" />
+                android:value="hu.bute.auctionapp.activities.LoginActivity"/>
         </activity>
         <activity
             android:name=".activities.ProductsActivity"
@@ -62,7 +63,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.MainActivity" />
+                android:value="hu.bute.auctionapp.MainActivity"/>
         </activity>
         <activity
             android:name=".activities.StoresActivity"
@@ -70,7 +71,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.MainActivity" />
+                android:value="hu.bute.auctionapp.MainActivity"/>
         </activity>
         <activity
             android:name=".activities.UploadActivity"
@@ -78,7 +79,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.MainActivity" />
+                android:value="hu.bute.auctionapp.MainActivity"/>
         </activity>
         <activity
             android:name=".activities.SearchActivity"
@@ -86,7 +87,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.MainActivity" />
+                android:value="hu.bute.auctionapp.MainActivity"/>
         </activity>
         <activity
             android:name=".activities.UploadStoreActivity"
@@ -94,18 +95,18 @@
             android:parentActivityName=".activities.StoresActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.activities.StoresActivity" />
+                android:value="hu.bute.auctionapp.activities.StoresActivity"/>
         </activity>
         <activity
             android:name=".activities.PickLocationActivity"
-            android:label="@string/title_activity_pick_location" />
+            android:label="@string/title_activity_pick_location"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
 
         <activity
             android:name=".activities.ProductDetailsActivity"
@@ -113,7 +114,7 @@
             android:parentActivityName=".activities.ProductsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.activities.ProductsActivity" />
+                android:value="hu.bute.auctionapp.activities.ProductsActivity"/>
         </activity>
         <activity
             android:name=".activities.StoreDetailsActivity"
@@ -121,12 +122,12 @@
             android:parentActivityName=".activities.StoresActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bute.auctionapp.activities.StoresActivity" />
+                android:value="hu.bute.auctionapp.activities.StoresActivity"/>
         </activity>
 
         <receiver android:name=".receiver.AlarmReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
     </application>
