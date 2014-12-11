@@ -34,9 +34,11 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListAdapter.D
     private boolean wantsLoad = true;
     private Context context;
     private String filter;
+    private String storeFilterId;
 
-    public ProductsAdapter(Context context, int type, String filter) {
+    public ProductsAdapter(Context context, int type, String filter, String storeFilterId) {
         this.filter = filter;
+        this.storeFilterId = storeFilterId;
         this.context = context;
         this.type = type;
         app = (AuctionApplication) context.getApplicationContext();
@@ -49,11 +51,11 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListAdapter.D
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.list_frag_products_item, null);
             holder = new ProductViewHolder();
-            holder.pictureImageView = (ImageView) convertView.findViewById(R.id.iconPicImageView);
+            holder.pictureImageView = (ImageView) convertView.findViewById(R.id.list_frag_stores_item_icon);
             holder.productNameTV = (TextView) convertView.findViewById(R.id.productNameTV);
             holder.storeNameTV = (TextView) convertView.findViewById(R.id.storeNameTV);
-            holder.typeTV = (TextView) convertView.findViewById(R.id.typeTV);
-            holder.clicksTV = (TextView) convertView.findViewById(R.id.clicksTV);
+            holder.typeTV = (TextView) convertView.findViewById(R.id.list_frag_stores_item_type);
+            holder.clicksTV = (TextView) convertView.findViewById(R.id.list_frag_stores_item_clicks);
             convertView.setTag(holder);
         } else {
             holder = (ProductViewHolder) convertView.getTag();
@@ -76,22 +78,23 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListAdapter.D
     }
 
     private List<ProductData> loadFavourites() {
-        List<ProductData> incoming = app.cloud.getFavoriteProducts(products.size(), LOAD_COUNT, filter);
+        List<ProductData> incoming = app.cloud.getFavoriteProducts(products.size(), LOAD_COUNT, filter, storeFilterId);
         return incoming;
     }
 
     private List<ProductData> loadMostViewed() {
-        List<ProductData> incoming = app.cloud.getProductsByViewDirectly(products.size(), LOAD_COUNT, filter);
+        List<ProductData> incoming = app.cloud.getProductsByViewDirectly(products.size(), LOAD_COUNT, filter, storeFilterId);
         return incoming;
     }
 
     private List<ProductData> loadMostRecent() {
-        List<ProductData> incoming = app.cloud.getProdcutsByLastChangedDirectly(products.size(), LOAD_COUNT, filter);
+        List<ProductData> incoming = app.cloud.getProdcutsByLastChangedDirectly(products.size(), LOAD_COUNT, filter, storeFilterId);
         return incoming;
     }
 
-    public void refresh(String filter) {
+    public void refresh(String filter, String storeFilterId) {
         this.filter = filter;
+        this.storeFilterId = storeFilterId;
         products.clear();
         wantsLoad = true;
         notifyDataSetChanged();
@@ -116,35 +119,6 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListAdapter.D
     public View getView(int position, View convertView, ViewGroup parent) {
         ProductData data = products.get(position);
         return getProductListItem(data, context, convertView, parent);
-       /* ProductViewHolder holder = null;
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.list_frag_products_item, null);
-            holder = new ProductViewHolder();
-            holder.pictureImageView = (ImageView) convertView.findViewById(R.id.iconPicImageView);
-            holder.productNameTV = (TextView) convertView.findViewById(R.id.productNameTV);
-            holder.storeNameTV = (TextView) convertView.findViewById(R.id.storeNameTV);
-            holder.typeTV = (TextView) convertView.findViewById(R.id.typeTV);
-            holder.clicksTV = (TextView) convertView.findViewById(R.id.clicksTV);
-            convertView.setTag(holder);
-        } else {
-            holder = (ProductViewHolder) convertView.getTag();
-        }
-        holder.productNameTV.setText(data.getName());
-        holder.storeNameTV.setText(data.getStore().getName());
-        holder.clicksTV.setText(app.getString(R.string.viewsLabel) + data.getClicks());
-        holder.typeTV.setText(app.getString(R.string.typeLabel) + data.getCategory());
-        if (data.getPictureFileName() == null) {
-            holder.pictureImageView.setImageResource(R.drawable.nophoto);
-        } else {
-            try {
-                Bitmap image = BitmapFactory.decodeStream(app.openFileInput(data.getPictureFileName()));
-                holder.pictureImageView.setImageBitmap(image);
-            } catch (FileNotFoundException e) {
-                holder.pictureImageView.setImageResource(R.drawable.nophoto);
-            }
-        }
-        return convertView;*/
     }
 
     @Override

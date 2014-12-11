@@ -45,21 +45,19 @@ public class StoresAdapter extends BaseAdapter implements DynamicListAdapter.Dyn
     }
 
     public static View getStoreListItem(StoreData data, Context context, View view, ViewGroup viewGroup) {
-        System.out.println("data = " + data);
         StoreViewHolder holder = null;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             view = inflater.inflate(R.layout.list_frag_stores_item, null);
             holder = new StoreViewHolder();
-            holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);
-            holder.pictureIV = (ImageView) view.findViewById(R.id.iconPicImageView);
-            holder.clicksTV = (TextView) view.findViewById(R.id.clicksTV);
-            holder.typeTV = (TextView) view.findViewById(R.id.typeTV);
+            holder.storeNameTV = (TextView) view.findViewById(R.id.list_frag_stores_item_name);
+            holder.pictureIV = (ImageView) view.findViewById(R.id.list_frag_stores_item_icon);
+            holder.clicksTV = (TextView) view.findViewById(R.id.list_frag_stores_item_clicks);
+            holder.typeTV = (TextView) view.findViewById(R.id.list_frag_stores_item_type);
             view.setTag(holder);
         } else {
             holder = (StoreViewHolder) view.getTag();
         }
-        System.out.println("view = " + view);
         holder.storeNameTV.setText(data.getName());
         holder.clicksTV.setText(context.getString(R.string.viewsLabel) + data.getClicks());
         holder.typeTV.setText(context.getString(R.string.typeLabel) + data.getType());
@@ -74,6 +72,29 @@ public class StoresAdapter extends BaseAdapter implements DynamicListAdapter.Dyn
             }
         }
         return view;
+    }
+
+    public static void applyStoreCardDate(StoreData data, View findy) {
+        Context context = findy.getContext();
+        StoreViewHolder holder = new StoreViewHolder();
+        holder.storeNameTV = (TextView) findy.findViewById(R.id.list_frag_stores_item_name);
+        holder.pictureIV = (ImageView) findy.findViewById(R.id.list_frag_stores_item_icon);
+        holder.clicksTV = (TextView) findy.findViewById(R.id.list_frag_stores_item_clicks);
+        holder.typeTV = (TextView) findy.findViewById(R.id.list_frag_stores_item_type);
+
+        holder.storeNameTV.setText(data.getName());
+        holder.clicksTV.setText(context.getString(R.string.viewsLabel) + data.getClicks());
+        holder.typeTV.setText(context.getString(R.string.typeLabel) + data.getType());
+        if (data.getPictureFileName() == null) {
+            holder.pictureIV.setImageResource(R.drawable.nophoto);
+        } else {
+            try {
+                Bitmap image = BitmapFactory.decodeStream(context.openFileInput(data.getPictureFileName()));
+                holder.pictureIV.setImageBitmap(image);
+            } catch (FileNotFoundException e) {
+                holder.pictureIV.setImageResource(R.drawable.nophoto);
+            }
+        }
     }
 
     private List<StoreData> loadFavourites() {

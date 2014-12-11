@@ -72,5 +72,7 @@
     <string name="store_dd">Store:</string>
     <string name="store_name">Store name</string>
     <string name="nearest_product">Nearest product</string>
+    <string name="related_products">Related products</string>
+    <string name="similar_products">Similar products</string>
 
 </resources>

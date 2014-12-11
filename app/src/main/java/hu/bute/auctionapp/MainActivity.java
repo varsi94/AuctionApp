@@ -22,6 +22,7 @@ import java.util.List;
 import hu.bute.auctionapp.activities.LoginActivity;
 import hu.bute.auctionapp.activities.ProductsActivity;
 import hu.bute.auctionapp.activities.SearchActivity;
+import hu.bute.auctionapp.activities.StoreDetailsActivity;
 import hu.bute.auctionapp.activities.StoresActivity;
 import hu.bute.auctionapp.activities.UploadActivity;
 import hu.bute.auctionapp.data.StoreData;
@@ -207,7 +208,7 @@ public class MainActivity extends Activity {
             for (; i < stores.size() && i < holder.holders.length; ++i) {
                 ContentViewHolder.StoreViewHolder v = holder.holders[i];
                 v.findy.setVisibility(View.VISIBLE);
-                StoreData s = stores.get(i);
+                final StoreData s = stores.get(i);
                 if (s.hasPicture()) {
                     try {
                         Bitmap image = BitmapFactory.decodeStream(app.openFileInput(s.getPictureFileName()));
@@ -219,9 +220,19 @@ public class MainActivity extends Activity {
                     v.image.setImageResource(R.drawable.nophoto);
                 }
                 v.text.setText(s.getName());
+                holder.holders[i].findy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(MainActivity.this, StoreDetailsActivity.class);
+                        i.putExtra(StoreDetailsActivity.STORE_KEY, s);
+                        startActivity(i);
+                        s.setClicks(s.getClicks() + 1);
+                    }
+                });
             }
             for (; i < holder.holders.length; ++i) {
                 holder.holders[i].findy.setVisibility(View.GONE);
+                holder.holders[i].findy.setOnClickListener(null);
             }
             return convertView;
         }

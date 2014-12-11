@@ -13,6 +13,7 @@ import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.activities.ProductDetailsActivity;
 import hu.bute.auctionapp.adapters.ProductsAdapter;
 import hu.bute.auctionapp.data.ProductData;
+import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 
 /**
@@ -25,15 +26,18 @@ import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 public class ProductFragment extends ListFragment {
     private static final String KEY_TYPE = "type";
     private static final String KEY_FILTER = "filter";
+    private static final String KEY_STORE_FILTER_ID = "str_flt_id";
     private int type;
     private String filter;
+    private String storeFilterId;
     private ProductsAdapter mAdapter;
 
-    public static ProductFragment newInstance(int type, String filter) {
+    public static ProductFragment newInstance(int type, String filter, StoreData storeFilter) {
         ProductFragment fragment = new ProductFragment();
         Bundle args = new Bundle();
         args.putInt(KEY_TYPE, type);
         args.putString(KEY_FILTER, filter);
+        args.putString(KEY_STORE_FILTER_ID, storeFilter == null ? null : storeFilter.getObjectId());
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,10 +48,12 @@ public class ProductFragment extends ListFragment {
         if (savedInstanceState != null) {
             type = savedInstanceState.getInt(KEY_TYPE);
             filter = savedInstanceState.getString(KEY_FILTER);
+            storeFilterId = savedInstanceState.getString(KEY_STORE_FILTER_ID);
         } else if (getArguments() != null) {
             Bundle args = getArguments();
             type = args.getInt(KEY_TYPE);
             filter = args.getString(KEY_FILTER);
+            storeFilterId = args.getString(KEY_STORE_FILTER_ID);
         }
     }
 
@@ -60,7 +66,7 @@ public class ProductFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new ProductsAdapter((AuctionApplication) getActivity().getApplication(), type, filter);
+        mAdapter = new ProductsAdapter((AuctionApplication) getActivity().getApplication(), type, filter, storeFilterId);
         DynamicListAdapter adapter = new DynamicListAdapter(getListView(), mAdapter);
         setListAdapter(adapter);
     }
@@ -80,6 +86,7 @@ public class ProductFragment extends ListFragment {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_TYPE, type);
         outState.putString(KEY_FILTER, filter);
+        outState.putString(KEY_STORE_FILTER_ID, storeFilterId);
     }
 
     @Override
@@ -87,14 +94,13 @@ public class ProductFragment extends ListFragment {
         super.onDetach();
     }
 
-    public void refresh() {
-        if (mAdapter != null) {
-            mAdapter.refresh(filter);
-        }
-    }
-
-    public void setFilter(String filter) {
-        getArguments().putString(KEY_FILTER, filter);
+    public void setFilter(String filter, StoreData storeFilter) {
         this.filter = filter;
+        this.storeFilterId = storeFilter == null ? null : storeFilter.getObjectId();
+        getArguments().putString(KEY_FILTER, filter);
+        getArguments().putString(KEY_STORE_FILTER_ID, storeFilterId);
+        if (mAdapter != null) {
+            mAdapter.refresh(filter, storeFilterId);
+        }
     }
 }

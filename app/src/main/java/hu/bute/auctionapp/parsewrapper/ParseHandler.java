@@ -174,13 +174,16 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<ProductData> getProductsByViewDirectly(int skip, int limit, String filter) {
+    public List<ProductData> getProductsByViewDirectly(int skip, int limit, String filter, String storeFilterId) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
         query.orderByDescending(PRODUCT_CLICKS);
         if (filter != null) {
             query.whereEqualTo(PRODUCT_CATEGORY, filter);
+        }
+        if (storeFilterId != null) {
+            //TODO
         }
         final List<ProductData> result = new ArrayList<ProductData>();
         try {
@@ -245,13 +248,16 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit, String filter) {
+    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit, String filter, String storeFilterId) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
         query.setSkip(skip);
         query.setLimit(limit);
         query.orderByDescending("updatedAt");
         if (filter != null) {
             query.whereEqualTo(PRODUCT_CATEGORY, filter);
+        }
+        if (storeFilterId != null) {
+            //TODO
         }
         final List<ProductData> result = new ArrayList<ProductData>();
         try {
@@ -825,7 +831,7 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
-    public List<ProductData> getFavoriteProducts(int skip, int limit, String filter) {
+    public List<ProductData> getFavoriteProducts(int skip, int limit, String filter, String storeFilterId) {
         AuctionApplication app = (AuctionApplication) context.getApplicationContext();
         try {
             ParseObject user = getParseObjectDirectly(app.getUser().getObjectId(), USER_CLASSNAME);
@@ -834,6 +840,9 @@ public class ParseHandler implements CloudHandler {
             query.setLimit(limit);
             if (filter != null) {
                 query.whereEqualTo(PRODUCT_CATEGORY, filter);
+            }
+            if (storeFilterId != null) {
+                //TODO
             }
             final List<ProductData> result = new ArrayList<ProductData>();
             try {

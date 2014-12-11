@@ -13,17 +13,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.fragments.CategoryFragment;
 import hu.bute.auctionapp.fragments.ProductFragment;
 
 public class ProductsActivity extends Activity implements ActionBar.TabListener, CategoryFragment.OnCategorySelectedListener {
     public static final String KEY_FILTER = "filt_key";
+    public static final String KEY_STORE_FILTER = "store_filt";
     private static final int UPLOAD_PRODUCT_REQUEST = 1520;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
     private String filter = null;
+    private StoreData storeFilter = null;
 
     public static <T> int indexof(T[] array, T element) {
         if (element == null) {
@@ -47,13 +50,18 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
         setContentView(R.layout.activity_products);
 
         filter = getIntent().getStringExtra(KEY_FILTER);
+        storeFilter = (StoreData) getIntent().getSerializableExtra(KEY_STORE_FILTER);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
-        if (filter == null) {
-            actionBar.setTitle(R.string.products);
+        if (storeFilter == null) {
+            if (filter == null) {
+                actionBar.setTitle(R.string.products);
+            } else {
+                actionBar.setTitle(filter);
+            }
         } else {
-            actionBar.setTitle(filter);
+            actionBar.setTitle(storeFilter.getName());
         }
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -122,8 +130,7 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
             Fragment f = getFragment(i);
             if (f instanceof ProductFragment) {
                 ProductFragment pf = (ProductFragment) f;
-                pf.setFilter(filter);
-                pf.refresh();
+                pf.setFilter(filter, storeFilter);
             }
         }
     }
@@ -156,7 +163,12 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
     public void onBackPressed() {
         if (filter != null) {
             filter = null;
-            getActionBar().setTitle(R.string.products);
+            final ActionBar actionBar = getActionBar();
+            if (storeFilter == null) {
+                actionBar.setTitle(R.string.products);
+            } else {
+                actionBar.setTitle(storeFilter.getName());
+            }
             mViewPager.setCurrentItem(0, true);
             clearFragments();
             Fragment f = getFragment(0);
@@ -172,10 +184,15 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
     @Override
     public void categorySelected(int index, String category) {
         this.filter = category;
-        if (filter == null) {
-            getActionBar().setTitle(R.string.products);
+        final ActionBar actionBar = getActionBar();
+        if (storeFilter == null) {
+            if (filter == null) {
+                actionBar.setTitle(R.string.products);
+            } else {
+                actionBar.setTitle(filter);
+            }
         } else {
-            getActionBar().setTitle(filter);
+            actionBar.setTitle(storeFilter.getName());
         }
         clearFragments();
         mViewPager.setCurrentItem(1, true);
@@ -195,7 +212,7 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
                 case 0:
                     return CategoryFragment.newInstance(R.array.product_types, indexof(getResources().getStringArray(R.array.product_types), filter));
                 default:
-                    return ProductFragment.newInstance(position - 1, filter);
+                    return ProductFragment.newInstance(position - 1, filter, storeFilter);
             }
         }
 

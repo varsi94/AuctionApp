@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/default_background"
     android:padding="4dp"
+    android:scrollbarStyle="outsideInset"
     tools:context="hu.bute.auctionapp.activities.ProductDetailsActivity">
 
     <LinearLayout
@@ -182,5 +184,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/favorite_selector"/>
+
+        <TextView
+            android:id="@+id/product_details_similar_products"
+            style="@style/textviewButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/similar_products"/>
+
+        <include
+            android:id="@+id/product_details_storecard"
+            layout="@layout/list_frag_stores_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 </ScrollView>

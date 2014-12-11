@@ -33,8 +33,17 @@ public class StoreDetailsActivity extends Activity {
             finish();
         }
         storeNameTV = (TextView) findViewById(R.id.storeNameTV);
-        typeTV = (TextView) findViewById(R.id.typeTV);
+        typeTV = (TextView) findViewById(R.id.list_frag_stores_item_type);
         previewIV = (ImageView) findViewById(R.id.imagePreview);
+        View relatedProds = findViewById(R.id.store_details_productsbutton);
+        relatedProds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(StoreDetailsActivity.this, ProductsActivity.class);
+                i.putExtra(ProductsActivity.KEY_STORE_FILTER, data);
+                startActivity(i);
+            }
+        });
         View setFavoriteImageBtn = findViewById(R.id.setFavoriteImgBtn);
         setFavoriteImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override

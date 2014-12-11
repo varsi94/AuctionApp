@@ -23,9 +23,9 @@ public interface CloudHandler {
 
     public List<StoreData> getStoresByLastChangedDirectly(int skip, int limit, String filter);
 
-    public List<ProductData> getProductsByViewDirectly(int skip, int limit, String filter);
+    public List<ProductData> getProductsByViewDirectly(int skip, int limit, String filter, String storeFilterId);
 
-    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit, String filter);
+    public List<ProductData> getProdcutsByLastChangedDirectly(int skip, int limit, String filter, String storeFilterId);
 
     public void getUser(String objectid, ResultCallback callback);
 
@@ -59,7 +59,7 @@ public interface CloudHandler {
 
     public List<StoreData> getFavoriteStores(int size, int loadCount, String filter);
 
-    public List<ProductData> getFavoriteProducts(int skip, int limit, String filter);
+    public List<ProductData> getFavoriteProducts(int skip, int limit, String filter, String storeFilterId);
 
     public ProductData getNearest(LatLng currPos);
 

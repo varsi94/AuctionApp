@@ -14,6 +14,7 @@ import java.text.DateFormat;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
+import hu.bute.auctionapp.adapters.StoresAdapter;
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
@@ -65,9 +66,17 @@ public class ProductDetailsActivity extends Activity {
                 v.setSelected(data.isFavorite());
             }
         });
+        View similar = findViewById(R.id.product_details_similar_products);
+        similar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProductDetailsActivity.this, ProductsActivity.class);
+                i.putExtra(ProductsActivity.KEY_FILTER, data.getCategory());
+                startActivity(i);
+            }
+        });
         showDetails();
         updateClicks();
-        System.out.println("data.isFavorite() = " + data.isFavorite());
         setFavoriteBtn.setSelected(data.isFavorite());
     }
 
@@ -83,6 +92,18 @@ public class ProductDetailsActivity extends Activity {
     }
 
     private void showDetails() {
+        View storecard = findViewById(R.id.product_details_storecard);
+        storecard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProductDetailsActivity.this, StoreDetailsActivity.class);
+                i.putExtra(StoreDetailsActivity.STORE_KEY, data.getStore());
+                startActivity(i);
+                data.setClicks(data.getClicks() + 1);
+                StoresAdapter.applyStoreCardDate(data.getStore(), v);
+            }
+        });
+        StoresAdapter.applyStoreCardDate(data.getStore(), storecard);
         productNameTV.setText(data.getName());
         propertiesTV.setText(data.getProperties());
         DateFormat sdf = DateFormat.getDateInstance();
