@@ -97,6 +97,7 @@ public class SearchActivity extends Activity {
 
     private void startSearch() {
         String keyword = text.getText().toString();
+        searchAdapter.clear(keyword);
         dynamicListAdapter.requestLoad();
     }
 
