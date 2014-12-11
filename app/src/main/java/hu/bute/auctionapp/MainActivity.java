@@ -279,8 +279,8 @@ public class MainActivity extends Activity {
 
                 StoreViewHolder(View findy) {
                     this.findy = findy;
-                    image = (ImageView) findy.findViewById(R.id.list_main_content_store_img);
-                    text = (TextView) findy.findViewById(R.id.list_main_content_store_text);
+                    image = (ImageView) findy.findViewById(R.id.list_main_content_card_img);
+                    text = (TextView) findy.findViewById(R.id.list_main_content_card_text);
                 }
             }
         }
