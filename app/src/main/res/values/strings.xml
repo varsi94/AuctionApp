@@ -71,5 +71,6 @@
     <string name="type_label">Type:</string>
     <string name="store_dd">Store:</string>
     <string name="store_name">Store name</string>
+    <string name="nearest_product">Nearest product</string>
 
 </resources>
