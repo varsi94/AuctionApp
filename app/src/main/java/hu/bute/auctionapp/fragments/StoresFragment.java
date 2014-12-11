@@ -1,10 +1,7 @@
 package hu.bute.auctionapp.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,7 @@ import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.activities.StoreDetailsActivity;
 import hu.bute.auctionapp.adapters.StoresAdapter;
 import hu.bute.auctionapp.data.StoreData;
-import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
+import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 
 public class StoresFragment extends ListFragment {
     private static final String KEY_TYPE = "type";
@@ -57,7 +54,8 @@ public class StoresFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAdapter = new StoresAdapter((AuctionApplication) getActivity().getApplication(), type, filter);
-        DynamicListHandler handler = new DynamicListHandler(getListView(), mAdapter);
+        DynamicListAdapter adapter = new DynamicListAdapter(getListView(), mAdapter);
+        setListAdapter(adapter);
     }
 
 
@@ -73,24 +71,23 @@ public class StoresFragment extends ListFragment {
         super.onDetach();
     }
 
-    public void refresh() {
+
+    public void setFilter(String filter) {
+        getArguments().putString(KEY_FILTER, filter);
+        this.filter = filter;
         if (mAdapter != null) {
             mAdapter.refresh(filter);
         }
     }
 
-    public void setFilter(String filter) {
-        getArguments().putString(KEY_FILTER, filter);
-        this.filter = filter;
-    }
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
         StoreData data = (StoreData) mAdapter.getItem(position);
         Intent i = new Intent(getActivity(), StoreDetailsActivity.class);
         i.putExtra(StoreDetailsActivity.STORE_KEY, data);
         startActivity(i);
+        data.setClicks(data.getClicks() + 1);
+        mAdapter.notifyDataSetChanged();
     }
 
 }

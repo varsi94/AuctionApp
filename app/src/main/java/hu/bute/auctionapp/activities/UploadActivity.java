@@ -23,7 +23,6 @@ import java.util.Date;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
-import hu.bute.auctionapp.adapters.StoresAdapterForSpinner;
 import hu.bute.auctionapp.data.ProductData;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
@@ -32,7 +31,8 @@ public class UploadActivity extends Activity {
     public static final String IMAGEPATH =
             Environment.getExternalStorageDirectory().getAbsolutePath() +
                     "/tmp_image.jpg";
-    private static final int PICK_LOCATION_REQUEST = 250;
+    private static final int REQUEST_PICK_LOCATION = 250;
+    private static final int REQUEST_SEARCH_STORE = 251;
     private final int REQUEST_CAMERA_IMAGE = 101;
     private String[] currencyTypes;
     private ImageView ivDrawer;
@@ -43,12 +43,14 @@ public class UploadActivity extends Activity {
     private EditText priceET;
     private Spinner currencySpinner;
     private Spinner categorySpinner;
-    private Spinner storeNameSpinner;
     private DatePicker durationDP;
     private EditText propertiesET;
     private EditText commentET;
+    private TextView storeText;
     private PickLocationActivity.LocationInfo locationInfo;
     private boolean hasPhoto;
+
+    private StoreData chosenStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +78,7 @@ public class UploadActivity extends Activity {
         });
 
         ivDrawer = (ImageView) findViewById(R.id.ivDrawer);
-        Spinner tv = (Spinner) findViewById(R.id.store);
 
-        ArrayAdapter<StoreData> storeAdapter = new StoresAdapterForSpinner(
-                this, android.R.layout.simple_dropdown_item_1line);
-        tv.setAdapter(storeAdapter);
 
         //Currency adapter
         Spinner crcy = (Spinner)
@@ -99,7 +97,7 @@ public class UploadActivity extends Activity {
         pickLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(UploadActivity.this, PickLocationActivity.class), PICK_LOCATION_REQUEST);
+                startActivityForResult(new Intent(UploadActivity.this, PickLocationActivity.class), REQUEST_PICK_LOCATION);
             }
         });
 
@@ -130,11 +128,23 @@ public class UploadActivity extends Activity {
         priceET = (EditText) findViewById(R.id.price);
         currencySpinner = (Spinner) findViewById(R.id.currency);
         categorySpinner = (Spinner) findViewById(R.id.category);
-        storeNameSpinner = (Spinner) findViewById(R.id.store);
         durationDP = (DatePicker) findViewById(R.id.duration);
         propertiesET = (EditText) findViewById(R.id.properties);
         commentET = (EditText) findViewById(R.id.comment);
+        storeText = (TextView) findViewById(R.id.storeTextView);
         hasPhoto = false;
+
+        View searchButton = findViewById(R.id.upload_product_search_store);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("v = [" + v + "]");
+                Intent intent = new Intent(UploadActivity.this, SearchActivity.class);
+                intent.putExtra(SearchActivity.KEY_REQUEST_DATA, SearchActivity.REQUEST_DATA_STORE);
+                intent.putExtra(SearchActivity.KEY_DISPLAY_DATA, SearchActivity.DISPLAY_STORE);
+                startActivityForResult(intent, REQUEST_SEARCH_STORE);
+            }
+        });
     }
 
     private void uploadProduct() {
@@ -146,7 +156,7 @@ public class UploadActivity extends Activity {
             return;
         }
         String name = productNameET.getText().toString();
-        StoreData store = (StoreData) storeNameSpinner.getSelectedItem();
+        StoreData store = chosenStore;
         double price = Double.parseDouble(priceET.getText().toString());
         Calendar calendar = Calendar.getInstance();
         calendar.set(durationDP.getYear(), durationDP.getMonth(), durationDP.getDayOfMonth());
@@ -186,33 +196,46 @@ public class UploadActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode,
                                     int resultCode, Intent data) {
-        if (requestCode == REQUEST_CAMERA_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                try {
-                    BitmapFactory.Options opt = new BitmapFactory.Options();
-                    opt.inJustDecodeBounds = true;
-                    BitmapFactory.decodeFile(IMAGEPATH, opt);
-                    int imgWidth = opt.outWidth;
+        switch (requestCode) {
+            case REQUEST_CAMERA_IMAGE: {
+                if (resultCode == RESULT_OK) {
+                    try {
+                        BitmapFactory.Options opt = new BitmapFactory.Options();
+                        opt.inJustDecodeBounds = true;
+                        BitmapFactory.decodeFile(IMAGEPATH, opt);
+                        int imgWidth = opt.outWidth;
 
-                    int realWidth = ivDrawer.getMeasuredWidth();
-                    int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
-                    opt.inSampleSize = scaleFactor;
-                    opt.inJustDecodeBounds = false;
+                        int realWidth = ivDrawer.getMeasuredWidth();
+                        int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
+                        opt.inSampleSize = scaleFactor;
+                        opt.inJustDecodeBounds = false;
 
-                    Bitmap img = BitmapFactory.decodeFile(IMAGEPATH, opt);
+                        Bitmap img = BitmapFactory.decodeFile(IMAGEPATH, opt);
 
-                    ivDrawer.setImageBitmap(img);
-                    hasPhoto = true;
-                } catch (Throwable t) {
-                    t.printStackTrace();
+                        ivDrawer.setImageBitmap(img);
+                        hasPhoto = true;
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
+                break;
             }
-        } else if (requestCode == PICK_LOCATION_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                PickLocationActivity.LocationInfo info =
-                        (PickLocationActivity.LocationInfo) data.getSerializableExtra(PickLocationActivity.LOCATION_INFO);
-                locationET.setText(info.getLocation());
-                locationInfo = info;
+            case REQUEST_PICK_LOCATION: {
+                if (resultCode == RESULT_OK) {
+                    PickLocationActivity.LocationInfo info =
+                            (PickLocationActivity.LocationInfo) data.getSerializableExtra(PickLocationActivity.LOCATION_INFO);
+                    locationET.setText(info.getLocation());
+                    locationInfo = info;
+                }
+                break;
+            }
+            case REQUEST_SEARCH_STORE: {
+                if (resultCode == RESULT_OK) {
+                    chosenStore = (StoreData) data.getSerializableExtra(SearchActivity.KEY_RESULT_STORE);
+                    storeText.setText(chosenStore.getName());
+                    System.out.println("chosenStore = " + chosenStore);
+                }
+                break;
             }
         }
     }

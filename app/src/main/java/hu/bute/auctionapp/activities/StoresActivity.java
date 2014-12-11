@@ -50,6 +50,11 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, C
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
+        if (filter == null) {
+            actionBar.setTitle(R.string.stores);
+        } else {
+            actionBar.setTitle(filter);
+        }
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
@@ -117,7 +122,6 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, C
             if (f instanceof StoresFragment) {
                 StoresFragment sf = (StoresFragment) f;
                 sf.setFilter(filter);
-                sf.refresh();
             }
         }
     }
@@ -150,6 +154,7 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, C
     public void onBackPressed() {
         if (filter != null) {
             filter = null;
+            getActionBar().setTitle(R.string.stores);
             mViewPager.setCurrentItem(0, true);
             clearFragments();
             Fragment f = getFragment(0);
@@ -165,6 +170,11 @@ public class StoresActivity extends Activity implements ActionBar.TabListener, C
     @Override
     public void categorySelected(int index, String category) {
         this.filter = category;
+        if (filter == null) {
+            getActionBar().setTitle(R.string.stores);
+        } else {
+            getActionBar().setTitle(filter);
+        }
         clearFragments();
         mViewPager.setCurrentItem(1, true);
     }

@@ -13,7 +13,7 @@ import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.activities.ProductDetailsActivity;
 import hu.bute.auctionapp.adapters.ProductsAdapter;
 import hu.bute.auctionapp.data.ProductData;
-import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
+import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -61,7 +61,8 @@ public class ProductFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAdapter = new ProductsAdapter((AuctionApplication) getActivity().getApplication(), type, filter);
-        DynamicListHandler handler = new DynamicListHandler(getListView(), mAdapter);
+        DynamicListAdapter adapter = new DynamicListAdapter(getListView(), mAdapter);
+        setListAdapter(adapter);
     }
 
     @Override
@@ -70,6 +71,8 @@ public class ProductFragment extends ListFragment {
         Intent i = new Intent(getActivity(), ProductDetailsActivity.class);
         i.putExtra(ProductDetailsActivity.PRODUCT_KEY, data);
         startActivity(i);
+        data.setClicks(data.getClicks() + 1);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

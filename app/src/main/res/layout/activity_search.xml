@@ -2,51 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/default_background"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:paddingBottom="16dp"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
-              android:paddingTop="16dp">
-
-    <ProgressBar
-        android:id="@+id/searchProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone"/>
-
+              android:paddingLeft="4dp"
+              android:paddingRight="4dp"
+              android:paddingTop="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/searchproduct"
-            android:layout_width="match_parent"
+            android:id="@+id/search_edittext"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="@string/search_product"
             android:imeOptions="actionSearch"
             android:singleLine="true"/>
 
-        <Button
-            android:id="@+id/okbtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00ca44"
-            android:text="@string/ok"/>
-
         <TextView
+            android:id="@+id/search_button_ok"
+            style="@style/textviewButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/results"
-            android:textSize="24sp"/>
+            android:layout_height="wrap_content"
+            android:text="@string/search"/>
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/search_list_result"
+        style="@style/cardsListStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

@@ -70,30 +70,32 @@ public class UploadStoreActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            if (selectedImage != null) {
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(
-                    selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
+                Cursor cursor = getContentResolver().query(
+                        selectedImage, filePathColumn, null, null, null);
+                cursor.moveToFirst();
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String filePath = cursor.getString(columnIndex);
-            cursor.close();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String filePath = cursor.getString(columnIndex);
+                cursor.close();
 
-            BitmapFactory.Options opt = new BitmapFactory.Options();
-            opt.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(filePath, opt);
-            int imgWidth = opt.outWidth;
+                BitmapFactory.Options opt = new BitmapFactory.Options();
+                opt.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(filePath, opt);
+                int imgWidth = opt.outWidth;
 
-            int realWidth = 128;
-            int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
-            opt.inSampleSize = scaleFactor;
-            opt.inJustDecodeBounds = false;
+                int realWidth = 128;
+                int scaleFactor = Math.round((float) imgWidth / (float) realWidth);
+                opt.inSampleSize = scaleFactor;
+                opt.inJustDecodeBounds = false;
 
-            Bitmap img = BitmapFactory.decodeFile(filePath, opt);
-            previewImage.setImageBitmap(img);
-            pictureFileName = filePath;
-            hasPhoto = true;
+                Bitmap img = BitmapFactory.decodeFile(filePath, opt);
+                previewImage.setImageBitmap(img);
+                pictureFileName = filePath;
+                hasPhoto = true;
+            }
         } else if (requestCode == GET_IMAGE_FROM_CAMERA && resultCode == RESULT_OK) {
             try {
                 BitmapFactory.Options opt = new BitmapFactory.Options();

@@ -13,7 +13,6 @@ import java.io.FileNotFoundException;
 
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
-import hu.bute.auctionapp.customviews.FavoriteImageView;
 import hu.bute.auctionapp.data.StoreData;
 import hu.bute.auctionapp.parsewrapper.CloudHandler;
 
@@ -23,7 +22,6 @@ public class StoreDetailsActivity extends Activity {
     private TextView storeNameTV;
     private TextView typeTV;
     private ImageView previewIV;
-    private FavoriteImageView setFavoriteImageBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +35,7 @@ public class StoreDetailsActivity extends Activity {
         storeNameTV = (TextView) findViewById(R.id.storeNameTV);
         typeTV = (TextView) findViewById(R.id.typeTV);
         previewIV = (ImageView) findViewById(R.id.imagePreview);
-        setFavoriteImageBtn = (FavoriteImageView) findViewById(R.id.setFavoriteImgBtn);
+        View setFavoriteImageBtn = findViewById(R.id.setFavoriteImgBtn);
         setFavoriteImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,13 +48,13 @@ public class StoreDetailsActivity extends Activity {
                     app.getUser().getFavoriteStoreIds().add(data.getObjectId());
                 }
                 data.setFavorite(!data.isFavorite());
-                setFavoriteImageBtn.setFavorite(data.isFavorite());
+                v.setSelected(data.isFavorite());
             }
         });
 
         showData();
         updateClicks();
-        setFavoriteImageBtn.setFavorite(data.isFavorite());
+        setFavoriteImageBtn.setSelected(data.isFavorite());
     }
 
     private void updateClicks() {

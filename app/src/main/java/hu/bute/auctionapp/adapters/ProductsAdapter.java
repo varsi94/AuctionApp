@@ -17,13 +17,13 @@ import java.util.List;
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.ProductData;
-import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
+import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 
 /**
  * Adapter a termékek megjelenítésére.
  * Created by Varsi on 2014.12.10..
  */
-public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
+public class ProductsAdapter extends BaseAdapter implements DynamicListAdapter.DynamicLoader {
     public static final int MOST_RECENT = 0;
     public static final int MOST_VIEWED = 1;
     public static final int FAVOURITES = 2;
@@ -41,6 +41,38 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
         this.type = type;
         app = (AuctionApplication) context.getApplicationContext();
         products = new ArrayList<>();
+    }
+
+    public static View getProductListItem(ProductData data, Context context, View convertView, ViewGroup parent) {
+        ProductViewHolder holder = null;
+        if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(R.layout.list_frag_products_item, null);
+            holder = new ProductViewHolder();
+            holder.pictureImageView = (ImageView) convertView.findViewById(R.id.iconPicImageView);
+            holder.productNameTV = (TextView) convertView.findViewById(R.id.productNameTV);
+            holder.storeNameTV = (TextView) convertView.findViewById(R.id.storeNameTV);
+            holder.typeTV = (TextView) convertView.findViewById(R.id.typeTV);
+            holder.clicksTV = (TextView) convertView.findViewById(R.id.clicksTV);
+            convertView.setTag(holder);
+        } else {
+            holder = (ProductViewHolder) convertView.getTag();
+        }
+        holder.productNameTV.setText(data.getName());
+        holder.storeNameTV.setText(data.getStore().getName());
+        holder.clicksTV.setText(context.getString(R.string.viewsLabel) + data.getClicks());
+        holder.typeTV.setText(context.getString(R.string.typeLabel) + data.getCategory());
+        if (data.getPictureFileName() == null) {
+            holder.pictureImageView.setImageResource(R.drawable.nophoto);
+        } else {
+            try {
+                Bitmap image = BitmapFactory.decodeStream(context.openFileInput(data.getPictureFileName()));
+                holder.pictureImageView.setImageBitmap(image);
+            } catch (FileNotFoundException e) {
+                holder.pictureImageView.setImageResource(R.drawable.nophoto);
+            }
+        }
+        return convertView;
     }
 
     private List<ProductData> loadFavourites() {
@@ -83,11 +115,12 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ProductData data = products.get(position);
-        ViewHolder holder = null;
+        return getProductListItem(data, context, convertView, parent);
+       /* ProductViewHolder holder = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.list_frag_products_item, null);
-            holder = new ViewHolder();
+            holder = new ProductViewHolder();
             holder.pictureImageView = (ImageView) convertView.findViewById(R.id.iconPicImageView);
             holder.productNameTV = (TextView) convertView.findViewById(R.id.productNameTV);
             holder.storeNameTV = (TextView) convertView.findViewById(R.id.storeNameTV);
@@ -95,7 +128,7 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
             holder.clicksTV = (TextView) convertView.findViewById(R.id.clicksTV);
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ProductViewHolder) convertView.getTag();
         }
         holder.productNameTV.setText(data.getName());
         holder.storeNameTV.setText(data.getStore().getName());
@@ -111,7 +144,7 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
                 holder.pictureImageView.setImageResource(R.drawable.nophoto);
             }
         }
-        return convertView;
+        return convertView;*/
     }
 
     @Override
@@ -140,7 +173,7 @@ public class ProductsAdapter extends BaseAdapter implements DynamicListHandler.D
         products.addAll(incoming);
     }
 
-    private static class ViewHolder {
+    private static class ProductViewHolder {
         public ImageView pictureImageView;
         private TextView productNameTV;
         private TextView clicksTV;

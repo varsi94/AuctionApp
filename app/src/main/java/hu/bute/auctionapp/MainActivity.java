@@ -25,14 +25,13 @@ import hu.bute.auctionapp.activities.SearchActivity;
 import hu.bute.auctionapp.activities.StoresActivity;
 import hu.bute.auctionapp.activities.UploadActivity;
 import hu.bute.auctionapp.data.StoreData;
-import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
+import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 
 
 public class MainActivity extends Activity {
     private static final int REQUEST_LOGIN = 9746;
     private AuctionApplication app;
 
-    private DynamicListHandler loadhandler;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,8 +60,8 @@ public class MainActivity extends Activity {
         }
 
         ListView list = (ListView) findViewById(R.id.main_list);
-        loadhandler = new DynamicListHandler(list, new MainListAdapter(this));
-
+        DynamicListAdapter adapter = new DynamicListAdapter(list, new MainListAdapter(this));
+        list.setAdapter(adapter);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class MainActivity extends Activity {
     }
 
 
-    private class MainListAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
+    private class MainListAdapter extends BaseAdapter implements DynamicListAdapter.DynamicLoader {
         List<String> titles = new ArrayList<String>();
         List<Object> items = new ArrayList<Object>();
         private Context context;

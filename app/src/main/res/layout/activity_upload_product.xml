@@ -17,7 +17,7 @@
         android:id="@+id/uploadForm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbarStyle="outsideOverlay">
+        android:scrollbarStyle="outsideInset">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +34,9 @@
                 android:id="@+id/productname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/product_name"/>
+                android:hint="@string/product_name"
+                android:maxLines="1"
+                android:singleLine="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,7 +50,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/product_price"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
 
                 <Spinner
                     android:id="@+id/currency"
@@ -70,20 +74,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/store_name"
-                android:textSize="20sp"/>
+                android:layout_marginBottom="6dp"
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/store"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical|start"
+                    android:text="@string/store_dd"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/storeTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/upload_product_search_store"
+                    style="@style/textviewButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/search"/>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -93,6 +121,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:enabled="false"
+                    android:gravity="center_vertical|start"
                     android:hint="@string/address"
                     android:textSize="18sp"/>
 
@@ -101,7 +130,7 @@
                     style="@style/textviewButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:text="@string/get_location"/>
             </LinearLayout>
 
@@ -151,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
-                    android:background="#8c96ff"
+                    android:background="@drawable/buttons_text_bg_selector"
                     android:src="@android:drawable/ic_menu_camera"/>
 
                 <ImageButton
@@ -160,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
-                    android:background="#8c96ff"
+                    android:background="@drawable/buttons_text_bg_selector"
                     android:src="@android:drawable/ic_menu_upload"/>
 
                 <ImageButton
@@ -169,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/close_buttons_margin"
                     android:layout_weight="1"
-                    android:background="#8c96ff"
+                    android:background="@drawable/buttons_text_bg_selector"
                     android:src="@android:drawable/ic_menu_delete"/>
 
 

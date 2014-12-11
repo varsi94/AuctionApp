@@ -12,55 +12,55 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class DynamicListHandler implements ListAdapter {
+public class DynamicListAdapter implements ListAdapter {
     private final ListView list;
     private final DynamicLoader listener;
+    private final AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
+        int currentFirstVisibleItem;
+        int currentVisibleItemCount;
+        int currentTotalItemCount;
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (this.currentTotalItemCount - currentFirstVisibleItem - currentVisibleItemCount <= 1
+                    && scrollState == SCROLL_STATE_IDLE) {
+                requestLoad();
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            if (visibleItemCount == totalItemCount) {
+                requestLoad();
+            }
+            this.currentFirstVisibleItem = firstVisibleItem;
+            this.currentVisibleItemCount = visibleItemCount;
+            this.currentTotalItemCount = totalItemCount;
+        }
+    };
     private boolean isLoading;
     private boolean needProgressbar;
-
     private int animateIndex = 0;
     private BaseAdapter adapter;
 
-    public DynamicListHandler(ListView target, BaseAdapter adapter, final DynamicLoader listener) {
-        this.needProgressbar = true;
+    public DynamicListAdapter(ListView target, BaseAdapter adapter, final DynamicLoader listener) {
+        this.needProgressbar = listener.wantsToLoad();
         this.isLoading = false;
         this.list = target;
         this.adapter = adapter;
         this.listener = listener;
-        list.setAdapter(this);
+
         list.setFooterDividersEnabled(false);
-        list.setOnScrollListener(new AbsListView.OnScrollListener() {
-            int currentFirstVisibleItem;
-            int currentVisibleItemCount;
-            int currentTotalItemCount;
-
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (this.currentTotalItemCount - currentFirstVisibleItem - currentVisibleItemCount <= 1
-                        && scrollState == SCROLL_STATE_IDLE) {
-                    checkWantsLoad();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (visibleItemCount == totalItemCount) {
-                    checkWantsLoad();
-                }
-                this.currentFirstVisibleItem = firstVisibleItem;
-                this.currentVisibleItemCount = visibleItemCount;
-                this.currentTotalItemCount = totalItemCount;
-            }
-        });
+        list.setOnScrollListener(scrollListener);
     }
 
-    public DynamicListHandler(ListView target, BaseAdapter adapter) {
+    public DynamicListAdapter(ListView target, BaseAdapter adapter) {
         this(target, adapter, (DynamicLoader) adapter);
     }
 
-    private void checkWantsLoad() {
-        boolean wantsload = listener.wantsToLoad();
+    public void requestLoad() {
         if (!isLoading) {
+            boolean wantsload = listener.wantsToLoad();
             if (wantsload != needProgressbar) {
                 needProgressbar = wantsload;
                 adapter.notifyDataSetChanged();
@@ -99,17 +99,14 @@ public class DynamicListHandler implements ListAdapter {
     @Override
     public int getItemViewType(int position) {
         if (needProgressbar && position == getCount() - 1) {
-            return getViewTypeCount() - 1;
+            return adapter.getViewTypeCount();
         }
         return adapter.getItemViewType(position);
     }
 
     @Override
     public int getViewTypeCount() {
-        if (needProgressbar) {
-            return adapter.getViewTypeCount() + 1;
-        }
-        return adapter.getViewTypeCount();
+        return adapter.getViewTypeCount() + 1;
     }
 
     @Override
@@ -176,10 +173,10 @@ public class DynamicListHandler implements ListAdapter {
         @Override
         protected void onPreExecute() {
             isLoading = true;
-            if (!needProgressbar) {
+           /* if (!needProgressbar) {
                 needProgressbar = true;
                 adapter.notifyDataSetChanged();
-            }
+            }*/
             preloadSize = adapter.getCount();
         }
 
@@ -190,12 +187,11 @@ public class DynamicListHandler implements ListAdapter {
 
         @Override
         protected void onPostExecute(Object aresult) {
-            isLoading = false;
-
             listener.addLoaded(aresult);
 
             needProgressbar = listener.wantsToLoad();
             animateIndex = preloadSize;
+            isLoading = false;
             adapter.notifyDataSetChanged();
         }
     }

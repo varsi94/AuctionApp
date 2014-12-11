@@ -50,6 +50,11 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
+        if (filter == null) {
+            actionBar.setTitle(R.string.products);
+        } else {
+            actionBar.setTitle(filter);
+        }
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
@@ -151,6 +156,7 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
     public void onBackPressed() {
         if (filter != null) {
             filter = null;
+            getActionBar().setTitle(R.string.products);
             mViewPager.setCurrentItem(0, true);
             clearFragments();
             Fragment f = getFragment(0);
@@ -166,6 +172,11 @@ public class ProductsActivity extends Activity implements ActionBar.TabListener,
     @Override
     public void categorySelected(int index, String category) {
         this.filter = category;
+        if (filter == null) {
+            getActionBar().setTitle(R.string.products);
+        } else {
+            getActionBar().setTitle(filter);
+        }
         clearFragments();
         mViewPager.setCurrentItem(1, true);
     }

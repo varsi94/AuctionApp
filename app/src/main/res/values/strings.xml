@@ -30,7 +30,6 @@
     <string name="addressLabel">Location: </string>
     <string name="title_activity_upload_store">Upload store</string>
     <string name="upload_store">Upload store</string>
-    <string name="store_name">Store name</string>
     <string name="address">Address</string>
     <string name="get_location">Pick location</string>
     <string name="pick_logo_image">Pick logo image</string>
@@ -49,7 +48,6 @@
     <string name="uploading">Uploading...</string>
     <string name="typeLabel">"Type: "</string>
     <string name="store_type">Store type:</string>
-    <string name="ok">OK</string>
     <string name="results">Results:</string>
     <string name="confirm_location">Confirm location</string>
     <string name="confirm_location_message">This is the address: %s. Confirm?</string>
@@ -71,5 +69,7 @@
     <string name="action_sign_up_short">Sign up</string>
     <string name="title_activity_store_details">StoreDetailsActivity</string>
     <string name="type_label">Type:</string>
+    <string name="store_dd">Store:</string>
+    <string name="store_name">Store name</string>
 
 </resources>

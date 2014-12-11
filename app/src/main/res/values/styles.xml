@@ -53,6 +53,7 @@
 
     <style name="cardsListStyle" parent="android:Widget.ListView">
         <item name="android:divider">@null</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
         <item name="android:background">@color/default_background</item>
     </style>
 

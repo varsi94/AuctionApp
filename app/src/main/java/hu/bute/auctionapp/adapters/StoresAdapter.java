@@ -17,13 +17,13 @@ import java.util.List;
 import hu.bute.auctionapp.AuctionApplication;
 import hu.bute.auctionapp.R;
 import hu.bute.auctionapp.data.StoreData;
-import hu.bute.auctionapp.dynamiclist.DynamicListHandler;
+import hu.bute.auctionapp.dynamiclist.DynamicListAdapter;
 
 /**
  * Osztály az áruházak megjelenítésére.
  * Created by Varsi on 2014.12.08..
  */
-public class StoresAdapter extends BaseAdapter implements DynamicListHandler.DynamicLoader {
+public class StoresAdapter extends BaseAdapter implements DynamicListAdapter.DynamicLoader {
     public static final int MOST_RECENT = 0;
     public static final int MOST_VIEWED = 1;
     public static final int FAVOURITES = 2;
@@ -42,6 +42,38 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         this.context = context;
         storeDatas = new ArrayList<StoreData>();
         this.wantsLoad = true;
+    }
+
+    public static View getStoreListItem(StoreData data, Context context, View view, ViewGroup viewGroup) {
+        System.out.println("data = " + data);
+        StoreViewHolder holder = null;
+        if (view == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.list_frag_stores_item, null);
+            holder = new StoreViewHolder();
+            holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);
+            holder.pictureIV = (ImageView) view.findViewById(R.id.iconPicImageView);
+            holder.clicksTV = (TextView) view.findViewById(R.id.clicksTV);
+            holder.typeTV = (TextView) view.findViewById(R.id.typeTV);
+            view.setTag(holder);
+        } else {
+            holder = (StoreViewHolder) view.getTag();
+        }
+        System.out.println("view = " + view);
+        holder.storeNameTV.setText(data.getName());
+        holder.clicksTV.setText(context.getString(R.string.viewsLabel) + data.getClicks());
+        holder.typeTV.setText(context.getString(R.string.typeLabel) + data.getType());
+        if (data.getPictureFileName() == null) {
+            holder.pictureIV.setImageResource(R.drawable.nophoto);
+        } else {
+            try {
+                Bitmap image = BitmapFactory.decodeStream(context.openFileInput(data.getPictureFileName()));
+                holder.pictureIV.setImageBitmap(image);
+            } catch (FileNotFoundException e) {
+                holder.pictureIV.setImageResource(R.drawable.nophoto);
+            }
+        }
+        return view;
     }
 
     private List<StoreData> loadFavourites() {
@@ -82,35 +114,9 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        StoreData data = storeDatas.get(i);
-        ViewHolder holder = null;
-        if (view == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            view = inflater.inflate(R.layout.list_frag_stores_item, null);
-            holder = new ViewHolder();
-            holder.storeNameTV = (TextView) view.findViewById(R.id.storeNameET);
-            holder.pictureIV = (ImageView) view.findViewById(R.id.iconPicImageView);
-            holder.clicksTV = (TextView) view.findViewById(R.id.clicksTV);
-            holder.typeTV = (TextView) view.findViewById(R.id.typeTV);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-        holder.storeNameTV.setText(data.getName());
-        holder.clicksTV.setText(app.getString(R.string.viewsLabel) + data.getClicks());
-        holder.typeTV.setText(app.getString(R.string.typeLabel) + data.getType());
-        if (data.getPictureFileName() == null) {
-            holder.pictureIV.setImageResource(R.drawable.nophoto);
-        } else {
-            try {
-                Bitmap image = BitmapFactory.decodeStream(app.openFileInput(data.getPictureFileName()));
-                holder.pictureIV.setImageBitmap(image);
-            } catch (FileNotFoundException e) {
-                holder.pictureIV.setImageResource(R.drawable.nophoto);
-            }
-        }
-        return view;
+    public View getView(int position, View view, ViewGroup viewGroup) {
+        StoreData data = storeDatas.get(position);
+        return getStoreListItem(data, context, view, viewGroup);
     }
 
     @Override
@@ -142,7 +148,7 @@ public class StoresAdapter extends BaseAdapter implements DynamicListHandler.Dyn
         }
     }
 
-    private static class ViewHolder {
+    private static class StoreViewHolder {
         public TextView storeNameTV;
         public ImageView pictureIV;
         public TextView clicksTV;

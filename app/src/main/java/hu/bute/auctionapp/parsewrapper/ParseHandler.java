@@ -436,6 +436,55 @@ public class ParseHandler implements CloudHandler {
     }
 
     @Override
+    public List<StoreData> findStoresDirectly(int skip, int limit, String keyword) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
+        query.whereContains(STORE_NAME, keyword);
+        query.addDescendingOrder(STORE_CLICKS);
+        query.setSkip(skip);
+        query.setLimit(limit);
+        final List<StoreData> result = new ArrayList<>();
+        try {
+            List<ParseObject> findresult = query.find();
+            for (ParseObject obj : findresult) {
+                result.add(parseObjectToStoreDirectly(obj, true));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public List<ProductData> findProductsDirectly(int skip, int limit, String keyword) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(PRODUCT_CLASSNAME);
+        query.whereContains(PRODUCT_NAME, keyword);
+        query.addDescendingOrder(PRODUCT_CLICKS);
+        query.setSkip(skip);
+        query.setLimit(limit);
+        final List<ProductData> result = new ArrayList<>();
+        try {
+            List<ParseObject> findresult = query.find();
+            for (ParseObject obj : findresult) {
+                try {
+                    result.add(parseObjectToProductDirectly(obj));
+                } catch (StoreNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public List<Object> findProdAndStoreDirectly(int skip, int limit, String keyword) {
+        //final List<Object> result = new ArrayList<>();
+//TODO big time
+        return new ArrayList<Object>(findProductsDirectly(skip, limit, keyword));
+    }
+
+    @Override
     public List<StoreData> getStoresByViewDirectly(int skip, int limit, String filter) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STORE_CLASSNAME);
         query.setSkip(skip);
