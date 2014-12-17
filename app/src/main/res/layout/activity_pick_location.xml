@@ -17,10 +17,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <Button
+        <TextView
             android:id="@+id/searchBtn"
+            style="@style/textviewButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="@string/search_label"/>
     </LinearLayout>
 

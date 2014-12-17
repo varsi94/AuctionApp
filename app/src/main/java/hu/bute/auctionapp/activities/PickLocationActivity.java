@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,10 +29,10 @@ import java.util.Locale;
 import hu.bute.auctionapp.R;
 
 public class PickLocationActivity extends FragmentActivity {
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private Button searchBtn;
-    private EditText searchET;
     public static final String LOCATION_INFO = "location_info";
+    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private View searchBtn;
+    private EditText searchET;
     private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -63,42 +62,6 @@ public class PickLocationActivity extends FragmentActivity {
         }
     };
 
-    public static class LocationInfo implements Serializable {
-        private String location;
-        private double gpsLat;
-        private double gpsLon;
-
-        public LocationInfo(String location, double gpsLat, double gpsLon) {
-            this.location = location;
-            this.gpsLat = gpsLat;
-            this.gpsLon = gpsLon;
-        }
-
-        public String getLocation() {
-            return location;
-        }
-
-        public void setLocation(String location) {
-            this.location = location;
-        }
-
-        public double getGpsLat() {
-            return gpsLat;
-        }
-
-        public void setGpsLat(double gpsLat) {
-            this.gpsLat = gpsLat;
-        }
-
-        public double getGpsLon() {
-            return gpsLon;
-        }
-
-        public void setGpsLon(double gpsLon) {
-            this.gpsLon = gpsLon;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +70,7 @@ public class PickLocationActivity extends FragmentActivity {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
 
-        searchBtn = (Button) findViewById(R.id.searchBtn);
+        searchBtn = findViewById(R.id.searchBtn);
         searchET = (EditText) findViewById(R.id.searchET);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -221,5 +184,41 @@ public class PickLocationActivity extends FragmentActivity {
         });
 
         builder.show();
+    }
+
+    public static class LocationInfo implements Serializable {
+        private String location;
+        private double gpsLat;
+        private double gpsLon;
+
+        public LocationInfo(String location, double gpsLat, double gpsLon) {
+            this.location = location;
+            this.gpsLat = gpsLat;
+            this.gpsLon = gpsLon;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public double getGpsLat() {
+            return gpsLat;
+        }
+
+        public void setGpsLat(double gpsLat) {
+            this.gpsLat = gpsLat;
+        }
+
+        public double getGpsLon() {
+            return gpsLon;
+        }
+
+        public void setGpsLon(double gpsLon) {
+            this.gpsLon = gpsLon;
+        }
     }
 }
